@@ -1,4 +1,3 @@
-import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Header } from './components/common/Header'
 import { Footer } from './components/common/Footer'
@@ -8,9 +7,9 @@ import { Sources } from './pages/Sources'
 import { Moderation } from './pages/Moderation'
 import { Suggestions } from './pages/Suggestions'
 import { NewNews } from './pages/NewNews'
-import { AuthProvider } from './context/AuthContext'
-import { NotificationProvider } from './context/NotificationContext'
 import './styles/main.scss'
+import { AuthProvider } from './context/AuthProvider'
+import { NotificationProvider } from './context/NotificationProvider'
 
 function App() {
   return (
@@ -24,9 +23,9 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/sources" element={<Sources />} />
-                <Route path="/moderation" element={<Moderation />} />
+                {/* <Route path="/moderation" element={<Moderation />} />
                 <Route path="/suggestions" element={<Suggestions />} />
-                <Route path="/new-news" element={<NewNews />} />
+                <Route path="/new-news" element={<NewNews />} /> */}
               </Routes>
             </main>
             <Footer />

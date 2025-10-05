@@ -6,7 +6,7 @@ export const Footer: React.FC = () => {
             <div className="footer__container">
                 <div className="footer__content">
                     <p className="footer__text">
-                        © 2024 News Aggregator. Все права защищены.
+                        © 2025 Новостной агрегатор. Все права защищены.
                     </p>
                     <div className="footer__links">
                         <a href="#" className="footer__link">О проекте</a>
