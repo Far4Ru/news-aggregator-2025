@@ -37,7 +37,7 @@ export const Header: React.FC = () => {
         <header className="navbar">
             <div className="navbar__container">
                 <Link to="/" className="navbar__logo">
-                    NewsAggregator
+                    Агрегатор новостей
                 </Link>
 
                 <nav className="navbar__nav">

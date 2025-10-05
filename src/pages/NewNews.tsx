@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { NewsItem } from '@/types'
-import { NewsList } from '@/components/news/NewsList'
-import { moderationService } from '@/services/moderationService'
-import { useNotification } from '@/context/NotificationContext'
+import { useNotification } from '../hooks/useNotificatiom'
+import { moderationService } from '../services/moderationService'
+import type { NewsItem } from '../types/news'
 
 export const NewNews: React.FC = () => {
     const { showNotification } = useNotification()
@@ -11,7 +10,7 @@ export const NewNews: React.FC = () => {
 
     useEffect(() => {
         loadNewNews()
-    }, [])
+    })
 
     const loadNewNews = async () => {
         setLoading(true)
@@ -49,9 +48,9 @@ export const NewNews: React.FC = () => {
     }
 
     // Заглушки для NewsList
-    const handleRate = () => { }
-    const handleShare = () => { }
-    const handleSuggestEdit = () => { }
+    // const handleRate = () => { }
+    // const handleShare = () => { }
+    // const handleSuggestEdit = () => { }
 
     return (
         <div className="page">

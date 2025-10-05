@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { NewsSuggestion } from '@/types'
-import { ModerationList } from '@/components/moderation/ModerationList'
-import { newsService } from '@/services/newsService'
-import { moderationService } from '@/services/moderationService'
-import { useNotification } from '@/context/NotificationContext'
+import { useNotification } from '../hooks/useNotificatiom'
+import { ModerationList } from '../components/moderation/ModerationList'
+import { moderationService } from '../services/moderationService'
+import { newsService } from '../services/newsService'
+import type { NewsSuggestion } from '../types/news'
 
 export const Suggestions: React.FC = () => {
     const { showNotification } = useNotification()
@@ -12,7 +12,7 @@ export const Suggestions: React.FC = () => {
 
     useEffect(() => {
         loadSuggestions()
-    }, [])
+    })
 
     const loadSuggestions = async () => {
         setLoading(true)
