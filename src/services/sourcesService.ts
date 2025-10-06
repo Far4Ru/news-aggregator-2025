@@ -33,7 +33,7 @@ export const sourcesService = {
                     ...sourceData,
                     status: 'pending'
                 },
-            ])
+            ] as any)
             .select()
         console.log(data, error)
         return null
@@ -45,7 +45,7 @@ export const sourcesService = {
         return mockSources
     },
 
-    async moderateSource(sourceId: string, action: 'approve' | 'reject') {
+    async moderateSource(_sourceId: string, _action: 'approve' | 'reject') {
         // Заглушка
         await new Promise(resolve => setTimeout(resolve, 200))
         return null

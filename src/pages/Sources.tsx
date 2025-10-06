@@ -49,7 +49,7 @@ export const Sources: React.FC = () => {
         const newSelectedSources = [...settings.selectedSources, sourceId]
         setSettings({
             ...settings,
-            selectedSources: newSelectedSources
+            selectedSources: newSelectedSources as any
         })
         showNotification('Источник добавлен в вашу подборку', { tag: 'success' })
     }

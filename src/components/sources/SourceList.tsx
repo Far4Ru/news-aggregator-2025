@@ -1,7 +1,7 @@
 import React from 'react'
-import { NewsSource } from '@/types'
+import { NewsSource } from '../../types/sources'
+import { LoadingSpinner } from '../common/LoadingSpinner'
 import { SourceCard } from './SourceCard'
-import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 
 interface SourceListProps {
     sources: NewsSource[]

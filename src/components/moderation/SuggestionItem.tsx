@@ -1,6 +1,6 @@
 import React from 'react'
-import { NewsSuggestion } from '../../types'
 import { Check, X, Ban, Calendar, Globe } from 'lucide-react'
+import { NewsSuggestion } from '../../types/news'
 
 interface SuggestionItemProps {
     suggestion: NewsSuggestion

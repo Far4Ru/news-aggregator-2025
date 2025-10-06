@@ -7,6 +7,7 @@ export interface NewsSource {
     activity_data: number[]; // daily news count for last 7 days
     status: 'pending' | 'approved' | 'rejected';
     created_at: string;
+    updated_at: string;
     added_by?: string;
 }
 

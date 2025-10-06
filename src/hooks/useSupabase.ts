@@ -1,6 +1,6 @@
 // Заглушка для Supabase - в реальном приложении здесь был бы реальный клиент
 export const supabase = {
-    from: (table: string) => ({
+    from: (_table: string) => ({
         select: () => ({
             eq: () => ({
                 or: () => ({
@@ -32,7 +32,7 @@ export const supabase = {
         getSession: () => Promise.resolve({ data: { session: null }, error: null }),
         signInWithPassword: () => Promise.resolve({ error: null }),
         signOut: () => Promise.resolve({ error: null }),
-        onAuthStateChange: (callback: any) => ({
+        onAuthStateChange: (_callback: any) => ({
             subscription: { unsubscribe: () => { } }
         })
     }

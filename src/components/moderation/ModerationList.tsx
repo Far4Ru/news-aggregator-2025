@@ -1,7 +1,7 @@
 import React from 'react'
-import { NewsSuggestion } from '@/types'
 import { SuggestionItem } from './SuggestionItem'
-import { LoadingSpinner } from '@/components/common/LoadingSpinner'
+import { NewsSuggestion } from '../../types/news'
+import { LoadingSpinner } from '../common/LoadingSpinner'
 
 interface ModerationListProps {
     suggestions: NewsSuggestion[]

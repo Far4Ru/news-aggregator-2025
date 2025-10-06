@@ -8,7 +8,7 @@ export const newsService = {
             .from('news')
             .select('*')
         console.log(news, error)
-        let filteredNews = [...mockNews, ...news]
+        let filteredNews = [...mockNews, ...news as any]
 
         // Применение фильтров
         if (filters.searchQuery) {
@@ -40,13 +40,13 @@ export const newsService = {
         return filteredNews
     },
 
-    async updateRating(newsId: string, increment: number) {
+    async updateRating(_newsId: string, increment: number) {
         // Заглушка
         await new Promise(resolve => setTimeout(resolve, 200))
         return { rating: increment }
     },
 
-    async suggestEdit(newsId: string, suggestedContent: string, ip: string) {
+    async suggestEdit(_newsId: string, _suggestedContent: string, _ip: string) {
         // Заглушка
         await new Promise(resolve => setTimeout(resolve, 200))
         return null
@@ -58,7 +58,7 @@ export const newsService = {
         return []
     },
 
-    async moderateSuggestion(suggestionId: string, action: 'approve' | 'reject') {
+    async moderateSuggestion(_suggestionId: string, _action: 'approve' | 'reject') {
         // Заглушка
         await new Promise(resolve => setTimeout(resolve, 200))
         return null

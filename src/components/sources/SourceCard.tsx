@@ -1,6 +1,6 @@
 import React from 'react'
-import { NewsSource } from '../../types'
 import { Plus, Minus, BarChart3, ExternalLink } from 'lucide-react'
+import { NewsSource } from '../../types/sources'
 
 interface SourceCardProps {
     source: NewsSource
@@ -15,7 +15,7 @@ export const SourceCard: React.FC<SourceCardProps> = ({
     onAdd,
     onRemove
 }) => {
-    const totalActivity = source.activity_data.reduce((sum, count) => sum + count, 0)
+    // const totalActivity = source.activity_data.reduce((sum, count) => sum + count, 0)
     const maxActivity = Math.max(...source.activity_data)
 
     return (
