@@ -13,6 +13,13 @@ $hh-text: #333333;
   box-sizing: border-box;
 }
 
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
+
 body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   color: $hh-text;
