@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -25,6 +25,9 @@ jobs:
         node-version: '18'
         cache: 'npm'
 
+    - name: Install dependencies
+      run: npm ci
+      
     - name: Create env file
       run: |
         echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> .env
@@ -48,9 +51,6 @@ jobs:
         echo "VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL != '' && 'SET' || 'EMPTY' }}"
         echo "VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY != '' && 'SET' || 'EMPTY' }}"
         echo "VITE_SUPABASE_MODERATOR_KEY: ${{ secrets.VITE_SUPABASE_MODERATOR_KEY != '' && 'SET' || 'EMPTY' }}" 
-
-    - name: Install dependencies
-      run: npm ci
 
     - name: Build project
       run: npm run build
