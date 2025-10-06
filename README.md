@@ -2,7 +2,9 @@
 
 Веб-приложение для автоматического сбора новостей из различных источников с предоставлением кратких сводок.
 
-**Демонстрация:** [news-aggregator-2025](https://far4ru.github.io/news-aggregator-2025/)
+**Ссылка:** [news-aggregator-2025](https://far4ru.github.io/news-aggregator-2025/)
+
+![Демонстрация](presentation/screen.gif)
 
 ## Описание
 
