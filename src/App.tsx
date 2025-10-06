@@ -15,7 +15,7 @@ function App() {
   return (
     <AuthProvider>
       <NotificationProvider>
-        <Router>
+        <Router basename='news-aggregator-2025'>
           <div className="app">
             <Header />
             <main className="main">
