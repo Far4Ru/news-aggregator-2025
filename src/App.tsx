@@ -15,7 +15,7 @@ function App() {
   return (
     <AuthProvider>
       <NotificationProvider>
-        <Router basename={import.meta.env.BASE_URL}>
+        <Router basename={import.meta.env.VITE_BASE_URL}>
           <div className="app">
             <Header />
             <main className="main">
