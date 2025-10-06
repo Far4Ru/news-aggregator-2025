@@ -33,6 +33,7 @@ jobs:
         echo "VITE_SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env
         echo "VITE_SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
         echo "VITE_SUPABASE_MODERATOR_KEY=${{ secrets.SUPABASE_MODERATOR_KEY }}" >> .env
+        echo "VITE_BASE_URL=${{ secrets.BASE_URL }}" >> .env
         
     - name: Build project
       run: npm run build

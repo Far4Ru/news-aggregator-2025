@@ -15,7 +15,7 @@ function App() {
   return (
     <AuthProvider>
       <NotificationProvider>
-        <Router basename='news-aggregator-2025'>
+        <Router basename={import.meta.env.BASE_URL}>
           <div className="app">
             <Header />
             <main className="main">
