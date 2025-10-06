@@ -1,4 +1,5 @@
 import { ParserConfig } from '../types';
+import 'dotenv/config'
 
 export const config = {
   supabase: {
@@ -28,5 +29,13 @@ export const config = {
     tempDir: './data/temp',
     archiveDir: './data/archive',
     keepTempFiles: 24 * 7 // Хранить временные файлы 7 дней
+  },
+  gigachat: {
+    authUrl: process.env.GIGACHAT_AUTH_URL || 'https://ngw.devices.sberbank.ru:9443/api/v2/oauth',
+    apiUrl: process.env.GIGACHAT_API_URL || 'https://gigachat.devices.sberbank.ru/api/v1/chat/completions',
+    clientId: process.env.GIGACHAT_CLIENT_ID,
+    clientSecret: process.env.GIGACHAT_CLIENT_SECRET,
+    scope: process.env.GIGACHAT_SCOPE || 'GIGACHAT_API_PERS',
+    model: process.env.GIGACHAT_MODEL || 'GigaChat'
   }
 };

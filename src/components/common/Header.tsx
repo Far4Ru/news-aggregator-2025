@@ -37,7 +37,11 @@ export const Header: React.FC = () => {
         <header className="navbar">
             <div className="navbar__container">
                 <Link to="/" className="navbar__logo">
-                    Агрегатор новостей
+                    <img 
+                        src="/logo.png" 
+                        alt="Агрегатор новостей" 
+                        className="navbar__logo-image"
+                    />
                 </Link>
 
                 <nav className="navbar__nav">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { NewsItem } from '../../types'
 import { ThumbsUp, ThumbsDown, Share2, Edit } from 'lucide-react'
+import type { NewsItem } from '../../types/news'
 
 interface NewsCardProps {
     news: NewsItem
@@ -42,7 +42,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                     <span className="news-card__date">
                         {new Date(news.published_at).toLocaleDateString()}
                     </span>
-                    <span className="news-card__source">{news.source_id}</span>
+                    <span className="news-card__source">{news.source_type}</span>
                 </div>
             </div>
 

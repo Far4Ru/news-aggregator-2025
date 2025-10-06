@@ -1,13 +1,14 @@
-import { supabase, supabaseModerator } from './supabase'
-import { NewsItem, NewsFilters, NewsSuggestion } from '../types'
+import { supabase } from './supabase'
 import { mockNews } from '../utils/mockData'
+import type { NewsFilters } from '../types/news'
 
 export const newsService = {
     async getNews(filters: NewsFilters, sortBy: 'date' | 'rating' = 'date') {
-        // Заглушка - в реальном приложении здесь был бы запрос к Supabase
-        await new Promise(resolve => setTimeout(resolve, 500))
-
-        let filteredNews = [...mockNews]
+        let { data: news, error } = await supabase
+            .from('news')
+            .select('*')
+        console.log(news, error)
+        let filteredNews = [...mockNews, ...news]
 
         // Применение фильтров
         if (filters.searchQuery) {

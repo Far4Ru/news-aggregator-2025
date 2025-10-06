@@ -6,6 +6,7 @@ import { Source, ParseResult } from '../types';
 import { config } from '../utils/config';
 import { Helpers } from '../utils/helpers';
 
+
 export class ParserManager {
   private dbService: DatabaseService;
   private fileService: FileService;
@@ -77,19 +78,19 @@ export class ParserManager {
 
       switch (source.type) {
         case 'telegram':
-          parser = new TelegramParser(source.id!, config.parsers.telegram);
+          parser = new TelegramParser(source.id!, source.url, config.parsers.telegram);
           break;
-        case 'rss':
-          parser = new RSSParser(source.id!, config.parsers.rss);
-          break;
-        case 'social':
-          const { SocialMediaParser } = await import('../parsers/social/SocialMediaParser');
-          parser = new SocialMediaParser(source.id!, config.parsers.default);
-          break;
-        case 'podcast':
-          const { PodcastParser } = await import('../parsers/podcast/PodcastParser');
-          parser = new PodcastParser(source.id!, config.parsers.default);
-          break;
+        // case 'rss':
+        //   parser = new RSSParser(source.id!, config.parsers.rss);
+        //   break;
+        // case 'social':
+        //   const { SocialMediaParser } = await import('../parsers/social/SocialMediaParser');
+        //   parser = new SocialMediaParser(source.id!, config.parsers.default);
+        //   break;
+        // case 'podcast':
+        //   const { PodcastParser } = await import('../parsers/podcast/PodcastParser');
+        //   parser = new PodcastParser(source.id!, config.parsers.default);
+        //   break;
         default:
           return {
             success: false,

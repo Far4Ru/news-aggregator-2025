@@ -1,8 +1,8 @@
 import React from 'react'
-import { NewsFilters as NewsFiltersType } from '@/types'
-import { FilterPanel } from '@/components/common/FilterPanel'
-import { SearchBar } from '@/components/common/SearchBar'
 import { SortAsc, SortDesc } from 'lucide-react'
+import { FilterPanel } from '../common/FilterPanel'
+import { SearchBar } from '../common/SearchBar'
+import type { NewsFilters as NewsFiltersType } from '../../types/news'
 
 interface NewsFiltersProps {
     filters: NewsFiltersType

@@ -1,7 +1,7 @@
 import React from 'react'
-import { NewsItem } from '@/types'
-import { NewsCard } from '@/components/common/NewsCard'
-import { LoadingSpinner } from '@/components/common/LoadingSpinner'
+import type { NewsItem } from '../../types/news'
+import { LoadingSpinner } from '../common/LoadingSpinner'
+import { NewsCard } from '../common/NewsCard'
 
 interface NewsListProps {
     news: NewsItem[]

@@ -1,13 +1,14 @@
-import { supabase, supabaseModerator } from './supabase'
-import { NewsSource } from '../types'
+import { supabase } from './supabase'
 import { mockSources } from '../utils/mockData'
+import type { NewsSource } from '../types/sources'
 
 export const sourcesService = {
     async getSources(searchQuery: string = '') {
-        // Заглушка
-        await new Promise(resolve => setTimeout(resolve, 500))
-
-        let filteredSources = [...mockSources]
+        let { data: sources, error } = await supabase
+        .from('sources')
+        .select('*')
+        console.log(sources, error)
+        let filteredSources = [...mockSources, ...sources as NewsSource[]]
 
         if (searchQuery) {
             filteredSources = filteredSources.filter(source =>
@@ -25,8 +26,16 @@ export const sourcesService = {
         url: string
         type: string
     }) {
-        // Заглушка
-        await new Promise(resolve => setTimeout(resolve, 500))
+        const { data, error } = await supabase
+            .from('sources')
+            .insert([
+                {
+                    ...sourceData,
+                    status: 'pending'
+                },
+            ])
+            .select()
+        console.log(data, error)
         return null
     },
 

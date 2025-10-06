@@ -10,6 +10,7 @@ export interface NewsItem {
   tags: string[];
   url?: string;
   status: 'pending' | 'approved' | 'rejected';
+  language?: string; // Добавляем поле языка
   created_at?: Date;
   updated_at?: Date;
 }
@@ -19,7 +20,7 @@ export interface Source {
   name: string;
   description?: string;
   url: string;
-  type: 'telegram' | 'rss' | 'website' | 'other';
+  type: 'telegram' | 'rss' | 'website' | 'social' | 'podcast' | 'other';
   activity_data: number[];
   status: 'pending' | 'approved' | 'rejected';
   added_by?: string;

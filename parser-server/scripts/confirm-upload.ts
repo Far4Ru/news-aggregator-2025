@@ -16,6 +16,34 @@ function question(prompt: string): Promise<string> {
   });
 }
 
+function formatDate(date: any): string {
+  try {
+    // If it's already a Date object
+    if (date instanceof Date) {
+      return date.toISOString();
+    }
+    
+    // If it's a string that can be converted to Date
+    if (typeof date === 'string') {
+      const dateObj = new Date(date);
+      if (!isNaN(dateObj.getTime())) {
+        return dateObj.toISOString();
+      }
+    }
+    
+    // If it's a timestamp (number)
+    if (typeof date === 'number') {
+      const dateObj = new Date(date);
+      return dateObj.toISOString();
+    }
+    
+    // Fallback: return raw value or current date
+    return String(date || new Date().toISOString());
+  } catch (error) {
+    return new Date().toISOString(); // Fallback to current date
+  }
+}
+
 async function confirmUpload() {
   console.log('=== NEWS UPLOAD CONFIRMATION ===\n');
   
@@ -29,7 +57,7 @@ async function confirmUpload() {
   
   console.log('Available files:');
   tempFiles.forEach((file, index) => {
-    console.log(`${index + 1}. ${file.source} - ${file.items.length} items (${file.parsedAt.toISOString()})`);
+    console.log(`${index + 1}. ${file.source} - ${file.items.length} items (${formatDate(file.parsedAt)})`);
   });
   
   const answer = await question('\nSelect file to upload (number) or "all" for all files: ');
@@ -54,6 +82,7 @@ async function confirmUpload() {
   for (const file of filesToProcess) {
     console.log(`\n--- Processing ${file.source} ---`);
     console.log(`Items: ${file.items.length}`);
+    console.log(`Parsed at: ${formatDate(file.parsedAt)}`);
     
     const confirm = await question('Upload to database? (y/n): ');
     

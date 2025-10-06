@@ -8,7 +8,8 @@
     "build": "tsc",
     "parse": "ts-node scripts/manual-parse.ts",
     "confirm": "ts-node scripts/confirm-upload.ts",
-    "cron": "ts-node scripts/cron-jobs.ts"
+    "cron": "ts-node scripts/cron-jobs.ts",
+    "test-gigachat": "ts-node scripts/test-gigachat.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^1.8.0",

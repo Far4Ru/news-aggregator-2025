@@ -1,17 +1,27 @@
 import React, { useState, useEffect } from 'react'
-import { NewsItem, NewsFilters as NewsFiltersType } from '@/types'
-import { NewsList } from '@/components/news/NewsList'
-import { NewsFilters } from '@/components/news/NewsFilters'
-import { newsService } from '@/services/newsService'
-import { useAppSettings } from '@/hooks/useLocalStorage'
-import { useNotifications } from '@/hooks/useNotifications'
-
+import { NewsList } from '../components/news/NewsList'
+import { useAppSettings } from '../hooks/useLocalStorage'
+import { useNotifications } from '../hooks/useNotifications'
+import { newsService } from '../services/newsService'
+import type { NewsFilters as NewsFiltersType, NewsItem } from '../types/news'
+import { NewsFilters } from '../components/news/NewsFilters'
+const getPublicIP = async () => {
+  try {
+    const response = await fetch('https://api.ipify.org?format=json');
+    const data = await response.json();
+    return data.ip;
+  } catch (error) {
+    console.error('Error fetching public IP:', error);
+    return null;
+  }
+};
 export const News: React.FC = () => {
     const { settings, setSettings } = useAppSettings()
     const { showNotification } = useNotifications()
 
     const [news, setNews] = useState<NewsItem[]>([])
     const [loading, setLoading] = useState(true)
+    const [ip, setIp] = useState('')
     const [filters, setFilters] = useState<NewsFiltersType>(settings.filters)
 
     useEffect(() => {
@@ -22,9 +32,15 @@ export const News: React.FC = () => {
         // Сохраняем фильтры в настройках
         setSettings({
             ...settings,
-            filters
+            filters: filters as any
         })
     }, [filters])
+
+    useEffect(() => {
+        getPublicIP().then(ip => {
+            setIp(ip);
+        });
+    }, []);
 
     const loadNews = async () => {
         setLoading(true)
@@ -33,7 +49,7 @@ export const News: React.FC = () => {
             setNews(data)
         } catch (error) {
             console.error('Error loading news:', error)
-            showNotification('Ошибка при загрузке новостей', 'error')
+            showNotification('Ошибка при загрузке новостей', { tag: 'error' })
         } finally {
             setLoading(false)
         }
@@ -50,7 +66,7 @@ export const News: React.FC = () => {
             ))
         } catch (error) {
             console.error('Error updating rating:', error)
-            showNotification('Ошибка при оценке новости', 'error')
+            showNotification('Ошибка при оценке новости', { tag: 'error' })
         }
     }
 
@@ -63,19 +79,18 @@ export const News: React.FC = () => {
             })
         } else {
             navigator.clipboard.writeText(newsItem.url || window.location.href)
-            showNotification('Ссылка скопирована в буфер обмена', 'success')
+            showNotification('Ссылка скопирована в буфер обмена', { tag: 'success' })
         }
     }
 
     const handleSuggestEdit = async (newsItem: NewsItem, content: string) => {
         try {
-            // В реальном приложении здесь нужно получить IP пользователя
-            const userIp = '127.0.0.1' // Заглушка
-            await newsService.suggestEdit(newsItem.id, content, userIp)
-            showNotification('Предложение отправлено на модерацию', 'success')
+            console.log(ip)
+            await newsService.suggestEdit(newsItem.id, content, ip)
+            showNotification('Предложение отправлено на модерацию', { tag: 'success' })
         } catch (error) {
             console.error('Error suggesting edit:', error)
-            showNotification('Ошибка при отправке предложения', 'error')
+            showNotification('Ошибка при отправке предложения', { tag: 'error' })
         }
     }
 

@@ -3,8 +3,21 @@ import { BaseParser } from '../base/BaseParser';
 import { ParseResult, NewsItem } from '../../types';
 import { Helpers } from '../../utils/helpers';
 
+interface CacheData {
+  data: NewsItem[];
+  timestamp: number;
+}
+
+interface RSSFeed {
+  url: string;
+  name: string;
+  sourceName: string;
+}
+
 export class RSSParser extends BaseParser {
   private parser: Parser;
+  private cache: CacheData | null = null;
+  private readonly CACHE_DURATION = 15 * 60 * 1000; // 15 минут
 
   constructor(sourceId: string, config: any) {
     super(sourceId, 'rss', config);
@@ -14,7 +27,8 @@ export class RSSParser extends BaseParser {
         item: [
           ['content:encoded', 'contentEncoded'],
           ['description', 'description'],
-          ['pubDate', 'pubDate']
+          ['pubDate', 'pubDate'],
+          ['contentSnippet', 'contentSnippet']
         ]
       }
     });
@@ -22,29 +36,67 @@ export class RSSParser extends BaseParser {
 
   async parse(): Promise<ParseResult> {
     try {
-      const feed = await this.parser.parseURL(this.config.url);
-      const newsItems: NewsItem[] = [];
+      const { limit = 20, source } = this.config;
 
-      for (const item of feed.items.slice(0, 20)) { // Берем последние 20 статей
-        const content = this.extractContent(item);
-        const title = item.title || 'Без заголовка';
-        
-        if (content && title !== 'Без заголовка') {
-          const publishedAt = item.pubDate ? new Date(item.pubDate) : new Date();
-          const newsItem = this.createNewsItem(
-            title,
-            content,
-            item.link,
-            publishedAt
-          );
+      // Проверяем кэш
+      if (this.cache && this.cache.timestamp && (Date.now() - this.cache.timestamp) < this.CACHE_DURATION) {
+        const filteredData = this.filterNews(this.cache.data, limit, source);
+        return { success: true, data: filteredData };
+      }
 
-          if (this.validateNewsItem(newsItem)) {
-            newsItems.push(newsItem);
+      const feeds: RSSFeed[] = [
+        { url: 'https://lenta.ru/rss/news', name: 'lenta', sourceName: 'Лента.ру' },
+        { url: 'https://rss.newsru.com/russia/news', name: 'newsru', sourceName: 'NewsRU' },
+        { url: 'https://www.vedomosti.ru/rss/news', name: 'vedomosti', sourceName: 'Ведомости' }
+      ];
+
+      const allNews: NewsItem[] = [];
+
+      for (const feed of feeds) {
+        try {
+          const feedData = await this.parser.parseURL(feed.url);
+          
+          for (const item of feedData.items.slice(0, limit)) {
+            const content = this.extractContent(item);
+            const title = item.title || 'Без заголовка';
+            
+            if (content && title !== 'Без заголовка') {
+              const publishedAt = item.pubDate ? new Date(item.pubDate) : new Date();
+              const newsItem = this.createNewsItem(
+                title,
+                content,
+                item.link,
+                publishedAt
+              );
+
+              // Добавляем дополнительную информацию о источнике
+              newsItem.id = `${feed.name}-${item.guid || item.link}`;
+              newsItem.source_name = feed.sourceName;
+              
+              if (this.validateNewsItem(newsItem)) {
+                allNews.push(newsItem);
+              }
+            }
           }
+        } catch (error) {
+          console.error(`RSSParser error for ${feed.name}:`, error);
         }
       }
 
-      return { success: true, data: newsItems };
+      // Сортировка по дате публикации (новые сначала)
+      const sortedNews = allNews.sort((a, b) => 
+        new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
+      );
+
+      // Обновляем кэш
+      this.cache = {
+        data: sortedNews,
+        timestamp: Date.now()
+      };
+
+      const filteredData = this.filterNews(sortedNews, limit, source);
+      return { success: true, data: filteredData };
+
     } catch (error) {
       console.error('RSSParser error:', error);
       return { 
@@ -67,6 +119,36 @@ export class RSSParser extends BaseParser {
     if (item.summary) {
       return Helpers.sanitizeHtml(item.summary);
     }
+    if (item.contentSnippet) {
+      return Helpers.sanitizeHtml(item.contentSnippet);
+    }
     return '';
+  }
+
+  private filterNews(news: NewsItem[], limit: number, source?: string): NewsItem[] {
+    let filtered = news;
+    
+    if (source) {
+      filtered = filtered.filter(item => item.source_id === source);
+    }
+    
+    return filtered.slice(0, limit);
+  }
+
+  // Метод для очистки кэша
+  clearCache(): void {
+    this.cache = null;
+  }
+
+  // Метод для получения информации о кэше
+  getCacheInfo(): { hasCache: boolean; age: number } {
+    if (!this.cache || !this.cache.timestamp) {
+      return { hasCache: false, age: 0 };
+    }
+    
+    return {
+      hasCache: true,
+      age: Date.now() - this.cache.timestamp
+    };
   }
 }
