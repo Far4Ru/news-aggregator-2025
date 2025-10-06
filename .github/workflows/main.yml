@@ -34,24 +34,6 @@ jobs:
         echo "VITE_SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
         echo "VITE_SUPABASE_MODERATOR_KEY=${{ secrets.SUPABASE_MODERATOR_KEY }}" >> .env
         
-        # Проверка создания файла
-        echo "=== Проверка .env файла ==="
-        ls -la .env
-        echo "=== Содержимое .env (без значений) ==="
-        cat .env | while read line; do
-          if [[ $line == VITE_* ]]; then
-            key=$(echo $line | cut -d'=' -f1)
-            echo "$key=***"
-          else
-            echo "$line"
-          fi
-        done
-        echo "=== Количество строк в .env ==="
-        wc -l .env
-        echo "VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL != '' && 'SET' || 'EMPTY' }}"
-        echo "VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY != '' && 'SET' || 'EMPTY' }}"
-        echo "VITE_SUPABASE_MODERATOR_KEY: ${{ secrets.SUPABASE_MODERATOR_KEY != '' && 'SET' || 'EMPTY' }}" 
-
     - name: Build project
       run: npm run build
 
