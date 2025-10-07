@@ -1,12 +1,10 @@
 import { createContext } from "react"
 import type { User } from "../types"
 
-interface AuthContextType {
+export interface AuthContextType {
     user: User | null
     role: 'user' | 'moderator'
-    login: (email: string, password: string) => Promise<void>
     logout: () => Promise<void>
-    loginWithToken: (token: string) => void
     isLoading: boolean
 }
 
