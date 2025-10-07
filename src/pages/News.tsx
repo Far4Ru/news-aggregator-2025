@@ -48,7 +48,7 @@ export const News: React.FC = () => {
             ...settings,
             filters: filters as any
         })
-    }, [filters, setSettings, settings])
+    }, [filters])
 
     useEffect(() => {
         getPublicIP().then(ip => {
