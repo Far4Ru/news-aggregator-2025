@@ -9,7 +9,7 @@ export const moderationService = {
       .select('*');
 
     console.log(error);
-  
+
     let filteredNews = [...mockNews, ...news as any];
 
     return filteredNews;
@@ -18,7 +18,7 @@ export const moderationService = {
   async moderateNews(newsId: string, status: 'approved' | 'rejected') {
     const { data, error } = await supabase
       .from('news')
-      .update({ status })
+      .update({ status } as never)
       .eq('id', newsId)
       .select();
 

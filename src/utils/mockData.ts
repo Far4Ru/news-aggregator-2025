@@ -13,6 +13,7 @@ export const mockNews: NewsItem[] = [
     rating: 15,
     tags: ['IT', 'искусственный интеллект', 'инновации'],
     url: 'https://example.com/news/1',
+    status: 'approved',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   },
@@ -27,6 +28,7 @@ export const mockNews: NewsItem[] = [
     rating: 8,
     tags: ['налоги', 'бизнес', 'законодательство'],
     url: 'https://example.com/news/2',
+    status: 'approved',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   }
