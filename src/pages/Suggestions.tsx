@@ -16,7 +16,6 @@ export const Suggestions: React.FC = () => {
   })
 
   const loadSuggestions = async () => {
-    setLoading(true)
     try {
       const data = await newsService.getSuggestions()
       setSuggestions(data || [])
@@ -67,7 +66,7 @@ export const Suggestions: React.FC = () => {
         <p className="page__subtitle">Модерация предложенных изменений новостей</p>
       </div>
 
-      <div className="page__content">
+      <div className="page__content-block">
         <ModerationList
           suggestions={suggestions}
           loading={loading}

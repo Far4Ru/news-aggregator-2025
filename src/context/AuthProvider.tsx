@@ -71,7 +71,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = (props) => 
 
   useEffect(() => {
     const initializeAuth = async () => {
-      setIsLoading(true)
       const urlToken = getTokenFromUrl()
       if (urlToken) {
         handleTokenAuth(urlToken)

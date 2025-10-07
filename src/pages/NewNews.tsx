@@ -14,7 +14,6 @@ export const NewNews: React.FC = () => {
   })
 
   const loadNewNews = async () => {
-    setLoading(true)
     try {
       const data = await moderationService.getNewNews()
       setNews(data)
@@ -60,7 +59,7 @@ export const NewNews: React.FC = () => {
         <p className="page__subtitle">Модерация новых добавленных новостей</p>
       </div>
 
-      <div className="page__content">
+      <div className="page__content-block">
         {loading ? (
           <div className="loading">Загрузка...</div>
         ) : news.length === 0 ? (
