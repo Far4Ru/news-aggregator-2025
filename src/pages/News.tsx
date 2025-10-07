@@ -32,7 +32,7 @@ export const News: React.FC = () => {
   const loadNews = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await newsService.getNews(filters, settings.sortBy);
+      const data = await newsService.getNews(settings.selectedSources, filters, settings.sortBy);
 
       setNews(data);
     } catch (error) {

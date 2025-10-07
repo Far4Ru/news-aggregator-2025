@@ -4,13 +4,17 @@ import { mockNews } from '../utils/mockData';
 import { supabase } from './supabase';
 
 export const newsService = {
-  async getNews(filters: NewsFilters, sortBy: 'date' | 'rating' = 'date') {
+  async getNews(selected: string[], filters: NewsFilters, sortBy: 'date' | 'rating' = 'date') {
     const { data: news, error } = await supabase
       .from('news')
       .select('*');
 
     console.log(news, error);
     let filteredNews = [...mockNews, ...news as any];
+
+    filteredNews = filteredNews.filter(item =>
+      selected.includes(item.source_id)
+    );
 
     // Применение фильтров
     if (filters.searchQuery) {
