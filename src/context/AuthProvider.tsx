@@ -1,5 +1,7 @@
-import { useState, useEffect, useCallback } from "react"
+import CryptoJS from 'crypto-js';
+import { useState, useEffect } from "react"
 
+import { supabase } from "../services/supabase"
 import type { User } from "../types"
 
 import { AuthContext } from "./AuthContext"
@@ -9,14 +11,24 @@ function isValidMd5Token(token: string): boolean {
 }
 
 function checkAuthToken (token: string): boolean {
-  const expectedTokens = import.meta.env.VITE_AUTH_TOKENS?.split(',') || []
-  return expectedTokens.includes(token)
+  return token === CryptoJS.MD5(import.meta.env.VITE_SUPABASE_MODERATOR_PASSWORD).toString();
 }
 
 function getTokenFromUrl (): string | null {
   const urlParams = new URLSearchParams(window.location.search)
-  return urlParams.get('token')
+  return urlParams.get('token') || localStorage.getItem('auth_token')
 }
+
+async function getPublicIP() {
+  try {
+    const response = await fetch('https://api.ipify.org?format=json');
+    const data = await response.json();
+    return data.ip;
+  } catch (error) {
+    console.error('Error fetching public IP:', error);
+    return null;
+  }
+};
 
 /**
  * Авторизация модератора:
@@ -28,87 +40,65 @@ function getTokenFromUrl (): string | null {
  */
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = (props) => {
   const [user, setUser] = useState<User | null>(null)
-  const [role, setRole] = useState<'user' | 'moderator'>('user')
   const [isLoading, setIsLoading] = useState(true)
   const children = props.children
 
-  const handleTokenAuth = (token: string) => {
+  const handleTokenAuth = async (token: string) => {
     if (isValidMd5Token(token) && checkAuthToken(token)) {
-      setUser({
-        id: `token_user_${token.substring(0, 8)}`,
-        role: 'user'
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: import.meta.env.VITE_SUPABASE_MODERATOR_EMAIL,
+        password: import.meta.env.VITE_SUPABASE_MODERATOR_PASSWORD
       })
-      setRole('user')
+      const ip = await getPublicIP()
 
-      localStorage.setItem('auth_token', token)
+      console.log(data, error, ip)
+      if (data) {
+        setUser({
+          id: data.user?.id || '',
+          ip,
+          email: data.user?.email,
+          role: 'moderator'
+        })
 
-      const url = new URL(window.location.href)
-      url.searchParams.delete('token')
-      window.history.replaceState({}, '', url.toString())
+        localStorage.setItem('auth_token', token)
+
+        // const url = new URL(window.location.href)
+        // url.searchParams.delete('token')
+        // window.history.replaceState({}, '', url.toString())
+      }
     }
   }
-
-  const checkAuth = async () => {
-    // const { data: { session } } = await supabase.auth.getSession()
-    // if (session?.user) {
-    //     setUser({
-    //         id: session.user.id,
-    //         email: session.user.email,
-    //         role: role
-    //     })
-    // }
-  }
-    
-  const initializeAuth = useCallback(async () => {
-    setIsLoading(true)
-
-    const urlToken = getTokenFromUrl()
-    if (urlToken) {
-      handleTokenAuth(urlToken)
-      setIsLoading(false)
-      return
-    }
-
-    const savedToken = localStorage.getItem('auth_token')
-    if (savedToken && isValidMd5Token(savedToken) && checkAuthToken(savedToken)) {
-      setUser({
-        id: `token_user_${savedToken.substring(0, 8)}`,
-        role: 'user'
-      })
-      setRole('user')
-      setIsLoading(false)
-      return
-    }
-
-    const moderatorKey = import.meta.env.VITE_SUPABASE_MODERATOR_KEY
-    if (moderatorKey) {
-      setRole('moderator')
-      setUser({
-        id: 'moderator',
-        role: 'moderator'
-      })
-    }
-
-    await checkAuth()
-    setIsLoading(false)
-  }, [])
 
   useEffect(() => {
+    const initializeAuth = async () => {
+      setIsLoading(true)
+      const urlToken = getTokenFromUrl()
+      if (urlToken) {
+        handleTokenAuth(urlToken)
+      } else {
+        const ip = await getPublicIP()
+        setUser({
+          id: '',
+          ip,
+          role: 'guest'
+        })
+      }
+      setIsLoading(false)
+    }
+
     initializeAuth()
-  }, [initializeAuth])
+  }, [])
 
   const logout = async () => {
     localStorage.removeItem('auth_token')
-    // const { error } = await supabase.auth.signOut()
-    // if (error) throw error
+    const { error } = await supabase.auth.signOut()
+    if (error) throw error
     setUser(null)
-    setRole('user')
   }
 
   return (
     <AuthContext.Provider value={{
       user,
-      role,
       logout,
       isLoading
     }}>

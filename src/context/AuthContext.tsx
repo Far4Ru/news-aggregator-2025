@@ -4,7 +4,6 @@ import type { User } from "../types"
 
 export interface AuthContextType {
     user: User | null
-    role: 'user' | 'moderator'
     logout: () => Promise<void>
     isLoading: boolean
 }

@@ -2,8 +2,9 @@ import type { NewsFilters } from "./news";
 
 export interface User {
     id: string;
+    ip?: string;
     email?: string;
-    role: 'user' | 'moderator';
+    role: 'guest' | 'moderator';
 }
 
 export interface AppSettings {
@@ -11,7 +12,6 @@ export interface AppSettings {
     sortBy: 'date' | 'rating';
     filters: NewsFilters;
     notificationsEnabled: boolean;
-    userRole: 'user' | 'moderator';
 }
 
 export type NotificationType = 'new_news' | 'moderation' | 'system';
