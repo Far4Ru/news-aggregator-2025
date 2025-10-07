@@ -7,7 +7,7 @@ export const Moderation: React.FC = () => (
       <p className="page__subtitle">Управление контентом и предложениями</p>
     </div>
 
-    <div className="page__content">
+    <div className="page__content-block">
       <div className="moderation-dashboard">
         <div className="moderation-dashboard__grid">
           <a href="/suggestions" className="moderation-dashboard__card">

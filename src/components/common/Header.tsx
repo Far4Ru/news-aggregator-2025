@@ -2,12 +2,14 @@ import { Bell, Settings, Download, Upload } from 'lucide-react'
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
+import { useAuth } from '../../hooks/useAuth'
 import { useAppSettings } from '../../hooks/useLocalStorage'
 import { useNotifications } from '../../hooks/useNotifications'
 
 export const Header: React.FC = () => {
   const location = useLocation()
-  const { settings, importSettings, exportSettings } = useAppSettings()
+  const authContext = useAuth()
+  const { importSettings, exportSettings } = useAppSettings()
   const { isSupported, isSubscribed, subscribe, unsubscribe } = useNotifications()
 
   const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +65,7 @@ export const Header: React.FC = () => {
                 Источники
               </Link>
             </li>
-            {(settings.userRole === 'moderator') && (
+            {(authContext.user?.role === 'moderator') && (
               <>
                 <li className="navbar__item">
                   <Link
@@ -71,22 +73,6 @@ export const Header: React.FC = () => {
                     className={`navbar__link ${location.pathname === '/moderation' ? 'navbar__link--active' : ''}`}
                   >
                     Модерация
-                  </Link>
-                </li>
-                <li className="navbar__item">
-                  <Link
-                    to="/suggestions"
-                    className={`navbar__link ${location.pathname === '/suggestions' ? 'navbar__link--active' : ''}`}
-                  >
-                    Предложения
-                  </Link>
-                </li>
-                <li className="navbar__item">
-                  <Link
-                    to="/new-news"
-                    className={`navbar__link ${location.pathname === '/new-news' ? 'navbar__link--active' : ''}`}
-                  >
-                    Новые новости
                   </Link>
                 </li>
               </>
