@@ -17,116 +17,116 @@ const getPublicIP = async () => {
   }
 };
 export const News: React.FC = () => {
-    const { settings, setSettings } = useAppSettings()
-    const { showNotification } = useNotifications()
+  const { settings, setSettings } = useAppSettings()
+  const { showNotification } = useNotifications()
 
-    const [news, setNews] = useState<NewsItem[]>([])
-    const [loading, setLoading] = useState(true)
-    const [ip, setIp] = useState('')
-    const [filters, setFilters] = useState<NewsFiltersType>(settings.filters)
+  const [news, setNews] = useState<NewsItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [ip, setIp] = useState('')
+  const [filters, setFilters] = useState<NewsFiltersType>(settings.filters)
 
-    const loadNews = useCallback(async () => {
-        setLoading(true)
-        try {
-            const data = await newsService.getNews(filters, settings.sortBy)
-            setNews(data)
-        } catch (error) {
-            console.error('Error loading news:', error)
-            showNotification('Ошибка при загрузке новостей', { tag: 'error' })
-        } finally {
-            setLoading(false)
-        }
-    }, [filters, settings.sortBy, showNotification])
-
-    useEffect(() => {
-        loadNews()
-    }, [loadNews])
-
-    useEffect(() => {
-        // Сохраняем фильтры в настройках
-        setSettings({
-            ...settings,
-            filters: filters as any
-        })
-    }, [filters])
-
-    useEffect(() => {
-        getPublicIP().then(ip => {
-            setIp(ip);
-        });
-    }, []);
-
-    const handleRate = async (newsId: string, increment: number) => {
-        try {
-            await newsService.updateRating(newsId, increment)
-            // Обновляем локальное состояние
-            setNews(news.map(item =>
-                item.id === newsId
-                    ? { ...item, rating: item.rating + increment }
-                    : item
-            ))
-        } catch (error) {
-            console.error('Error updating rating:', error)
-            showNotification('Ошибка при оценке новости', { tag: 'error' })
-        }
+  const loadNews = useCallback(async () => {
+    setLoading(true)
+    try {
+      const data = await newsService.getNews(filters, settings.sortBy)
+      setNews(data)
+    } catch (error) {
+      console.error('Error loading news:', error)
+      showNotification('Ошибка при загрузке новостей', { tag: 'error' })
+    } finally {
+      setLoading(false)
     }
+  }, [filters, settings.sortBy, showNotification])
 
-    const handleShare = (newsItem: NewsItem) => {
-        if (navigator.share) {
-            navigator.share({
-                title: newsItem.title,
-                text: newsItem.short_content,
-                url: newsItem.url || window.location.href
-            })
-        } else {
-            navigator.clipboard.writeText(newsItem.url || window.location.href)
-            showNotification('Ссылка скопирована в буфер обмена', { tag: 'success' })
-        }
+  useEffect(() => {
+    loadNews()
+  }, [loadNews])
+
+  useEffect(() => {
+    // Сохраняем фильтры в настройках
+    setSettings({
+      ...settings,
+      filters: filters as any
+    })
+  }, [filters])
+
+  useEffect(() => {
+    getPublicIP().then(ip => {
+      setIp(ip);
+    });
+  }, []);
+
+  const handleRate = async (newsId: string, increment: number) => {
+    try {
+      await newsService.updateRating(newsId, increment)
+      // Обновляем локальное состояние
+      setNews(news.map(item =>
+        item.id === newsId
+          ? { ...item, rating: item.rating + increment }
+          : item
+      ))
+    } catch (error) {
+      console.error('Error updating rating:', error)
+      showNotification('Ошибка при оценке новости', { tag: 'error' })
     }
+  }
 
-    const handleSuggestEdit = async (newsItem: NewsItem, content: string) => {
-        try {
-            console.log(ip)
-            await newsService.suggestEdit(newsItem.id, content, ip)
-            showNotification('Предложение отправлено на модерацию', { tag: 'success' })
-        } catch (error) {
-            console.error('Error suggesting edit:', error)
-            showNotification('Ошибка при отправке предложения', { tag: 'error' })
-        }
+  const handleShare = (newsItem: NewsItem) => {
+    if (navigator.share) {
+      navigator.share({
+        title: newsItem.title,
+        text: newsItem.short_content,
+        url: newsItem.url || window.location.href
+      })
+    } else {
+      navigator.clipboard.writeText(newsItem.url || window.location.href)
+      showNotification('Ссылка скопирована в буфер обмена', { tag: 'success' })
     }
+  }
 
-    const availableSources = Array.from(new Set(news.map(item => item.source_id)))
-    const availableTags = Array.from(new Set(news.flatMap(item => item.tags)))
+  const handleSuggestEdit = async (newsItem: NewsItem, content: string) => {
+    try {
+      console.log(ip)
+      await newsService.suggestEdit(newsItem.id, content, ip)
+      showNotification('Предложение отправлено на модерацию', { tag: 'success' })
+    } catch (error) {
+      console.error('Error suggesting edit:', error)
+      showNotification('Ошибка при отправке предложения', { tag: 'error' })
+    }
+  }
 
-    return (
-        <div className="page">
-            <div className="page__header">
-                <h1 className="page__title">Новости</h1>
-                <p className="page__subtitle">Свежие новости из ваших источников</p>
-            </div>
+  const availableSources = Array.from(new Set(news.map(item => item.source_id)))
+  const availableTags = Array.from(new Set(news.flatMap(item => item.tags)))
 
-            <div className="page__content">
-                <div className="page__sidebar">
-                    <NewsFilters
-                        filters={filters}
-                        onFiltersChange={setFilters}
-                        sortBy={settings.sortBy}
-                        onSortChange={(sortBy) => setSettings({ ...settings, sortBy })}
-                        availableSources={availableSources}
-                        availableTags={availableTags}
-                    />
-                </div>
+  return (
+    <div className="page">
+      <div className="page__header">
+        <h1 className="page__title">Новости</h1>
+        <p className="page__subtitle">Свежие новости из ваших источников</p>
+      </div>
 
-                <div className="page__main">
-                    <NewsList
-                        news={news}
-                        loading={loading}
-                        onRate={handleRate}
-                        onShare={handleShare}
-                        onSuggestEdit={handleSuggestEdit}
-                    />
-                </div>
-            </div>
+      <div className="page__content">
+        <div className="page__sidebar">
+          <NewsFilters
+            filters={filters}
+            onFiltersChange={setFilters}
+            sortBy={settings.sortBy}
+            onSortChange={(sortBy) => setSettings({ ...settings, sortBy })}
+            availableSources={availableSources}
+            availableTags={availableTags}
+          />
         </div>
-    )
+
+        <div className="page__main">
+          <NewsList
+            news={news}
+            loading={loading}
+            onRate={handleRate}
+            onShare={handleShare}
+            onSuggestEdit={handleSuggestEdit}
+          />
+        </div>
+      </div>
+    </div>
+  )
 }

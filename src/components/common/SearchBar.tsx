@@ -8,20 +8,20 @@ interface SearchBarProps {
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
-    value,
-    onChange,
-    placeholder = 'Поиск...'
+  value,
+  onChange,
+  placeholder = 'Поиск...'
 }) => (
-        <div className="search-bar">
-            <div className="search-bar__icon">
-                <Search size={20} />
-            </div>
-            <input
-                type="text"
-                className="search-bar__input"
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
-                placeholder={placeholder}
-            />
-        </div>
-    )
+  <div className="search-bar">
+    <div className="search-bar__icon">
+      <Search size={20} />
+    </div>
+    <input
+      type="text"
+      className="search-bar__input"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+    />
+  </div>
+)

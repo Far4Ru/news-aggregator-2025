@@ -43,6 +43,9 @@ export default [
     },
     rules: {
       ...js.configs.recommended.rules,
+      'indent': ['error', 2],
+      'react/jsx-indent': ['error', 2],
+      'react/jsx-indent-props': ['error', 2],
       'no-multiple-empty-lines': ['error', { 
         max: 1, 
         maxEOF: 1 
@@ -86,6 +89,9 @@ export default [
     },
     rules: {
       // TypeScript правила
+      'indent': ['error', 2],
+      'react/jsx-indent': ['error', 2],
+      'react/jsx-indent-props': ['error', 2],
       'no-multiple-empty-lines': ['error', { 
         max: 1, 
         maxEOF: 1 
