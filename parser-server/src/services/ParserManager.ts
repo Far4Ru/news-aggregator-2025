@@ -80,9 +80,9 @@ export class ParserManager {
         case 'telegram':
           parser = new TelegramParser(source.id!, source.url, config.parsers.telegram);
           break;
-        // case 'rss':
-        //   parser = new RSSParser(source.id!, config.parsers.rss);
-        //   break;
+        case 'rss':
+          parser = new RSSParser(source.id!, source.url, config.parsers.rss);
+          break;
         // case 'social':
         //   const { SocialMediaParser } = await import('../parsers/social/SocialMediaParser');
         //   parser = new SocialMediaParser(source.id!, config.parsers.default);

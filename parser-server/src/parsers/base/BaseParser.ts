@@ -25,7 +25,7 @@ export abstract class BaseParser {
   ): Promise<NewsItem> {
     // Используем оригинальный заголовок как fallback
     const originalTitle = title.trim();
-    
+    return this.createBasicNewsItem(originalTitle, content, url, publishedAt);
     try {
       // Объединяем заголовок и контент для лучшего анализа
       const fullContent = `${originalTitle}. ${content}`;

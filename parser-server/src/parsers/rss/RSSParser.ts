@@ -19,8 +19,8 @@ export class RSSParser extends BaseParser {
   private cache: CacheData | null = null;
   private readonly CACHE_DURATION = 15 * 60 * 1000; // 15 минут
 
-  constructor(sourceId: string, config: any) {
-    super(sourceId, 'rss', config);
+  constructor(sourceId: string, sourceUrl: string, config: any) {
+    super(sourceId, sourceUrl, 'rss', config);
     this.parser = new Parser({
       timeout: this.config.timeout,
       customFields: {
@@ -36,17 +36,17 @@ export class RSSParser extends BaseParser {
 
   async parse(): Promise<ParseResult> {
     try {
-      const { limit = 20, source } = this.config;
+      // const { limit = 20, source } = this.config;
 
       // Проверяем кэш
-      if (this.cache && this.cache.timestamp && (Date.now() - this.cache.timestamp) < this.CACHE_DURATION) {
-        const filteredData = this.filterNews(this.cache.data, limit, source);
-        return { success: true, data: filteredData };
-      }
+      // if (this.cache && this.cache.timestamp && (Date.now() - this.cache.timestamp) < this.CACHE_DURATION) {
+      //   const filteredData = this.filterNews(this.cache.data, limit, source);
+      //   return { success: true, data: filteredData };
+      // }
 
       const feeds: RSSFeed[] = [
         { url: 'https://lenta.ru/rss/news', name: 'lenta', sourceName: 'Лента.ру' },
-        { url: 'https://rss.newsru.com/russia/news', name: 'newsru', sourceName: 'NewsRU' },
+        // { url: 'https://rss.newsru.com/russia/news', name: 'newsru', sourceName: 'NewsRU' },
         { url: 'https://www.vedomosti.ru/rss/news', name: 'vedomosti', sourceName: 'Ведомости' }
       ];
 
@@ -56,13 +56,13 @@ export class RSSParser extends BaseParser {
         try {
           const feedData = await this.parser.parseURL(feed.url);
           
-          for (const item of feedData.items.slice(0, limit)) {
+          for (const item of feedData.items) {
             const content = this.extractContent(item);
             const title = item.title || 'Без заголовка';
             
             if (content && title !== 'Без заголовка') {
               const publishedAt = item.pubDate ? new Date(item.pubDate) : new Date();
-              const newsItem = this.createNewsItem(
+              const newsItem = this.createBasicNewsItem(
                 title,
                 content,
                 item.link,
@@ -70,8 +70,8 @@ export class RSSParser extends BaseParser {
               );
 
               // Добавляем дополнительную информацию о источнике
-              newsItem.id = `${feed.name}-${item.guid || item.link}`;
-              newsItem.source_name = feed.sourceName;
+              // newsItem.id = `${feed.name}-${item.guid || item.link}`;
+              // newsItem.source_name = feed.sourceName;
               
               if (this.validateNewsItem(newsItem)) {
                 allNews.push(newsItem);
@@ -79,7 +79,7 @@ export class RSSParser extends BaseParser {
             }
           }
         } catch (error) {
-          console.error(`RSSParser error for ${feed.name}:`, error);
+          console.log(`RSSParser error for ${feed.name}:`, error);
         }
       }
 
@@ -94,14 +94,19 @@ export class RSSParser extends BaseParser {
         timestamp: Date.now()
       };
 
-      const filteredData = this.filterNews(sortedNews, limit, source);
-      return { success: true, data: filteredData };
+      // const filteredData = this.filterNews(sortedNews, 20, source);
+      return { success: true, data: sortedNews,
+        sourceName: 'unknown',
+        timestamp: new Date()
+      };
 
     } catch (error) {
       console.error('RSSParser error:', error);
       return { 
         success: false, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+        error: error instanceof Error ? error.message : 'Unknown error',
+        sourceName: 'unknown',
+        timestamp: new Date()
       };
     }
   }
