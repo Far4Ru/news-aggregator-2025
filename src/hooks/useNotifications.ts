@@ -21,7 +21,6 @@ export const useNotifications = () => {
         checkSubscription()
     }, [checkSubscription])
 
-
     const subscribe = async () => {
         if (!isSupported) {
             console.warn('Уведомления не поддерживаются')

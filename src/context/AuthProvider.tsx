@@ -4,7 +4,6 @@ import type { User } from "../types"
 
 import { AuthContext } from "./AuthContext"
 
-
 function isValidMd5Token(token: string): boolean {
     return /^[a-f0-9]{32}$/i.test(token)
 }

@@ -56,7 +56,6 @@ export const News: React.FC = () => {
         });
     }, []);
 
-
     const handleRate = async (newsId: string, increment: number) => {
         try {
             await newsService.updateRating(newsId, increment)

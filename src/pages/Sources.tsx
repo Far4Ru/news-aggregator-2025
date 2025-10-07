@@ -35,7 +35,6 @@ export const Sources: React.FC = () => {
         loadSources()
     }, [loadSources])
 
-
     const handleAddSource = async (sourceData: any) => {
         try {
             await sourcesService.addSource(sourceData)

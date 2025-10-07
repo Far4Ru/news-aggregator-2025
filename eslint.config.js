@@ -43,6 +43,11 @@ export default [
     },
     rules: {
       ...js.configs.recommended.rules,
+      'no-multiple-empty-lines': ['error', { 
+        max: 1, 
+        maxEOF: 1 
+      }],
+      'eol-last': ['error', 'always'],
       'prefer-const': 'error',
       'no-var': 'error',
       'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -81,6 +86,11 @@ export default [
     },
     rules: {
       // TypeScript правила
+      'no-multiple-empty-lines': ['error', { 
+        max: 1, 
+        maxEOF: 1 
+      }],
+      'eol-last': ['error', 'always'],
       '@typescript-eslint/no-unused-vars': ['error', { 
         'argsIgnorePattern': '^_',
         'varsIgnorePattern': '^_' 
