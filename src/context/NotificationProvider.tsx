@@ -1,8 +1,8 @@
-import { useCallback, useState, type ReactNode } from "react"
+import { useCallback, useState, type ReactNode } from 'react';
 
-import { NotificationCard } from "../components/common/NotificationCard"
+import { NotificationCard } from '../components/common/NotificationCard';
 
-import { NotificationContext } from "./NotificationContext"
+import { NotificationContext } from './NotificationContext';
 
 export interface NotificationItem {
   id: string
@@ -12,27 +12,27 @@ export interface NotificationItem {
 }
 
 export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [notifications, setNotifications] = useState<NotificationItem[]>([])
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
   const showNotification = useCallback((
     message: string, 
     type: 'success' | 'error' | 'info' = 'info',
     duration?: number
   ) => {
-    const id = Math.random().toString(36).substr(2, 9)
-    const newNotification: NotificationItem = { id, message, type, duration }
+    const id = Math.random().toString(36).substr(2, 9);
+    const newNotification: NotificationItem = { id, message, type, duration };
     
-    setNotifications(prev => [...prev, newNotification])
-  }, [])
+    setNotifications(prev => [...prev, newNotification]);
+  }, []);
 
   const removeNotification = useCallback((id: string) => {
-    setNotifications(prev => prev.filter(notification => notification.id !== id))
-  }, [])
+    setNotifications(prev => prev.filter(notification => notification.id !== id));
+  }, []);
 
   return (
     <NotificationContext.Provider value={{ showNotification }}>
       {children}
-      <div className="notification-container">
+      <div className='notification-container'>
         {notifications.map((notification) => (
           <NotificationCard
             key={notification.id}
@@ -42,5 +42,5 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
         ))}
       </div>
     </NotificationContext.Provider>
-  )
-}
+  );
+};

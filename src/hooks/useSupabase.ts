@@ -36,6 +36,6 @@ export const supabase = {
       subscription: { unsubscribe: () => { } }
     })
   }
-}
+};
 
-export const supabaseModerator = supabase
+export const supabaseModerator = supabase;

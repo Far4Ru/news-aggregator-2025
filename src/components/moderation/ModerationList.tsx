@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-import { type NewsSuggestion } from '../../types/news'
-import { LoadingSpinner } from '../common/LoadingSpinner'
+import { type NewsSuggestion } from '../../types/news';
+import { LoadingSpinner } from '../common/LoadingSpinner';
 
-import { SuggestionItem } from './SuggestionItem'
+import { SuggestionItem } from './SuggestionItem';
 
 interface ModerationListProps {
     suggestions: NewsSuggestion[]
@@ -21,26 +21,26 @@ export const ModerationList: React.FC<ModerationListProps> = ({
   onBlock
 }) => {
   if (loading) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   if (suggestions.length === 0) {
     return (
-      <div className="moderation-list__empty">
-        <h3 className="moderation-list__empty-title">Предложения не найдены</h3>
-        <p className="moderation-list__empty-text">Нет предложений, ожидающих модерации</p>
+      <div className='moderation-list__empty'>
+        <h3 className='moderation-list__empty-title'>Предложения не найдены</h3>
+        <p className='moderation-list__empty-text'>Нет предложений, ожидающих модерации</p>
       </div>
-    )
+    );
   }
 
-  const pendingSuggestions = suggestions.filter(s => s.status === 'pending')
-  const processedSuggestions = suggestions.filter(s => s.status !== 'pending')
+  const pendingSuggestions = suggestions.filter(s => s.status === 'pending');
+  const processedSuggestions = suggestions.filter(s => s.status !== 'pending');
 
   return (
-    <div className="moderation-list">
+    <div className='moderation-list'>
       {pendingSuggestions.length > 0 && (
-        <div className="moderation-list__section">
-          <h3 className="moderation-list__section-title">Ожидают модерации</h3>
+        <div className='moderation-list__section'>
+          <h3 className='moderation-list__section-title'>Ожидают модерации</h3>
           {pendingSuggestions.map(suggestion => (
             <SuggestionItem
               key={suggestion.id}
@@ -54,8 +54,8 @@ export const ModerationList: React.FC<ModerationListProps> = ({
       )}
 
       {processedSuggestions.length > 0 && (
-        <div className="moderation-list__section">
-          <h3 className="moderation-list__section-title">Обработанные</h3>
+        <div className='moderation-list__section'>
+          <h3 className='moderation-list__section-title'>Обработанные</h3>
           {processedSuggestions.map(suggestion => (
             <SuggestionItem
               key={suggestion.id}
@@ -68,5 +68,5 @@ export const ModerationList: React.FC<ModerationListProps> = ({
         </div>
       )}
     </div>
-  )
-}
+  );
+};

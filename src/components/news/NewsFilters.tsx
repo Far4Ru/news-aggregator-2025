@@ -1,9 +1,9 @@
-import { SortAsc, SortDesc } from 'lucide-react'
-import React from 'react'
+import { SortAsc, SortDesc } from 'lucide-react';
+import React from 'react';
 
-import type { NewsFilters as NewsFiltersType } from '../../types/news'
-import { FilterPanel } from '../common/FilterPanel'
-import { SearchBar } from '../common/SearchBar'
+import type { NewsFilters as NewsFiltersType } from '../../types/news';
+import { FilterPanel } from '../common/FilterPanel';
+import { SearchBar } from '../common/SearchBar';
 
 interface NewsFiltersProps {
     filters: NewsFiltersType
@@ -22,17 +22,17 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
   availableSources,
   availableTags
 }) => (
-  <div className="news-filters">
-    <div className="news-filters__top">
-      <div className="news-filters__search">
+  <div className='news-filters'>
+    <div className='news-filters__top'>
+      <div className='news-filters__search'>
         <SearchBar
           value={filters.searchQuery}
           onChange={(value) => onFiltersChange({ ...filters, searchQuery: value })}
-          placeholder="Поиск по новостям..."
+          placeholder='Поиск по новостям...'
         />
       </div>
 
-      <div className="news-filters__sort">
+      <div className='news-filters__sort'>
         <button
           className={`news-filters__sort-button ${sortBy === 'date' ? 'news-filters__sort-button--active' : ''}`}
           onClick={() => onSortChange('date')}
@@ -57,4 +57,4 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
       availableTags={availableTags}
     />
   </div>
-)
+);

@@ -1,4 +1,4 @@
-import type { NewsFilters } from "./news";
+import type { NewsFilters } from './news';
 
 export interface User {
     id: string;

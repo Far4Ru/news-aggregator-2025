@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 
-import type { NewsItem } from '../../types/news'
-import { LoadingSpinner } from '../common/LoadingSpinner'
-import { NewsCard } from '../common/NewsCard'
+import type { NewsItem } from '../../types/news';
+import { LoadingSpinner } from '../common/LoadingSpinner';
+import { NewsCard } from '../common/NewsCard';
 
 interface NewsListProps {
     news: NewsItem[]
@@ -20,20 +20,20 @@ export const NewsList: React.FC<NewsListProps> = ({
   onSuggestEdit
 }) => {
   if (loading) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   if (news.length === 0) {
     return (
-      <div className="news-list__empty">
-        <h3 className="news-list__empty-title">Новости не найдены</h3>
-        <p className="news-list__empty-text">Попробуйте изменить параметры фильтрации</p>
+      <div className='news-list__empty'>
+        <h3 className='news-list__empty-title'>Новости не найдены</h3>
+        <p className='news-list__empty-text'>Попробуйте изменить параметры фильтрации</p>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="news-list">
+    <div className='news-list'>
       {news.map(item => (
         <NewsCard
           key={item.id}
@@ -44,5 +44,5 @@ export const NewsList: React.FC<NewsListProps> = ({
         />
       ))}
     </div>
-  )
-}
+  );
+};

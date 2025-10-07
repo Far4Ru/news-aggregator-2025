@@ -1,7 +1,7 @@
-import { Plus, Minus, BarChart3, ExternalLink } from 'lucide-react'
-import React from 'react'
+import { Plus, Minus, BarChart3, ExternalLink } from 'lucide-react';
+import React from 'react';
 
-import { type NewsSource } from '../../types/sources'
+import { type NewsSource } from '../../types/sources';
 
 interface SourceCardProps {
     source: NewsSource
@@ -17,29 +17,29 @@ export const SourceCard: React.FC<SourceCardProps> = ({
   onRemove
 }) => {
   // const totalActivity = source.activity_data.reduce((sum, count) => sum + count, 0)
-  const maxActivity = Math.max(...source.activity_data)
+  const maxActivity = Math.max(...source.activity_data);
 
   return (
-    <div className="source-card">
-      <div className="source-card__header">
-        <h3 className="source-card__title">{source.name}</h3>
+    <div className='source-card'>
+      <div className='source-card__header'>
+        <h3 className='source-card__title'>{source.name}</h3>
         <span className={`source-card__type source-card__type--${source.type}`}>
           {source.type}
         </span>
       </div>
 
-      <p className="source-card__description">{source.description}</p>
+      <p className='source-card__description'>{source.description}</p>
 
-      <div className="source-card__activity">
-        <div className="source-card__activity-header">
+      <div className='source-card__activity'>
+        <div className='source-card__activity-header'>
           <BarChart3 size={16} />
           <span>Активность (последние 7 дней)</span>
         </div>
-        <div className="source-card__chart">
+        <div className='source-card__chart'>
           {source.activity_data.map((count, index) => (
             <div
               key={index}
-              className="source-card__bar"
+              className='source-card__bar'
               style={{
                 height: `${maxActivity > 0 ? (count / maxActivity) * 40 : 0}px`
               }}
@@ -49,12 +49,12 @@ export const SourceCard: React.FC<SourceCardProps> = ({
         </div>
       </div>
 
-      <div className="source-card__actions">
+      <div className='source-card__actions'>
         <a
           href={source.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="source-card__link"
+          target='_blank'
+          rel='noopener noreferrer'
+          className='source-card__link'
         >
           <ExternalLink size={16} />
           Перейти
@@ -62,7 +62,7 @@ export const SourceCard: React.FC<SourceCardProps> = ({
 
         {isAdded ? (
           <button
-            className="source-card__button source-card__button--remove"
+            className='source-card__button source-card__button--remove'
             onClick={() => onRemove(source.id)}
           >
             <Minus size={16} />
@@ -70,7 +70,7 @@ export const SourceCard: React.FC<SourceCardProps> = ({
           </button>
         ) : (
           <button
-            className="source-card__button source-card__button--add"
+            className='source-card__button source-card__button--add'
             onClick={() => onAdd(source.id)}
           >
             <Plus size={16} />
@@ -79,5 +79,5 @@ export const SourceCard: React.FC<SourceCardProps> = ({
         )}
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-import { type NewsSource } from '../../types/sources'
-import { LoadingSpinner } from '../common/LoadingSpinner'
+import { type NewsSource } from '../../types/sources';
+import { LoadingSpinner } from '../common/LoadingSpinner';
 
-import { SourceCard } from './SourceCard'
+import { SourceCard } from './SourceCard';
 
 interface SourceListProps {
     sources: NewsSource[]
@@ -21,20 +21,20 @@ export const SourceList: React.FC<SourceListProps> = ({
   onRemoveSource
 }) => {
   if (loading) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   if (sources.length === 0) {
     return (
-      <div className="source-list__empty">
-        <h3 className="source-list__empty-title">Источники не найдены</h3>
-        <p className="source-list__empty-text">Попробуйте изменить параметры поиска</p>
+      <div className='source-list__empty'>
+        <h3 className='source-list__empty-title'>Источники не найдены</h3>
+        <p className='source-list__empty-text'>Попробуйте изменить параметры поиска</p>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="source-list">
+    <div className='source-list'>
       {sources.map(source => (
         <SourceCard
           key={source.id}
@@ -45,5 +45,5 @@ export const SourceList: React.FC<SourceListProps> = ({
         />
       ))}
     </div>
-  )
-}
+  );
+};

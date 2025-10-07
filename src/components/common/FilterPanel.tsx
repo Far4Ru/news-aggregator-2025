@@ -1,7 +1,7 @@
-import { Filter, X } from 'lucide-react'
-import React from 'react'
+import { Filter, X } from 'lucide-react';
+import React from 'react';
 
-import { type NewsFilters } from '../../types/news'
+import { type NewsFilters } from '../../types/news';
 
 interface FilterPanelProps {
     filters: NewsFilters
@@ -16,14 +16,14 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   availableSources,
   availableTags
 }) => {
-  const sourceTypes = ['telegram', 'rss', 'website', 'other']
+  const sourceTypes = ['telegram', 'rss', 'website', 'other'];
 
   const updateFilter = (key: keyof NewsFilters, value: any) => {
     onFiltersChange({
       ...filters,
       [key]: value
-    })
-  }
+    });
+  };
 
   const clearFilters = () => {
     onFiltersChange({
@@ -33,8 +33,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       searchQuery: '',
       dateFrom: '',
       dateTo: ''
-    })
-  }
+    });
+  };
 
   const hasActiveFilters =
         filters.sources.length > 0 ||
@@ -42,46 +42,46 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         filters.tags.length > 0 ||
         filters.searchQuery ||
         filters.dateFrom ||
-        filters.dateTo
+        filters.dateTo;
 
   return (
-    <div className="filter-panel">
-      <div className="filter-panel__header">
-        <h3 className="filter-panel__title">
+    <div className='filter-panel'>
+      <div className='filter-panel__header'>
+        <h3 className='filter-panel__title'>
           <Filter size={20} />
           Фильтры
         </h3>
         {hasActiveFilters && (
-          <button className="filter-panel__clear" onClick={clearFilters}>
+          <button className='filter-panel__clear' onClick={clearFilters}>
             <X size={16} />
             Очистить
           </button>
         )}
       </div>
 
-      <div className="filter-panel__section">
-        <label className="filter-panel__label">Дата от</label>
+      <div className='filter-panel__section'>
+        <label className='filter-panel__label'>Дата от</label>
         <input
-          type="date"
-          className="filter-panel__input"
+          type='date'
+          className='filter-panel__input'
           value={filters.dateFrom}
           onChange={(e) => updateFilter('dateFrom', e.target.value)}
         />
       </div>
 
-      <div className="filter-panel__section">
-        <label className="filter-panel__label">Дата до</label>
+      <div className='filter-panel__section'>
+        <label className='filter-panel__label'>Дата до</label>
         <input
-          type="date"
-          className="filter-panel__input"
+          type='date'
+          className='filter-panel__input'
           value={filters.dateTo}
           onChange={(e) => updateFilter('dateTo', e.target.value)}
         />
       </div>
 
-      <div className="filter-panel__section">
-        <label className="filter-panel__label">Источники</label>
-        <div className="filter-panel__chips">
+      <div className='filter-panel__section'>
+        <label className='filter-panel__label'>Источники</label>
+        <div className='filter-panel__chips'>
           {availableSources.map(source => (
             <button
               key={source}
@@ -89,8 +89,9 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               onClick={() => {
                 const newSources = filters.sources.includes(source)
                   ? filters.sources.filter(s => s !== source)
-                  : [...filters.sources, source]
-                updateFilter('sources', newSources)
+                  : [...filters.sources, source];
+
+                updateFilter('sources', newSources);
               }}
             >
               {source}
@@ -99,9 +100,9 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         </div>
       </div>
 
-      <div className="filter-panel__section">
-        <label className="filter-panel__label">Типы источников</label>
-        <div className="filter-panel__chips">
+      <div className='filter-panel__section'>
+        <label className='filter-panel__label'>Типы источников</label>
+        <div className='filter-panel__chips'>
           {sourceTypes.map(type => (
             <button
               key={type}
@@ -109,8 +110,9 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               onClick={() => {
                 const newTypes = filters.sourceTypes.includes(type)
                   ? filters.sourceTypes.filter(t => t !== type)
-                  : [...filters.sourceTypes, type]
-                updateFilter('sourceTypes', newTypes)
+                  : [...filters.sourceTypes, type];
+
+                updateFilter('sourceTypes', newTypes);
               }}
             >
               {type}
@@ -119,9 +121,9 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         </div>
       </div>
 
-      <div className="filter-panel__section">
-        <label className="filter-panel__label">Теги</label>
-        <div className="filter-panel__chips">
+      <div className='filter-panel__section'>
+        <label className='filter-panel__label'>Теги</label>
+        <div className='filter-panel__chips'>
           {availableTags.map(tag => (
             <button
               key={tag}
@@ -129,8 +131,9 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               onClick={() => {
                 const newTags = filters.tags.includes(tag)
                   ? filters.tags.filter(t => t !== tag)
-                  : [...filters.tags, tag]
-                updateFilter('tags', newTags)
+                  : [...filters.tags, tag];
+
+                updateFilter('tags', newTags);
               }}
             >
               {tag}
@@ -139,5 +142,5 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

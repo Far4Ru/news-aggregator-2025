@@ -1,71 +1,73 @@
-import { Bell, Settings, Download, Upload, LogOut } from 'lucide-react'
-import React from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Bell, Settings, Download, Upload, LogOut } from 'lucide-react';
+import React from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../../hooks/useAuth'
-import { useAppSettings } from '../../hooks/useLocalStorage'
-import { useNotifications } from '../../hooks/useNotifications'
+import { useAuth } from '../../hooks/useAuth';
+import { useAppSettings } from '../../hooks/useLocalStorage';
+import { useNotifications } from '../../hooks/useNotifications';
 
 export const Header: React.FC = () => {
-  const location = useLocation()
-  const authContext = useAuth()
+  const location = useLocation();
+  const authContext = useAuth();
   const navigate = useNavigate();
-  const { importSettings, exportSettings } = useAppSettings()
-  const { isSupported, isSubscribed, subscribe, unsubscribe } = useNotifications()
+  const { importSettings, exportSettings } = useAppSettings();
+  const { isSupported, isSubscribed, subscribe, unsubscribe } = useNotifications();
 
   const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
+
     if (file) {
-      importSettings(file)
+      importSettings(file);
     }
-  }
+  };
 
   const handleExport = () => {
-    const url = exportSettings()
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'news-app-settings.json'
-    a.click()
-    URL.revokeObjectURL(url)
-  }
+    const url = exportSettings();
+    const a = document.createElement('a');
+
+    a.href = url;
+    a.download = 'news-app-settings.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const toggleNotifications = async () => {
     if (isSubscribed) {
-      await unsubscribe()
+      await unsubscribe();
     } else {
-      await subscribe()
+      await subscribe();
     }
-  }
+  };
 
   const logout = () => {
-    authContext.logout()
+    authContext.logout();
     navigate('/');
-  }
+  };
 
   return (
-    <header className="navbar">
-      <div className="navbar__container">
-        <Link to="/" className="navbar__logo">
+    <header className='navbar'>
+      <div className='navbar__container'>
+        <Link to='/' className='navbar__logo'>
           <img 
-            src="./logo.png" 
-            alt="Агрегатор новостей" 
-            className="navbar__logo-image"
+            src='./logo.png' 
+            alt='Агрегатор новостей' 
+            className='navbar__logo-image'
           />
         </Link>
 
-        <nav className="navbar__nav">
-          <ul className="navbar__menu">
-            <li className="navbar__item">
+        <nav className='navbar__nav'>
+          <ul className='navbar__menu'>
+            <li className='navbar__item'>
               <Link
-                to="/news"
+                to='/news'
                 className={`navbar__link ${location.pathname === '/news' ? 'navbar__link--active' : ''}`}
               >
                 Новости
               </Link>
             </li>
-            <li className="navbar__item">
+            <li className='navbar__item'>
               <Link
-                to="/sources"
+                to='/sources'
                 className={`navbar__link ${location.pathname === '/sources' ? 'navbar__link--active' : ''}`}
               >
                 Источники
@@ -73,9 +75,9 @@ export const Header: React.FC = () => {
             </li>
             {(authContext.user?.role === 'moderator') && (
               <>
-                <li className="navbar__item">
+                <li className='navbar__item'>
                   <Link
-                    to="/moderation"
+                    to='/moderation'
                     className={`navbar__link ${location.pathname === '/moderation' ? 'navbar__link--active' : ''}`}
                   >
                     Модерация
@@ -86,10 +88,10 @@ export const Header: React.FC = () => {
           </ul>
         </nav>
 
-        <div className="navbar__actions">
+        <div className='navbar__actions'>
           {isSupported && (
             <button
-              className="navbar__button"
+              className='navbar__button'
               onClick={toggleNotifications}
               title={isSubscribed ? 'Отключить уведомления' : 'Включить уведомления'}
             >
@@ -97,21 +99,21 @@ export const Header: React.FC = () => {
             </button>
           )}
 
-          <div className="navbar__dropdown">
-            <button className="navbar__button">
+          <div className='navbar__dropdown'>
+            <button className='navbar__button'>
               <Settings size={20} />
             </button>
-            <div className="navbar__dropdown-content">
-              <button className="navbar__dropdown-item" onClick={handleExport}>
+            <div className='navbar__dropdown-content'>
+              <button className='navbar__dropdown-item' onClick={handleExport}>
                 <Download size={16} />
                 Экспорт настроек
               </button>
-              <button className="navbar__dropdown-item">
+              <button className='navbar__dropdown-item'>
                 <Upload size={16} />
                 Импорт настроек
                 <input
-                  type="file"
-                  accept=".json"
+                  type='file'
+                  accept='.json'
                   onChange={handleImport}
                   style={{ display: 'none' }}
                 />
@@ -121,7 +123,7 @@ export const Header: React.FC = () => {
 
           {(authContext.user?.role === 'moderator') && (
             <button
-              className="navbar__button"
+              className='navbar__button'
               onClick={logout}
               title='Выйти из режима модерации'
             >
@@ -131,5 +133,5 @@ export const Header: React.FC = () => {
         </div>
       </div>
     </header>
-  )
-}
+  );
+};

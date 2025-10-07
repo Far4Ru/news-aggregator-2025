@@ -1,5 +1,5 @@
-import { type NewsItem } from "../types/news"
-import { type NewsSource } from "../types/sources"
+import { type NewsItem } from '../types/news';
+import { type NewsSource } from '../types/sources';
 
 export const mockNews: NewsItem[] = [
   {
@@ -30,7 +30,7 @@ export const mockNews: NewsItem[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   }
-]
+];
 
 export const mockSources: NewsSource[] = [
   {
@@ -55,4 +55,4 @@ export const mockSources: NewsSource[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   }
-]
+];

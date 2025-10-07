@@ -1,5 +1,5 @@
 // components/common/Notification.tsx
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 export interface NotificationProps {
   id: string
@@ -16,45 +16,45 @@ export const NotificationCard: React.FC<NotificationProps> = ({
   duration = 5000,
   onClose,
 }) => {
-  const [isClosing, setIsClosing] = useState(false)
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      handleClose()
-    }, duration)
+      handleClose();
+    }, duration);
 
-    return () => clearTimeout(timer)
-  }, [duration])
+    return () => clearTimeout(timer);
+  }, [duration]);
 
   const handleClose = () => {
-    setIsClosing(true)
+    setIsClosing(true);
     setTimeout(() => {
-      onClose(id)
-    }, 300)
-  }
+      onClose(id);
+    }, 300);
+  };
 
   const getIcon = () => {
     switch (type) {
     case 'success':
-      return '✅'
+      return '✅';
     case 'error':
-      return '❌'
+      return '❌';
     case 'info':
-      return 'ℹ️'
+      return 'ℹ️';
     default:
-      return 'ℹ️'
+      return 'ℹ️';
     }
-  }
+  };
 
   return (
     <div className={`notification notification--${type} ${isClosing ? 'notification--closing' : ''}`}>
-      <div className="notification__content">
-        <span className="notification__icon">{getIcon()}</span>
-        <span className="notification__message">{message}</span>
-        <button className="notification__close" onClick={handleClose}>
+      <div className='notification__content'>
+        <span className='notification__icon'>{getIcon()}</span>
+        <span className='notification__message'>{message}</span>
+        <button className='notification__close' onClick={handleClose}>
           ×
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
