@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import { ModerationList } from '../components/moderation/ModerationList'
-import { useNotification } from '../hooks/useNotificatiom'
+import { useNotification } from '../hooks/useNotification'
 import { moderationService } from '../services/moderationService'
 import { newsService } from '../services/newsService'
 import type { NewsSuggestion } from '../types/news'

@@ -89,6 +89,37 @@ export default [
     },
     rules: {
       // TypeScript правила
+      // Пустые строки между логическими блоками
+      'padding-line-between-statements': [
+        'error',
+        // Пустая строка после импортов
+        { 'blankLine': 'always', 'prev': 'import', 'next': '*' },
+        { 'blankLine': 'any', 'prev': 'import', 'next': 'import' },
+        
+        // Пустая строка между классами, функциями, константами
+        { 'blankLine': 'always', 'prev': ['class', 'function', 'const', 'let', 'var'], 'next': '*' },
+        { 'blankLine': 'any', 'prev': ['const', 'let', 'var'], 'next': ['const', 'let', 'var'] },
+        
+        // Пустая строка перед return
+        { 'blankLine': 'always', 'prev': '*', 'next': 'return' },
+        
+        // Пустая строка после объявлений
+        { 'blankLine': 'always', 'prev': ['class', 'function'], 'next': '*' },
+      ],
+    
+      // Точки с запятой - в TypeScript рекомендуется использовать
+      'semi': ['error', 'always'],
+      '@typescript-eslint/semi': ['error', 'always'],
+      
+      // Одинарные кавычки - стандарт для TypeScript/React
+      'quotes': ['error', 'single', { 'allowTemplateLiterals': true }],
+      '@typescript-eslint/quotes': ['error', 'single', { 'allowTemplateLiterals': true }],
+    
+      // JSX кавычки
+      'jsx-quotes': ['error', 'prefer-single'],
+      
+      // Дополнительные правила для лучшей читаемости
+      'lines-between-class-members': ['error', 'always', { 'exceptAfterSingleLine': true }],
       'indent': ['error', 2],
       'react/jsx-indent': ['error', 2],
       'react/jsx-indent-props': ['error', 2],
@@ -96,7 +127,9 @@ export default [
         max: 1, 
         maxEOF: 1 
       }],
+      // Пустые строки в начале и конце файлов
       'eol-last': ['error', 'always'],
+      'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 1, 'maxBOF': 0 }],
       '@typescript-eslint/no-unused-vars': ['error', { 
         'argsIgnorePattern': '^_',
         'varsIgnorePattern': '^_' 

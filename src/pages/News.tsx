@@ -3,9 +3,10 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { NewsFilters } from '../components/news/NewsFilters'
 import { NewsList } from '../components/news/NewsList'
 import { useAppSettings } from '../hooks/useLocalStorage'
-import { useNotifications } from '../hooks/useNotifications'
+import { useNotification } from '../hooks/useNotification'
 import { newsService } from '../services/newsService'
 import type { NewsFilters as NewsFiltersType, NewsItem } from '../types/news'
+
 const getPublicIP = async () => {
   try {
     const response = await fetch('https://api.ipify.org?format=json');
@@ -16,9 +17,10 @@ const getPublicIP = async () => {
     return null;
   }
 };
+
 export const News: React.FC = () => {
   const { settings, setSettings } = useAppSettings()
-  const { showNotification } = useNotifications()
+  const { showNotification } = useNotification()
 
   const [news, setNews] = useState<NewsItem[]>([])
   const [loading, setLoading] = useState(true)
@@ -32,7 +34,7 @@ export const News: React.FC = () => {
       setNews(data)
     } catch (error) {
       console.error('Error loading news:', error)
-      showNotification('Ошибка при загрузке новостей', { tag: 'error' })
+      showNotification('Ошибка при загрузке новостей', 'error' )
     } finally {
       setLoading(false)
     }
@@ -67,7 +69,7 @@ export const News: React.FC = () => {
       ))
     } catch (error) {
       console.error('Error updating rating:', error)
-      showNotification('Ошибка при оценке новости', { tag: 'error' })
+      showNotification('Ошибка при оценке новости', 'error')
     }
   }
 
@@ -80,7 +82,7 @@ export const News: React.FC = () => {
       })
     } else {
       navigator.clipboard.writeText(newsItem.url || window.location.href)
-      showNotification('Ссылка скопирована в буфер обмена', { tag: 'success' })
+      showNotification('Ссылка скопирована в буфер обмена', 'success' )
     }
   }
 
@@ -88,10 +90,10 @@ export const News: React.FC = () => {
     try {
       console.log(ip)
       await newsService.suggestEdit(newsItem.id, content, ip)
-      showNotification('Предложение отправлено на модерацию', { tag: 'success' })
+      showNotification('Предложение отправлено на модерацию', 'success' )
     } catch (error) {
       console.error('Error suggesting edit:', error)
-      showNotification('Ошибка при отправке предложения', { tag: 'error' })
+      showNotification('Ошибка при отправке предложения', 'error')
     }
   }
 

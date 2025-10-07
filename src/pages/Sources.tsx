@@ -5,13 +5,13 @@ import { SearchBar } from '../components/common/SearchBar'
 import { AddSourceModal } from '../components/sources/AddSourceModal'
 import { SourceList } from '../components/sources/SourceList'
 import { useAppSettings } from '../hooks/useLocalStorage'
-import { useNotifications } from '../hooks/useNotifications'
 import { sourcesService } from '../services/sourcesService'
 import type { NewsSource } from '../types/sources'
+import { useNotification } from '../hooks/useNotification'
 
 export const Sources: React.FC = () => {
   const { settings, setSettings } = useAppSettings()
-  const { showNotification } = useNotifications()
+  const { showNotification } = useNotification()
 
   const [sources, setSources] = useState<NewsSource[]>([])
   const [loading, setLoading] = useState(true)
@@ -25,7 +25,7 @@ export const Sources: React.FC = () => {
       setSources(data)
     } catch (error) {
       console.error('Error loading sources:', error)
-      showNotification('Ошибка при загрузке источников', { tag: 'error' })
+      showNotification('Ошибка при загрузке источников', 'error')
     } finally {
       setLoading(false)
     }
@@ -38,11 +38,11 @@ export const Sources: React.FC = () => {
   const handleAddSource = async (sourceData: any) => {
     try {
       await sourcesService.addSource(sourceData)
-      showNotification('Источник добавлен и ожидает модерации', { tag: 'success' })
+      showNotification('Источник добавлен и ожидает модерации', 'success')
       loadSources() // Перезагружаем список
     } catch (error) {
       console.error('Error adding source:', error)
-      showNotification('Ошибка при добавлении источника', { tag: 'error' })
+      showNotification('Ошибка при добавлении источника', 'error')
     }
   }
 
@@ -52,7 +52,7 @@ export const Sources: React.FC = () => {
       ...settings,
       selectedSources: newSelectedSources as any
     })
-    showNotification('Источник добавлен в вашу подборку', { tag: 'success' })
+    showNotification('Источник добавлен в вашу подборку', 'success')
   }
 
   const handleRemoveUserSource = (sourceId: string) => {
@@ -61,7 +61,7 @@ export const Sources: React.FC = () => {
       ...settings,
       selectedSources: newSelectedSources
     })
-    showNotification('Источник удален из вашей подборки', { tag: 'success' })
+    showNotification('Источник удален из вашей подборки', 'success')
   }
 
   const filteredSources = sources.filter(source =>

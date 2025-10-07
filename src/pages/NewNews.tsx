@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { useNotification } from '../hooks/useNotificatiom'
+import { useNotification } from '../hooks/useNotification'
 import { moderationService } from '../services/moderationService'
 import type { NewsItem } from '../types/news'
 
