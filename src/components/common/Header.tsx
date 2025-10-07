@@ -1,6 +1,6 @@
-import { Bell, Settings, Download, Upload } from 'lucide-react'
+import { Bell, Settings, Download, Upload, LogOut } from 'lucide-react'
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuth } from '../../hooks/useAuth'
 import { useAppSettings } from '../../hooks/useLocalStorage'
@@ -9,6 +9,7 @@ import { useNotifications } from '../../hooks/useNotifications'
 export const Header: React.FC = () => {
   const location = useLocation()
   const authContext = useAuth()
+  const navigate = useNavigate();
   const { importSettings, exportSettings } = useAppSettings()
   const { isSupported, isSubscribed, subscribe, unsubscribe } = useNotifications()
 
@@ -34,6 +35,11 @@ export const Header: React.FC = () => {
     } else {
       await subscribe()
     }
+  }
+
+  const logout = () => {
+    authContext.logout()
+    navigate('/');
   }
 
   return (
@@ -100,7 +106,7 @@ export const Header: React.FC = () => {
                 <Download size={16} />
                 Экспорт настроек
               </button>
-              <label className="navbar__dropdown-item">
+              <button className="navbar__dropdown-item">
                 <Upload size={16} />
                 Импорт настроек
                 <input
@@ -109,9 +115,19 @@ export const Header: React.FC = () => {
                   onChange={handleImport}
                   style={{ display: 'none' }}
                 />
-              </label>
+              </button>
             </div>
           </div>
+
+          {(authContext.user?.role === 'moderator') && (
+            <button
+              className="navbar__button"
+              onClick={logout}
+              title='Выйти из режима модерации'
+            >
+              <LogOut size={20} className={isSubscribed ? 'navbar__icon--active' : ''} />
+            </button>
+          )}
         </div>
       </div>
     </header>
