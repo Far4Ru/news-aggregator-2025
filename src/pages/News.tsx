@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+
+import { NewsFilters } from '../components/news/NewsFilters'
 import { NewsList } from '../components/news/NewsList'
 import { useAppSettings } from '../hooks/useLocalStorage'
 import { useNotifications } from '../hooks/useNotifications'
 import { newsService } from '../services/newsService'
 import type { NewsFilters as NewsFiltersType, NewsItem } from '../types/news'
-import { NewsFilters } from '../components/news/NewsFilters'
 const getPublicIP = async () => {
   try {
     const response = await fetch('https://api.ipify.org?format=json');
@@ -24,25 +25,7 @@ export const News: React.FC = () => {
     const [ip, setIp] = useState('')
     const [filters, setFilters] = useState<NewsFiltersType>(settings.filters)
 
-    useEffect(() => {
-        loadNews()
-    }, [filters, settings.sortBy])
-
-    useEffect(() => {
-        // Сохраняем фильтры в настройках
-        setSettings({
-            ...settings,
-            filters: filters as any
-        })
-    }, [filters])
-
-    useEffect(() => {
-        getPublicIP().then(ip => {
-            setIp(ip);
-        });
-    }, []);
-
-    const loadNews = async () => {
+    const loadNews = useCallback(async () => {
         setLoading(true)
         try {
             const data = await newsService.getNews(filters, settings.sortBy)
@@ -53,7 +36,26 @@ export const News: React.FC = () => {
         } finally {
             setLoading(false)
         }
-    }
+    }, [filters, settings.sortBy, showNotification])
+
+    useEffect(() => {
+        loadNews()
+    }, [loadNews])
+
+    useEffect(() => {
+        // Сохраняем фильтры в настройках
+        setSettings({
+            ...settings,
+            filters: filters as any
+        })
+    }, [filters, setSettings, settings])
+
+    useEffect(() => {
+        getPublicIP().then(ip => {
+            setIp(ip);
+        });
+    }, []);
+
 
     const handleRate = async (newsId: string, increment: number) => {
         try {

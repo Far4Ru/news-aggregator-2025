@@ -1,10 +1,11 @@
-import { supabase } from './supabase'
-import { mockSources } from '../utils/mockData'
 import type { NewsSource } from '../types/sources'
+import { mockSources } from '../utils/mockData'
+
+import { supabase } from './supabase'
 
 export const sourcesService = {
-    async getSources(searchQuery: string = '') {
-        let { data: sources, error } = await supabase
+    async getSources(searchQuery = '') {
+        const { data: sources, error } = await supabase
         .from('sources')
         .select('*')
         console.log(sources, error)

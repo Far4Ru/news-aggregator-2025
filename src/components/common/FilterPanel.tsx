@@ -1,6 +1,7 @@
-import React from 'react'
 import { Filter, X } from 'lucide-react'
-import { NewsFilters } from '../../types/news'
+import React from 'react'
+
+import { type NewsFilters } from '../../types/news'
 
 interface FilterPanelProps {
     filters: NewsFilters

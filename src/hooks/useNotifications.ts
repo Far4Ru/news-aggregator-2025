@@ -4,12 +4,7 @@ export const useNotifications = () => {
     const [isSupported, setIsSupported] = useState(false)
     const [isSubscribed, setIsSubscribed] = useState(false)
 
-    useEffect(() => {
-        setIsSupported('Notification' in window && 'serviceWorker' in navigator)
-        checkSubscription()
-    }, [])
-
-    const checkSubscription = async () => {
+    const checkSubscription = useCallback(async () => {
         if (!isSupported) return
 
         try {
@@ -19,7 +14,13 @@ export const useNotifications = () => {
         } catch (error) {
             console.error('Error checking subscription:', error)
         }
-    }
+    }, [isSupported])
+
+    useEffect(() => {
+        setIsSupported('Notification' in window && 'serviceWorker' in navigator)
+        checkSubscription()
+    }, [checkSubscription])
+
 
     const subscribe = async () => {
         if (!isSupported) {

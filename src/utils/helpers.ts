@@ -1,6 +1,4 @@
-export const formatDate = (dateString: string): string => {
-    return new Date(dateString).toLocaleDateString('ru-RU')
-}
+export const formatDate = (dateString: string): string => new Date(dateString).toLocaleDateString('ru-RU')
 
 export const debounce = <T extends (...args: any[]) => any>(
     func: T,

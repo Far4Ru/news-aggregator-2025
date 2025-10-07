@@ -1,6 +1,8 @@
 import React from 'react'
-import { NewsSource } from '../../types/sources'
+
+import { type NewsSource } from '../../types/sources'
 import { LoadingSpinner } from '../common/LoadingSpinner'
+
 import { SourceCard } from './SourceCard'
 
 interface SourceListProps {

@@ -1,8 +1,9 @@
-import React from 'react'
 import { SortAsc, SortDesc } from 'lucide-react'
+import React from 'react'
+
+import type { NewsFilters as NewsFiltersType } from '../../types/news'
 import { FilterPanel } from '../common/FilterPanel'
 import { SearchBar } from '../common/SearchBar'
-import type { NewsFilters as NewsFiltersType } from '../../types/news'
 
 interface NewsFiltersProps {
     filters: NewsFiltersType
@@ -20,8 +21,7 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
     onSortChange,
     availableSources,
     availableTags
-}) => {
-    return (
+}) => (
         <div className="news-filters">
             <div className="news-filters__top">
                 <div className="news-filters__search">
@@ -58,4 +58,3 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
             />
         </div>
     )
-}

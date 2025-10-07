@@ -1,7 +1,6 @@
 import React from 'react'
 
-export const Moderation: React.FC = () => {
-    return (
+export const Moderation: React.FC = () => (
         <div className="page">
             <div className="page__header">
                 <h1 className="page__title">Панель модерации</h1>
@@ -30,4 +29,3 @@ export const Moderation: React.FC = () => {
             </div>
         </div>
     )
-}

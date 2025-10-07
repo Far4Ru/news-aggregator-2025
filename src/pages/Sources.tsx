@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
 import { Plus } from 'lucide-react'
+import React, { useState, useEffect, useCallback } from 'react'
+
 import { SearchBar } from '../components/common/SearchBar'
 import { AddSourceModal } from '../components/sources/AddSourceModal'
 import { SourceList } from '../components/sources/SourceList'
@@ -17,11 +18,7 @@ export const Sources: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('')
     const [showAddModal, setShowAddModal] = useState(false)
 
-    useEffect(() => {
-        loadSources()
-    }, [searchQuery])
-
-    const loadSources = async () => {
+    const loadSources = useCallback(async () => {
         setLoading(true)
         try {
             const data = await sourcesService.getSources(searchQuery)
@@ -32,7 +29,12 @@ export const Sources: React.FC = () => {
         } finally {
             setLoading(false)
         }
-    }
+    }, [searchQuery, showNotification])
+
+    useEffect(() => {
+        loadSources()
+    }, [loadSources])
+
 
     const handleAddSource = async (sourceData: any) => {
         try {

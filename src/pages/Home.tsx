@@ -1,9 +1,8 @@
+import { Newspaper, Rss, Users } from 'lucide-react'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Newspaper, Rss, Users } from 'lucide-react'
 
-export const Home: React.FC = () => {
-    return (
+export const Home: React.FC = () => (
         <div className="home">
             <section className="home__hero">
                 <div className="home__hero-content">
@@ -51,4 +50,3 @@ export const Home: React.FC = () => {
             </section>
         </div>
     )
-}

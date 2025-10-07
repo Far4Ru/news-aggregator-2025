@@ -1,6 +1,7 @@
-import React from 'react'
 import { Plus, Minus, BarChart3, ExternalLink } from 'lucide-react'
-import { NewsSource } from '../../types/sources'
+import React from 'react'
+
+import { type NewsSource } from '../../types/sources'
 
 interface SourceCardProps {
     source: NewsSource

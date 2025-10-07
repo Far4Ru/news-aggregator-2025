@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+
 import { NotificationContext } from "./NotificationContext"
 
 export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {

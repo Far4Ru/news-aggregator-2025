@@ -1,5 +1,5 @@
-import React from 'react'
 import { Search } from 'lucide-react'
+import React from 'react'
 
 interface SearchBarProps {
     value: string
@@ -11,8 +11,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     value,
     onChange,
     placeholder = 'Поиск...'
-}) => {
-    return (
+}) => (
         <div className="search-bar">
             <div className="search-bar__icon">
                 <Search size={20} />
@@ -26,4 +25,3 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             />
         </div>
     )
-}

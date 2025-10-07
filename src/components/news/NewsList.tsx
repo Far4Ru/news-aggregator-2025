@@ -1,4 +1,5 @@
 import React from 'react'
+
 import type { NewsItem } from '../../types/news'
 import { LoadingSpinner } from '../common/LoadingSpinner'
 import { NewsCard } from '../common/NewsCard'

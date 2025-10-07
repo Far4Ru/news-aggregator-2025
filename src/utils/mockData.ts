@@ -1,5 +1,6 @@
-import { NewsItem } from "../types/news"
-import { NewsSource } from "../types/sources"
+import { type NewsItem } from "../types/news"
+import { type NewsSource } from "../types/sources"
+
 
 export const mockNews: NewsItem[] = [
     {

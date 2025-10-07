@@ -1,6 +1,7 @@
+import { Bell, Settings, Download, Upload } from 'lucide-react'
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Bell, Settings, Download, Upload } from 'lucide-react'
+
 import { useAppSettings } from '../../hooks/useLocalStorage'
 import { useNotifications } from '../../hooks/useNotifications'
 

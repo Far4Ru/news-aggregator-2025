@@ -1,10 +1,11 @@
-import { supabase } from './supabase'
-import { mockNews } from '../utils/mockData'
 import type { NewsFilters } from '../types/news'
+import { mockNews } from '../utils/mockData'
+
+import { supabase } from './supabase'
 
 export const newsService = {
     async getNews(filters: NewsFilters, sortBy: 'date' | 'rating' = 'date') {
-        let { data: news, error } = await supabase
+        const { data: news, error } = await supabase
             .from('news')
             .select('*')
         console.log(news, error)

@@ -1,15 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Header } from './components/common/Header'
+
 import { Footer } from './components/common/Footer'
-import { Home } from './pages/Home'
-import { News } from './pages/News'
-import { Sources } from './pages/Sources'
-import { Moderation } from './pages/Moderation'
-import { Suggestions } from './pages/Suggestions'
-import { NewNews } from './pages/NewNews'
-import './styles/main.scss'
+import { Header } from './components/common/Header'
 import { AuthProvider } from './context/AuthProvider'
 import { NotificationProvider } from './context/NotificationProvider'
+import { Home } from './pages/Home'
+import { Moderation } from './pages/Moderation'
+import { NewNews } from './pages/NewNews'
+import { News } from './pages/News'
+import { Sources } from './pages/Sources'
+import { Suggestions } from './pages/Suggestions'
+import './styles/main.scss'
 
 function App() {
   return (

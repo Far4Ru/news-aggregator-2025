@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
+
 import type { User } from "../types"
+
 import { AuthContext } from "./AuthContext"
 
 
@@ -47,69 +49,54 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = (props) => 
         }
     }
 
-    useEffect(() => {
-        const initializeAuth = async () => {
-            setIsLoading(true)
+    const checkAuth = async () => {
+        // const { data: { session } } = await supabase.auth.getSession()
+        // if (session?.user) {
+        //     setUser({
+        //         id: session.user.id,
+        //         email: session.user.email,
+        //         role: role
+        //     })
+        // }
+    }
+    
+    const initializeAuth = useCallback(async () => {
+        setIsLoading(true)
 
-            const urlToken = getTokenFromUrl()
-            if (urlToken) {
-                handleTokenAuth(urlToken)
-                setIsLoading(false)
-                return
-            }
-
-            const savedToken = localStorage.getItem('auth_token')
-            if (savedToken && isValidMd5Token(savedToken) && checkAuthToken(savedToken)) {
-                setUser({
-                    id: `token_user_${savedToken.substring(0, 8)}`,
-                    role: 'user'
-                })
-                setRole('user')
-                setIsLoading(false)
-                return
-            }
-
-            const moderatorKey = import.meta.env.VITE_SUPABASE_MODERATOR_KEY
-            if (moderatorKey) {
-                setRole('moderator')
-                setUser({
-                    id: 'moderator',
-                    role: 'moderator'
-                })
-            }
-
-            const checkAuth = async () => {
-                // const { data: { session } } = await supabase.auth.getSession()
-                // if (session?.user) {
-                //     setUser({
-                //         id: session.user.id,
-                //         email: session.user.email,
-                //         role: role
-                //     })
-                // }
-            }
-
-            await checkAuth()
+        const urlToken = getTokenFromUrl()
+        if (urlToken) {
+            handleTokenAuth(urlToken)
             setIsLoading(false)
+            return
         }
 
-        initializeAuth()
+        const savedToken = localStorage.getItem('auth_token')
+        if (savedToken && isValidMd5Token(savedToken) && checkAuthToken(savedToken)) {
+            setUser({
+                id: `token_user_${savedToken.substring(0, 8)}`,
+                role: 'user'
+            })
+            setRole('user')
+            setIsLoading(false)
+            return
+        }
 
-        // // Слушатель изменений URL для обработки токена при навигации
-        // const handleUrlChange = () => {
-        //     const urlToken = getTokenFromUrl()
-        //     if (urlToken && (!user || user.id.startsWith('token_user_'))) {
-        //         handleTokenAuth(urlToken)
-        //     }
-        // }
+        const moderatorKey = import.meta.env.VITE_SUPABASE_MODERATOR_KEY
+        if (moderatorKey) {
+            setRole('moderator')
+            setUser({
+                id: 'moderator',
+                role: 'moderator'
+            })
+        }
 
-        // window.addEventListener('popstate', handleUrlChange)
-
-        // return () => {
-        //     window.removeEventListener('popstate', handleUrlChange)
-        //     // return () => subscription.unsubscribe() // раскомментируйте когда будете использовать supabase
-        // }
+        await checkAuth()
+        setIsLoading(false)
     }, [])
+
+    useEffect(() => {
+        initializeAuth()
+    }, [initializeAuth])
 
     const logout = async () => {
         localStorage.removeItem('auth_token')

@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
 import { ThumbsUp, ThumbsDown, Share2, Edit } from 'lucide-react'
+import React, { useState } from 'react'
+
 import type { NewsItem } from '../../types/news'
 
 interface NewsCardProps {
