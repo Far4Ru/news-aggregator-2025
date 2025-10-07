@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { useNotification } from '../hooks/useNotification';
 import { moderationService } from '../services/moderationService';
@@ -9,14 +9,11 @@ export const NewNews: React.FC = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadNewNews();
-  });
-
-  const loadNewNews = async () => {
+  const loadNewNews = useCallback(async () => {
     try {
       const data = await moderationService.getNewNews();
 
+      console.log(data);
       setNews(data);
     } catch (error) {
       console.error('Error loading new news:', error);
@@ -24,11 +21,15 @@ export const NewNews: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showNotification]);
+
+  useEffect(() => {
+    loadNewNews();
+  }, [loadNewNews]);
 
   const handleApprove = async (newsId: string) => {
     try {
-      await moderationService.moderateNews(newsId, 'approve');
+      await moderationService.moderateNews(newsId, 'approved');
       showNotification('Новость подтверждена', 'success');
       loadNewNews(); // Перезагружаем список
     } catch (error) {
@@ -39,7 +40,7 @@ export const NewNews: React.FC = () => {
 
   const handleReject = async (newsId: string) => {
     try {
-      await moderationService.moderateNews(newsId, 'reject');
+      await moderationService.moderateNews(newsId, 'rejected');
       showNotification('Новость отклонена', 'success');
       loadNewNews(); // Перезагружаем список
     } catch (error) {
@@ -79,20 +80,28 @@ export const NewNews: React.FC = () => {
                     <span>Дата: {new Date(item.published_at).toLocaleDateString()}</span>
                   </div>
                 </div>
-                <div className='moderation-news-item__actions'>
-                  <button
-                    className='button button--success'
-                    onClick={() => handleApprove(item.id)}
-                  >
-                    Подтвердить
-                  </button>
-                  <button
-                    className='button button--danger'
-                    onClick={() => handleReject(item.id)}
-                  >
-                    Отклонить
-                  </button>
-                </div>
+                {item.status === 'pending' && (
+                  <div className='moderation-news-item__actions'>
+                    <button
+                      className='button button--success'
+                      onClick={() => handleApprove(item.id)}
+                    >
+                      Подтвердить
+                    </button>
+                    <button
+                      className='button button--danger'
+                      onClick={() => handleReject(item.id)}
+                    >
+                      Отклонить
+                    </button>
+                  </div>
+                )}
+                {item.status === 'approved' && (
+                  <div>Подтверждено</div>
+                )}
+                {item.status === 'rejected' && (
+                  <div>Отклонено</div>
+                )}
               </div>
             ))}
           </div>

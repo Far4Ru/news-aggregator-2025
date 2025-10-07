@@ -5,6 +5,7 @@ export interface NewsItem {
     short_content: string;
     source_id: string;
     source_type: 'telegram' | 'rss' | 'website' | 'other';
+    status: string;
     published_at: string;
     rating: number;
     tags: string[];

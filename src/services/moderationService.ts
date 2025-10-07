@@ -1,16 +1,28 @@
 import { mockNews } from '../utils/mockData';
 
+import { supabase } from './supabase';
+
 export const moderationService = {
   async getNewNews() {
-    // Заглушка
-    await new Promise(resolve => setTimeout(resolve, 500));
+    const { data: news, error } = await supabase
+      .from('news')
+      .select('*');
 
-    return mockNews.filter(news => news.id === '1'); // Только одна новость для примера
+    console.log(error);
+  
+    let filteredNews = [...mockNews, ...news as any];
+
+    return filteredNews;
   },
 
-  async moderateNews(_newsId: string, _action: 'approve' | 'reject') {
-    // Заглушка
-    await new Promise(resolve => setTimeout(resolve, 200));
+  async moderateNews(newsId: string, status: 'approved' | 'rejected') {
+    const { data, error } = await supabase
+      .from('news')
+      .update({ status })
+      .eq('id', newsId)
+      .select();
+
+    console.log(data, error);
 
     return null;
   },

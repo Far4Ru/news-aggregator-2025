@@ -17,6 +17,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   availableTags
 }) => {
   const sourceTypes = ['telegram', 'rss', 'website', 'other'];
+  const periodTags = ['за последний час', 'за 3 часа', 'за 6 часов', 'сегодня', 'за неделю', 'за месяц'];
 
   const updateFilter = (key: keyof NewsFilters, value: any) => {
     onFiltersChange({
@@ -59,7 +60,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         )}
       </div>
 
-      <div className='filter-panel__section'>
+      {/* <div className='filter-panel__section'>
         <label className='filter-panel__label'>Дата от</label>
         <input
           type='date'
@@ -77,6 +78,28 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           value={filters.dateTo}
           onChange={(e) => updateFilter('dateTo', e.target.value)}
         />
+      </div> */}
+
+      <div className='filter-panel__section'>
+        <label className='filter-panel__label'>Дата</label>
+        <div className='filter-panel__chips'>
+          {periodTags.map(periodTag => (
+            <button
+              key={periodTag}
+              className={`filter-panel__chip ${filters.sources.includes(periodTag) ? 'filter-panel__chip--active' : ''}`}
+              onClick={() => {
+                // TODO: - change
+                // const newSources = filters.sources.includes(periodTag)
+                //   ? filters.sources.filter(s => s !== periodTag)
+                //   : [...filters.sources, periodTag];
+
+                // updateFilter('sources', newSources);
+              }}
+            >
+              {periodTag}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className='filter-panel__section'>

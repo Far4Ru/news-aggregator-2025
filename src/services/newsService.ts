@@ -9,7 +9,7 @@ export const newsService = {
       .from('news')
       .select('*');
 
-    console.log(news, error);
+    console.log(error);
     let filteredNews = [...mockNews, ...news as any];
 
     filteredNews = filteredNews.filter(item =>
