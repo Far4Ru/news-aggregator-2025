@@ -34,7 +34,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
       setSuggestedContent('');
     }
   };
-
+  
   return (
     <div className='news-card'>
       <div className='news-card__header'>

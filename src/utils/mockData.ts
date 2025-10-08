@@ -14,6 +14,14 @@ export const mockNews: NewsItem[] = [
     tags: ['IT', 'искусственный интеллект', 'инновации'],
     url: 'https://example.com/news/1',
     status: 'approved',
+    sources: {
+      description: 'Главные Новости РИА',
+      id: '887928cd-5184-4a09-a519-0be4ef1d58b6',
+      name: 'РИА Новости',
+      status: 'approved',
+      type: 'telegram',
+      url: 'https://t.me/rian_ru'
+    },
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   },
@@ -28,6 +36,14 @@ export const mockNews: NewsItem[] = [
     rating: 8,
     tags: ['налоги', 'бизнес', 'законодательство'],
     url: 'https://example.com/news/2',
+    sources: {
+      description: 'Главные Новости РИА',
+      id: '887928cd-5184-4a09-a519-0be4ef1d58b6',
+      name: 'РИА Новости',
+      status: 'approved',
+      type: 'telegram',
+      url: 'https://t.me/rian_ru'
+    },
     status: 'approved',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
