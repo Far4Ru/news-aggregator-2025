@@ -1,0 +1,81 @@
+@use '../abstracts/variables' as colors;
+@use '../abstracts/mixins';
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: colors.$spacing-lg;
+
+  &__header {
+    margin-bottom: colors.$spacing-xl;
+  }
+
+  &__title {
+    font-size: 32px;
+    font-weight: 600;
+    color: colors.$hh-text;
+    margin-bottom: colors.$spacing-sm;
+  }
+
+  &__subtitle {
+    font-size: 16px;
+    color: colors.$hh-gray-dark;
+    margin: 0;
+  }
+
+  &__actions {
+    @include mixins.flex-between;
+    margin-bottom: colors.$spacing-xl;
+    gap: colors.$spacing-md;
+
+    @include mixins.mobile {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  &__search {
+    flex: 1;
+    max-width: 400px;
+
+    @include mixins.mobile {
+      max-width: none;
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: colors.$spacing-xl;
+
+    @include mixins.tablet {
+      grid-template-columns: 250px 1fr;
+    }
+
+    @include mixins.mobile {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__content-block {
+    display: block;
+  }
+
+  &__sidebar {
+    @include mixins.mobile {
+      order: 2;
+    }
+  }
+
+  &__main {
+    @include mixins.mobile {
+      order: 1;
+    }
+  }
+
+  @include mixins.mobile {
+    &__title {
+      font-size: 24px;
+    }
+  }
+}

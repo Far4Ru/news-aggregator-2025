@@ -1,0 +1,46 @@
+@use '../abstracts/variables' as colors;
+@use '../abstracts/mixins';
+
+.footer {
+  background: colors.$hh-gray-light;
+  border-top: 1px solid colors.$hh-gray;
+  margin-top: colors.$spacing-xl;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: colors.$spacing-lg;
+  }
+
+  &__content {
+    @include mixins.flex-between;
+    align-items: center;
+
+    @include mixins.mobile {
+      flex-direction: column;
+      gap: colors.$spacing-md;
+      text-align: center;
+    }
+  }
+
+  &__text {
+    color: colors.$hh-gray-dark;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  &__links {
+    display: flex;
+    gap: colors.$spacing-md;
+  }
+
+  &__link {
+    color: colors.$hh-gray-dark;
+    text-decoration: none;
+    font-size: 14px;
+
+    &:hover {
+      color: colors.$hh-red;
+    }
+  }
+}

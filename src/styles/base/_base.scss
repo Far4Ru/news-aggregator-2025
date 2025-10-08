@@ -1,0 +1,15 @@
+@use '../abstracts/variables' as colors;
+
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: colors.$hh-text;
+  background-color: colors.$background;
+  line-height: 1.4;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100dvh;
+}

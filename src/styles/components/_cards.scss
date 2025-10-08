@@ -1,0 +1,247 @@
+@use '../abstracts/variables' as colors;
+@use '../abstracts/mixins';
+
+.news-card {
+  @include mixins.card-base;
+  margin-bottom: colors.$spacing-md;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: colors.$shadow-md;
+  }
+
+  &__header {
+    @include mixins.flex-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: colors.$hh-text;
+    margin: 0;
+    flex: 1;
+  }
+
+  &__meta {
+    @include mixins.flex-column;
+    align-items: flex-end;
+    gap: colors.$spacing-xs;
+  }
+
+  &__date {
+    font-size: 12px;
+    color: colors.$hh-gray-dark;
+  }
+
+  &__source {
+    font-size: 12px;
+    color: colors.$hh-red;
+    font-weight: 500;
+  }
+
+  &__content {
+    margin-bottom: 12px;
+  }
+
+  &__text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: colors.$hh-text;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: colors.$spacing-sm;
+    margin-bottom: colors.$spacing-md;
+  }
+
+  &__tag {
+    background: colors.$hh-gray-light;
+    padding: colors.$spacing-xs colors.$spacing-sm;
+    border-radius: colors.$border-radius-sm;
+    font-size: 12px;
+    color: colors.$hh-gray-dark;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-md;
+  }
+
+  &__rating {
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-sm;
+  }
+
+  &__rating-value {
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  &__button {
+    @include mixins.button-reset;
+    border: 1px solid colors.$hh-gray;
+    border-radius: colors.$border-radius-sm;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: colors.$hh-gray-light;
+    }
+
+    &--up:hover {
+      color: green;
+      border-color: green;
+    }
+
+    &--down:hover {
+      color: red;
+      border-color: red;
+    }
+  }
+
+  @include mixins.mobile {
+    &__header {
+      flex-direction: column;
+      gap: colors.$spacing-sm;
+    }
+
+    &__meta {
+      align-items: flex-start;
+    }
+  }
+}
+
+.source-card {
+  @include mixins.card-base;
+
+  &__header {
+    @include mixins.flex-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    color: colors.$hh-text;
+  }
+
+  &__type {
+    padding: colors.$spacing-xs colors.$spacing-sm;
+    background: colors.$hh-gray-light;
+    border-radius: colors.$border-radius-sm;
+    font-size: 12px;
+    color: colors.$hh-gray-dark;
+
+    &--telegram {
+      background: #0088cc;
+      color: colors.$background;
+    }
+
+    &--rss {
+      background: #ff6600;
+      color: colors.$background;
+    }
+
+    &--website {
+      background: colors.$hh-red;
+      color: colors.$background;
+    }
+  }
+
+  &__description {
+    color: colors.$hh-gray-dark;
+    font-size: 14px;
+    margin-bottom: colors.$spacing-md;
+    line-height: 1.5;
+  }
+
+  &__activity {
+    margin-bottom: colors.$spacing-md;
+  }
+
+  &__activity-header {
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-sm;
+    margin-bottom: colors.$spacing-sm;
+    font-size: 14px;
+    color: colors.$hh-text;
+  }
+
+  &__chart {
+    display: flex;
+    align-items: end;
+    gap: colors.$spacing-xs;
+    height: 40px;
+  }
+
+  &__bar {
+    flex: 1;
+    background: colors.$hh-red;
+    border-radius: 2px 2px 0 0;
+    min-height: 1px;
+  }
+
+  &__actions {
+    @include mixins.flex-between;
+    align-items: center;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-xs;
+    color: colors.$hh-red;
+    text-decoration: none;
+    font-size: 14px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-xs;
+    padding: 6px 12px;
+    border: 1px solid colors.$hh-gray;
+    border-radius: colors.$border-radius-sm;
+    background: colors.$background;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+
+    &--add {
+      color: colors.$hh-red;
+      border-color: colors.$hh-red;
+
+      &:hover {
+        background: colors.$hh-red;
+        color: colors.$background;
+      }
+    }
+
+    &--remove {
+      color: colors.$hh-gray-dark;
+      border-color: colors.$hh-gray-dark;
+
+      &:hover {
+        background: colors.$hh-gray-dark;
+        color: colors.$background;
+      }
+    }
+  }
+}

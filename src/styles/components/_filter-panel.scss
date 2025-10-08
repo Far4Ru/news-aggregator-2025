@@ -1,0 +1,80 @@
+@use '../abstracts/variables' as colors;
+@use '../abstracts/mixins';
+
+.filter-panel {
+  @include mixins.card-base;
+
+  &__header {
+    @include mixins.flex-between;
+    margin-bottom: 20px;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-sm;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  &__clear {
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-xs;
+    background: none;
+    border: none;
+    color: colors.$hh-gray-dark;
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover {
+      color: colors.$hh-red;
+    }
+  }
+
+  &__section {
+    margin-bottom: 20px;
+  }
+
+  &__label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: colors.$spacing-sm;
+    color: colors.$hh-text;
+  }
+
+  &__input {
+    width: 100%;
+    padding: colors.$spacing-sm 12px;
+    border: 1px solid colors.$hh-gray;
+    border-radius: colors.$border-radius-sm;
+    font-size: 14px;
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: colors.$spacing-sm;
+  }
+
+  &__chip {
+    padding: 6px 12px;
+    background: colors.$hh-gray-light;
+    border: 1px solid colors.$hh-gray;
+    border-radius: 16px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: colors.$hh-gray;
+    }
+
+    &--active {
+      background: colors.$hh-red;
+      color: colors.$background;
+      border-color: colors.$hh-red;
+    }
+  }
+}

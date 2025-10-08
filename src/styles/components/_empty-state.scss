@@ -1,0 +1,12 @@
+@use '../abstracts/variables' as colors;
+
+.empty-state {
+  text-align: center;
+  padding: colors.$spacing-xxl colors.$spacing-lg;
+  color: colors.$hh-gray-dark;
+
+  h3 {
+    margin: 0 0 colors.$spacing-sm 0;
+    font-size: 18px;
+  }
+}

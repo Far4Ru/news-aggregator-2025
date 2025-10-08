@@ -1,0 +1,85 @@
+@use '../abstracts/variables' as colors;
+@use '../abstracts/mixins';
+
+.home {
+  &__hero {
+    background: linear-gradient(135deg, colors.$hh-red 0%, colors.$hh-red-dark 100%);
+    color: colors.$background;
+    padding: 80px 20px;
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  &__title {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: colors.$spacing-md;
+  }
+
+  &__subtitle {
+    font-size: 20px;
+    margin-bottom: colors.$spacing-xl;
+    opacity: 0.9;
+  }
+
+  &__actions {
+    display: flex;
+    gap: colors.$spacing-md;
+    justify-content: center;
+
+    @include mixins.mobile {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &__button {
+    min-width: 160px;
+  }
+
+  &__features {
+    padding: 0 20px 64px;
+  }
+
+  &__features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: colors.$spacing-xl;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  &__feature {
+    text-align: center;
+    padding: colors.$spacing-xl colors.$spacing-lg;
+  }
+
+  &__feature-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto colors.$spacing-md;
+    color: colors.$hh-red;
+  }
+
+  &__feature-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: colors.$hh-text;
+  }
+
+  &__feature-text {
+    color: colors.$hh-gray-dark;
+    line-height: 1.6;
+  }
+
+  @include mixins.mobile {
+    &__title {
+      font-size: 36px;
+    }
+
+    &__subtitle {
+      font-size: 18px;
+    }
+  }
+}

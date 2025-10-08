@@ -1,0 +1,155 @@
+@use '../abstracts/variables' as colors;
+@use '../abstracts/mixins';
+
+.navbar {
+  background: colors.$background;
+  border-bottom: 2px solid colors.$hh-red;
+
+  &__container {
+    @include mixins.flex-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 60px;
+    padding: 0 colors.$spacing-lg;
+  }
+
+  &__logo {
+    color: colors.$hh-red;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  &__logo-image {
+    display: block;
+    height: 40px;
+  }
+
+  &__menu {
+    display: flex;
+    list-style: none;
+    gap: colors.$spacing-xl;
+  }
+
+  &__item {
+    position: relative;
+  }
+
+  &__link {
+    color: colors.$hh-text;
+    text-decoration: none;
+    font-weight: 500;
+    padding: colors.$spacing-sm 0;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: colors.$hh-red;
+    }
+
+    &--active {
+      color: colors.$hh-red;
+      border-bottom: 2px solid colors.$hh-red;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__button {
+    @include mixins.button-reset;
+    padding: colors.$spacing-sm;
+    border-radius: colors.$border-radius-sm;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: colors.$hh-gray-light;
+    }
+  }
+
+  &__dropdown {
+    position: relative;
+  }
+
+  &__dropdown-content {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: colors.$background;
+    border: 1px solid colors.$hh-gray;
+    border-radius: colors.$border-radius-sm;
+    min-width: 200px;
+    box-shadow: colors.$shadow-md;
+    display: none;
+    z-index: 1001;
+  }
+
+  &__dropdown:hover &__dropdown-content {
+    display: block;
+  }
+
+  &__dropdown-item {
+    @include mixins.flex-center;
+    gap: colors.$spacing-sm;
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: colors.$hh-gray-light;
+    }
+  }
+
+  &__icon--active {
+    color: colors.$hh-red;
+  }
+  
+  &__burger {
+    display: none;
+  
+    @include mixins.mobile {
+      display: block;
+    }
+  }
+
+  @include mixins.mobile {
+    &__container {
+      flex-direction: row;
+      position: relative;
+    }
+
+    &__menu {
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      text-align: center;
+      margin: 0;
+      padding: colors.$spacing-md 0;
+    }
+
+    &__nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: colors.$background;
+      border-bottom: 2px solid colors.$hh-red;
+      transform: translateY(-10%);
+      opacity: 0;
+      visibility: hidden;
+      z-index: 1000;
+
+      &--open {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
+}
