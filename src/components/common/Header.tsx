@@ -23,12 +23,10 @@ export const Header: React.FC = () => {
     setIsMenuOpen(false);
   };
 
-  // Закрываем меню при изменении маршрута
   useEffect(() => {
     closeMenu();
   }, [location.pathname]);
 
-  // Закрываем меню при нажатии на Escape
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -169,11 +167,11 @@ export const Header: React.FC = () => {
           )}
 
           <button 
-            className='navbar__burger'
+            className='navbar__button navbar__burger'
             onClick={toggleMenu}
             aria-label={isMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>

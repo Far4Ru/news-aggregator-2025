@@ -87,6 +87,7 @@
     min-width: 200px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: none;
+    z-index: 1001;
   }
 
   &__dropdown:hover &__dropdown-content {
@@ -116,11 +117,6 @@
   
   &__burger {
     display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-    z-index: 1001;
   
     @media (max-width: 768px) {
       display: block;
