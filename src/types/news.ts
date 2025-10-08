@@ -10,6 +10,7 @@ export interface NewsItem {
     rating: number;
     tags: string[];
     url: string;
+    sources: any;
     created_at: string;
     updated_at: string;
 }

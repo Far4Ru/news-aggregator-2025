@@ -7,7 +7,17 @@ export const newsService = {
   async getNews(selected: string[], filters: NewsFilters, sortBy: 'date' | 'rating' = 'date') {
     const { data: news, error } = await supabase
       .from('news')
-      .select('*');
+      .select(`
+        *,
+        sources (
+          id,
+          name,
+          description,
+          url,
+          type,
+          status
+        )
+      `);
 
     console.log(error);
     let filteredNews = [...mockNews, ...news as any];

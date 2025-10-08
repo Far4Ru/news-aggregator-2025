@@ -13,7 +13,7 @@
 
   &__content {
     background: colors.$background;
-    padding: colors.$spacing-xl;
+    padding: colors.$spacing-lg;
     border-radius: colors.$border-radius-md;
     max-width: 500px;
     width: 90%;
@@ -34,6 +34,7 @@
     margin: 0;
     font-size: 18px;
     font-weight: 600;
+    margin-bottom: colors.$spacing-lg;
   }
 
   &__close {

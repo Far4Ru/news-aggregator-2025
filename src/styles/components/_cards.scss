@@ -3,7 +3,6 @@
 
 .news-card {
   @include mixins.card-base;
-  margin-bottom: colors.$spacing-md;
   transition: box-shadow 0.2s ease;
 
   &:hover {
@@ -14,6 +13,24 @@
     @include mixins.flex-between;
     align-items: flex-start;
     margin-bottom: 12px;
+  }
+
+  &__title-block {
+    @include mixins.flex-column;
+  }
+
+  &__header-block {
+    display: flex;
+    gap: colors.$spacing-sm;
+  }
+
+  &__title-image-block {
+    @include mixins.flex-column;
+    justify-content: center;
+  }
+
+  &__title-image {
+    width: 32px;
   }
 
   &__title {
@@ -33,6 +50,7 @@
   &__date {
     font-size: 12px;
     color: colors.$hh-gray-dark;
+    margin-right: colors.$spacing-md;
   }
 
   &__source {
@@ -45,25 +63,26 @@
     margin-bottom: 12px;
   }
 
+  &__footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   &__text {
     font-size: 14px;
     line-height: 1.5;
     color: colors.$hh-text;
   }
 
-  &__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: colors.$spacing-sm;
-    margin-bottom: colors.$spacing-md;
-  }
-
   &__tag {
     background: colors.$hh-gray-light;
-    padding: colors.$spacing-xs colors.$spacing-sm;
+    padding: colors.$spacing-sm colors.$spacing-sm;
     border-radius: colors.$border-radius-sm;
     font-size: 12px;
     color: colors.$hh-gray-dark;
+    margin-right: 8px;
   }
 
   &__actions {
@@ -107,14 +126,34 @@
       color: red;
       border-color: red;
     }
+
+    &--up-right {
+      border: none;
+      padding: 2px;
+      color: colors.$hh-gray;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    &--up-right:hover {
+      background: none;
+    }
   }
 
   @include mixins.mobile {
-    &__header {
+    &__footer {
+      align-items: flex-end;
       flex-direction: column;
-      gap: colors.$spacing-sm;
+      gap: colors.$spacing-md;
     }
-
+    &__tags {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+    }
     &__meta {
       align-items: flex-start;
     }
