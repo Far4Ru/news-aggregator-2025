@@ -7,7 +7,7 @@ import { newsService } from '../services/newsService';
 import type { NewsSuggestion } from '../types/news';
 
 export const Suggestions: React.FC = () => {
-  const { showNotification } = useNotification();
+  const { showCardNotification: showNotification } = useNotification();
   const [suggestions, setSuggestions] = useState<NewsSuggestion[]>([]);
   const [loading, setLoading] = useState(true);
 

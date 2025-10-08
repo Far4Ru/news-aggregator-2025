@@ -1,4 +1,4 @@
-import { Bell, Settings, Download, Upload, LogOut } from 'lucide-react';
+import { Bell, Settings, Download, Upload, LogOut, BellOff } from 'lucide-react';
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -95,7 +95,12 @@ export const Header: React.FC = () => {
               onClick={toggleNotifications}
               title={isSubscribed ? 'Отключить уведомления' : 'Включить уведомления'}
             >
-              <Bell size={20} className={isSubscribed ? 'navbar__icon--active' : ''} />
+              {isSubscribed && (
+                <Bell size={20} className='navbar__icon--active' />
+              )}
+              {!isSubscribed && (
+                <BellOff size={20} />
+              )}
             </button>
           )}
 
@@ -127,7 +132,7 @@ export const Header: React.FC = () => {
               onClick={logout}
               title='Выйти из режима модерации'
             >
-              <LogOut size={20} className={isSubscribed ? 'navbar__icon--active' : ''} />
+              <LogOut size={20} />
             </button>
           )}
         </div>

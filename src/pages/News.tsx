@@ -22,7 +22,7 @@ const getPublicIP = async () => {
 
 export const News: React.FC = () => {
   const { settings, setSettings } = useAppSettings();
-  const { showNotification } = useNotification();
+  const { showCardNotification: showNotification } = useNotification();
 
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);

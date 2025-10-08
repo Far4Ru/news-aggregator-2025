@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 
+import { useNotification } from './useNotification';
+
 export const useNotifications = () => {
   const [isSupported, setIsSupported] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const { showCardNotification } = useNotification();
 
   const checkSubscription = useCallback(async () => {
     if (!isSupported) return;
@@ -18,7 +21,14 @@ export const useNotifications = () => {
   }, [isSupported]);
 
   useEffect(() => {
-    setIsSupported('Notification' in window && 'serviceWorker' in navigator);
+    const supported = 
+      'Notification' in window &&
+      'serviceWorker' in navigator &&
+      'PushManager' in window &&
+      typeof Notification !== 'undefined';
+
+    setIsSupported(supported);
+    // setIsSupported('Notification' in window && 'serviceWorker' in navigator);
     checkSubscription();
   }, [checkSubscription]);
 
@@ -33,9 +43,12 @@ export const useNotifications = () => {
       const permission = await Notification.requestPermission();
 
       if (permission !== 'granted') {
-        throw new Error('Разрешение на уведомления не получено');
+        showCardNotification('Разрешение на уведомления не получено', 'error');
+
+        return;
       }
       setIsSubscribed(true);
+      showCardNotification('Уведомления включены', 'success');
     } catch (error) {
       console.error('Ошибка подписки на уведомления:', error);
     }
@@ -45,6 +58,7 @@ export const useNotifications = () => {
     if (!isSupported) return;
 
     try {
+      showCardNotification('Уведомления выключены', 'success');
       setIsSubscribed(false);
     } catch (error) {
       console.error('Ошибка отписки от уведомлений:', error);

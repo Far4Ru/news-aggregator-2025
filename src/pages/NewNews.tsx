@@ -5,7 +5,7 @@ import { moderationService } from '../services/moderationService';
 import type { NewsItem } from '../types/news';
 
 export const NewNews: React.FC = () => {
-  const { showNotification } = useNotification();
+  const { showCardNotification: showNotification } = useNotification();
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
 

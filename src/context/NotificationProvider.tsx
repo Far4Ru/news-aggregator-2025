@@ -14,7 +14,7 @@ export interface NotificationItem {
 export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
-  const showNotification = useCallback((
+  const showCardNotification = useCallback((
     message: string, 
     type: 'success' | 'error' | 'info' = 'info',
     duration?: number
@@ -30,7 +30,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
   }, []);
 
   return (
-    <NotificationContext.Provider value={{ showNotification }}>
+    <NotificationContext.Provider value={{ showCardNotification }}>
       {children}
       <div className='notification-container'>
         {notifications.map((notification) => (

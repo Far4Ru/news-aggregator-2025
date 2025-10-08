@@ -11,7 +11,7 @@ import type { NewsSource } from '../types/sources';
 
 export const Sources: React.FC = () => {
   const { settings, setSettings } = useAppSettings();
-  const { showNotification } = useNotification();
+  const { showCardNotification: showNotification } = useNotification();
 
   const [sources, setSources] = useState<NewsSource[]>([]);
   const [loading, setLoading] = useState(true);
