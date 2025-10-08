@@ -12,18 +12,18 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg}']
       },
       manifest: {
-        name: 'News Aggregator',
-        short_name: 'NewsApp',
-        description: 'Aggregator of news from various sources',
-        theme_color: '#ffffff',
+        name: 'Агрегатор новостей',
+        short_name: 'Новости',
+        description: 'Все важные новости из проверенных источников в одном месте',
+        theme_color: '#d7131c',
         icons: [
           {
-            src: 'icons/icon-192x192.png',
+            src: 'icons/icon_192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'icons/icon-512x512.png',
+            src: 'icons/icon_512.png',
             sizes: '512x512',
             type: 'image/png'
           }

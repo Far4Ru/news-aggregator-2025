@@ -2,7 +2,7 @@
 
 // Навигационная панель
 .navbar {
-  background: #ffffff;
+  background: colors.$background;
   border-bottom: 2px solid colors.$hh-red;
   padding: 0 20px;
 
@@ -185,7 +185,7 @@
     border-radius: 8px;
     max-width: 500px;
     width: 90%;
-    max-height: 90vh;
+    max-height: 90dvh;
     overflow-y: auto;
 
     &--large {

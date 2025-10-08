@@ -13,7 +13,7 @@ export const NotificationCard: React.FC<NotificationProps> = ({
   id,
   message,
   type,
-  duration = 5000,
+  duration = 1000,
   onClose,
 }) => {
   const [isClosing, setIsClosing] = useState(false);
@@ -51,9 +51,6 @@ export const NotificationCard: React.FC<NotificationProps> = ({
       <div className='notification__content'>
         <span className='notification__icon'>{getIcon()}</span>
         <span className='notification__message'>{message}</span>
-        <button className='notification__close' onClick={handleClose}>
-          ×
-        </button>
       </div>
     </div>
   );
