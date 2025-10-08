@@ -1,5 +1,5 @@
-import { Bell, Settings, Download, Upload, LogOut, BellOff } from 'lucide-react';
-import React from 'react';
+import { Bell, Settings, Download, Upload, LogOut, BellOff, Menu, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../hooks/useAuth';
@@ -12,6 +12,34 @@ export const Header: React.FC = () => {
   const navigate = useNavigate();
   const { importSettings, exportSettings } = useAppSettings();
   const { isSupported, isSubscribed, subscribe, unsubscribe } = useNotifications();
+  
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  // Закрываем меню при изменении маршрута
+  useEffect(() => {
+    closeMenu();
+  }, [location.pathname]);
+
+  // Закрываем меню при нажатии на Escape
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeMenu();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
 
   const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -42,12 +70,13 @@ export const Header: React.FC = () => {
   const logout = () => {
     authContext.logout();
     navigate('/');
+    closeMenu();
   };
 
   return (
     <header className='navbar'>
       <div className='navbar__container'>
-        <Link to='/' className='navbar__logo'>
+        <Link to='/' className='navbar__logo' onClick={closeMenu}>
           <img 
             src='./logo.png' 
             alt='Агрегатор новостей' 
@@ -55,12 +84,13 @@ export const Header: React.FC = () => {
           />
         </Link>
 
-        <nav className='navbar__nav'>
+        <nav className={`navbar__nav ${isMenuOpen ? 'navbar__nav--open' : ''}`}>
           <ul className='navbar__menu'>
             <li className='navbar__item'>
               <Link
                 to='/news'
                 className={`navbar__link ${location.pathname === '/news' ? 'navbar__link--active' : ''}`}
+                onClick={closeMenu}
               >
                 Новости
               </Link>
@@ -69,6 +99,7 @@ export const Header: React.FC = () => {
               <Link
                 to='/sources'
                 className={`navbar__link ${location.pathname === '/sources' ? 'navbar__link--active' : ''}`}
+                onClick={closeMenu}
               >
                 Источники
               </Link>
@@ -79,6 +110,7 @@ export const Header: React.FC = () => {
                   <Link
                     to='/moderation'
                     className={`navbar__link ${location.pathname === '/moderation' ? 'navbar__link--active' : ''}`}
+                    onClick={closeMenu}
                   >
                     Модерация
                   </Link>
@@ -135,6 +167,14 @@ export const Header: React.FC = () => {
               <LogOut size={20} />
             </button>
           )}
+
+          <button 
+            className='navbar__burger'
+            onClick={toggleMenu}
+            aria-label={isMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </div>
     </header>

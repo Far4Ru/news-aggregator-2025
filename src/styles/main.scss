@@ -830,22 +830,6 @@
 
 // Адаптивность
 @media (max-width: 768px) {
-  .navbar {
-    &__container {
-      flex-direction: column;
-      height: auto;
-      padding: 12px 0;
-    }
-
-    &__menu {
-      flex-direction: column;
-      gap: 16px;
-      width: 100%;
-      text-align: center;
-      margin: 16px 0;
-    }
-  }
-
   .news-card {
     &__header {
       flex-direction: column;

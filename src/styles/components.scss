@@ -4,7 +4,6 @@
 .navbar {
   background: colors.$background;
   border-bottom: 2px solid colors.$hh-red;
-  padding: 0 20px;
 
   &__container {
     display: flex;
@@ -13,6 +12,7 @@
     max-width: 1200px;
     margin: 0 auto;
     height: 60px;
+    padding: 0 20px;
   }
 
   &__logo {
@@ -112,6 +112,55 @@
 
   &__icon--active {
     color: colors.$hh-red;
+  }
+  
+  &__burger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 1001;
+  
+    @media (max-width: 768px) {
+      display: block;
+    }
+  }
+
+
+  @media (max-width: 768px) {
+    &__container {
+      flex-direction: row;
+      position: relative;
+    }
+
+    &__menu {
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      text-align: center;
+      margin: 0;
+      padding: 16px 0;
+    }
+
+    &__nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-bottom: 2px solid #d7131c;
+      transform: translateY(-10%);
+      opacity: 0;
+      visibility: hidden;
+      z-index: 1000;
+
+      &--open {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+    }
   }
 }
 
