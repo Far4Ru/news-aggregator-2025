@@ -47,6 +47,20 @@ export const AddSourceModal: React.FC<AddSourceModalProps> = ({
 
         <form onSubmit={handleSubmit} className='modal__form'>
           <div className='form__group'>
+            <label className='form__label'>Тип источника</label>
+            <select
+              className='form__select'
+              value={formData.type}
+              onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+            >
+              <option value='website'>Веб-сайт</option>
+              <option value='telegram'>Telegram</option>
+              <option value='rss'>RSS</option>
+              <option value='other'>Другое</option>
+            </select>
+          </div>
+
+          <div className='form__group'>
             <label className='form__label'>Название *</label>
             <input
               type='text'
@@ -76,20 +90,6 @@ export const AddSourceModal: React.FC<AddSourceModalProps> = ({
               onChange={(e) => setFormData({ ...formData, url: e.target.value })}
               required
             />
-          </div>
-
-          <div className='form__group'>
-            <label className='form__label'>Тип источника</label>
-            <select
-              className='form__select'
-              value={formData.type}
-              onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-            >
-              <option value='website'>Веб-сайт</option>
-              <option value='telegram'>Telegram</option>
-              <option value='rss'>RSS</option>
-              <option value='other'>Другое</option>
-            </select>
           </div>
 
           <div className='modal__actions'>
