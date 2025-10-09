@@ -1,0 +1,409 @@
+// components/mobile-filters.scss
+@use '../abstracts/variables' as colors;
+@use '../abstracts/mixins';
+
+.mobile-filters {
+  &__top {
+    background: colors.$background;
+    border-bottom: 1px solid colors.$hh-gray;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  &__actions {
+    display: flex;
+    gap: colors.$spacing-sm;
+    padding: colors.$spacing-md;
+    border-bottom: 1px solid colors.$hh-gray-light;
+  }
+
+  &__button {
+    @include mixins.button-reset;
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-xs;
+    padding: 8px 12px;
+    border: 1px solid colors.$hh-gray;
+    border-radius: colors.$border-radius-md;
+    font-size: 14px;
+    background: colors.$background;
+    color: colors.$hh-text;
+    flex: 1;
+    justify-content: center;
+
+    &:hover {
+      border-color: colors.$hh-red;
+    }
+  }
+
+  &__count {
+    background: colors.$hh-red;
+    color: colors.$background;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__active {
+    display: flex;
+    align-items: center;
+    padding: colors.$spacing-sm colors.$spacing-md;
+    gap: colors.$spacing-sm;
+    border-bottom: 1px solid colors.$hh-gray-light;
+  }
+
+  &__active-list {
+    display: flex;
+    gap: colors.$spacing-xs;
+    overflow-x: auto;
+    flex: 1;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__active-item {
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-xs;
+    padding: 4px 8px;
+    background: colors.$hh-gray-light;
+    border: 1px solid colors.$hh-gray;
+    border-radius: 16px;
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &__active-remove {
+    @include mixins.button-reset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: colors.$hh-gray-dark;
+
+    &:hover {
+      color: colors.$hh-red;
+    }
+  }
+
+  &__clear-all {
+    @include mixins.button-reset;
+    color: colors.$hh-red;
+    font-size: 14px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &__groups {
+    display: flex;
+    gap: colors.$spacing-xs;
+    padding: colors.$spacing-sm colors.$spacing-md;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__group-button {
+    @include mixins.button-reset;
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-xs;
+    padding: 6px 12px;
+    border: 1px solid colors.$hh-gray;
+    border-radius: 16px;
+    font-size: 12px;
+    background: colors.$background;
+    color: colors.$hh-text;
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    &:hover {
+      border-color: colors.$hh-red;
+    }
+
+    &--active {
+      background: colors.$hh-red;
+      color: colors.$background;
+      border-color: colors.$hh-red;
+    }
+  }
+
+  &__group-count {
+    background: rgba(colors.$background, 0.2);
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.mobile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  &__content {
+    background: colors.$background;
+    border-radius: colors.$border-radius-lg colors.$border-radius-lg 0 0;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: colors.$spacing-md;
+    border-bottom: 1px solid colors.$hh-gray;
+    flex-shrink: 0;
+  }
+
+  &__header-actions {
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-md;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  &__close {
+    @include mixins.button-reset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: colors.$hh-gray-dark;
+  }
+
+  &__clear {
+    @include mixins.button-reset;
+    color: colors.$hh-red;
+    font-size: 14px;
+  }
+
+  &__options {
+    padding: colors.$spacing-md;
+    display: flex;
+    flex-direction: column;
+    gap: colors.$spacing-xs;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  &__option {
+    @include mixins.button-reset;
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-sm;
+    padding: colors.$spacing-md;
+    border: 1px solid colors.$hh-gray;
+    border-radius: colors.$border-radius-md;
+    font-size: 16px;
+    text-align: left;
+    background: colors.$background;
+    color: colors.$hh-text;
+
+    &--active {
+      border-color: colors.$hh-red;
+      color: colors.$hh-red;
+    }
+  }
+
+  &__filter-groups {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  &__filter-group {
+    padding: colors.$spacing-md;
+    border-bottom: 1px solid colors.$hh-gray-light;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__filter-group-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: colors.$spacing-md;
+    color: colors.$hh-text;
+  }
+
+  &__filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: colors.$spacing-md;
+  }
+
+  &__filter-option {
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-sm;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  &__checkbox {
+    display: none;
+  }
+
+  &__checkmark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid colors.$hh-gray;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    .mobile-modal__checkbox:checked+& {
+      background: colors.$hh-red;
+      border-color: colors.$hh-red;
+
+      &::after {
+        content: '✓';
+        color: colors.$background;
+        font-size: 12px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  &__option-label {
+    flex: 1;
+  }
+
+  &__option-count {
+    color: colors.$hh-gray-dark;
+    font-size: 12px;
+  }
+
+  &__footer {
+    padding: colors.$spacing-md;
+    border-top: 1px solid colors.$hh-gray;
+    flex-shrink: 0;
+  }
+
+  &__apply {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.mobile-filter-popover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  &__content {
+    background: colors.$background;
+    border-radius: colors.$border-radius-lg colors.$border-radius-lg 0 0;
+    max-height: 60vh;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: colors.$spacing-md;
+    border-bottom: 1px solid colors.$hh-gray;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  &__close {
+    @include mixins.button-reset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: colors.$hh-gray-dark;
+  }
+
+  &__options {
+    padding: colors.$spacing-md;
+    display: flex;
+    flex-direction: column;
+    gap: colors.$spacing-md;
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-sm;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  &__checkbox {
+    display: none;
+  }
+
+  &__checkmark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid colors.$hh-gray;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    .mobile-filter-popover__checkbox:checked+& {
+      background: colors.$hh-red;
+      border-color: colors.$hh-red;
+
+      &::after {
+        content: '✓';
+        color: colors.$background;
+        font-size: 12px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  &__option-label {
+    flex: 1;
+  }
+}

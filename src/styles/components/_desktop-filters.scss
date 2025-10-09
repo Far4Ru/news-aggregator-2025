@@ -1,0 +1,67 @@
+// components/desktop-filters.scss
+@use '../abstracts/variables' as colors;
+@use '../abstracts/mixins';
+
+.desktop-filters {
+  &__active {
+    margin-bottom: colors.$spacing-lg;
+    padding: colors.$spacing-md;
+    background: colors.$background;
+    border: 1px solid colors.$hh-gray;
+    border-radius: colors.$border-radius-md;
+  }
+
+  &__active-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: colors.$spacing-sm;
+  }
+
+  &__active-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: colors.$hh-text;
+    margin: 0;
+  }
+
+  &__clear-all {
+    @include mixins.button-reset;
+    color: colors.$hh-red;
+    font-size: 12px;
+    text-decoration: underline;
+
+    &:hover {
+      color: colors.$hh-red-dark;
+    }
+  }
+
+  &__active-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: colors.$spacing-xs;
+  }
+
+  &__active-item {
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-xs;
+    padding: 4px 8px;
+    background: colors.$hh-gray-light;
+    border: 1px solid colors.$hh-gray;
+    border-radius: 16px;
+    font-size: 12px;
+  }
+
+  &__active-remove {
+    @include mixins.button-reset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: colors.$hh-gray-dark;
+
+    &:hover {
+      color: colors.$hh-red;
+    }
+  }
+}

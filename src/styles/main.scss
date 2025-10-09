@@ -18,6 +18,9 @@
 @use 'components/lists';
 @use 'components/loading';
 @use 'components/empty-state';
+@use 'components/mobile-filters';
+@use 'components/desktop-filters';
+@use 'components/news-filters';
 
 // Layout
 @use 'layout/page';

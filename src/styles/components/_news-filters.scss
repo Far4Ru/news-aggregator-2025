@@ -1,0 +1,26 @@
+@use '../abstracts/variables' as colors;
+@use '../abstracts/mixins';
+
+.news-filters {
+  &__search {
+    margin-bottom: colors.$spacing-md;
+  }
+
+  &__mobile {
+    display: none;
+  }
+
+  &__desktop {
+    display: block;
+  }
+
+  @include mixins.mobile {
+    &__mobile {
+      display: block;
+    }
+
+    &__desktop {
+      display: none;
+    }
+  }
+}
