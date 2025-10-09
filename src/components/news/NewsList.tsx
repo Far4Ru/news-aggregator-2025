@@ -1,25 +1,33 @@
+// components/news/NewsList.tsx
 import React from 'react';
 
 import type { NewsItem } from '../../types/news';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { NewsCard } from '../common/NewsCard';
+import { ScrollToTop } from '../common/ScrollToTop';
 
 interface NewsListProps {
-    news: NewsItem[]
-    loading: boolean
-    onRate: (newsId: string, increment: number) => void
-    onShare: (news: NewsItem) => void
-    onSuggestEdit: (news: NewsItem, content: string) => void
+  news: NewsItem[];
+  loading: boolean;
+  hasMore: boolean;
+  onLoadMore: () => void;
+  onRate: (newsId: string, increment: number) => void;
+  onShare: (news: NewsItem) => void;
+  onSuggestEdit: (news: NewsItem, content: string) => void;
+  loadMoreRef?: React.RefObject<HTMLDivElement>;
 }
 
 export const NewsList: React.FC<NewsListProps> = ({
   news,
   loading,
+  hasMore,
+  onLoadMore,
   onRate,
   onShare,
-  onSuggestEdit
+  onSuggestEdit,
+  loadMoreRef
 }) => {
-  if (loading) {
+  if (loading && news.length === 0) {
     return <LoadingSpinner />;
   }
 
@@ -43,6 +51,29 @@ export const NewsList: React.FC<NewsListProps> = ({
           onSuggestEdit={onSuggestEdit}
         />
       ))}
+
+      {/* Элемент для автоматической подгрузки */}
+      {hasMore && (
+        <div ref={loadMoreRef} className='news-list__load-more-sentinel'>
+          {loading && <LoadingSpinner />}
+        </div>
+      )}
+
+      {/* Кнопка для ручной подгрузки */}
+      {hasMore && !loading && (
+        <div className='news-list__load-more-button'>
+          <button
+            className='button button--secondary'
+            onClick={onLoadMore}
+            disabled={loading}
+          >
+            Загрузить еще
+          </button>
+        </div>
+      )}
+
+      {/* Плавающая кнопка скролла наверх */}
+      <ScrollToTop />
     </div>
   );
 };

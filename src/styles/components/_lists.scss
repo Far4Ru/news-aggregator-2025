@@ -67,7 +67,8 @@
 }
 
 .news-filters__sort-button--active svg {
-  color: #ff5f01; /* Брендовый оранжевый HH.ru */
+  color: #ff5f01;
+  /* Брендовый оранжевый HH.ru */
 }
 
 .news-filters__sort-button:not(.news-filters__sort-button--active) svg {
@@ -82,4 +83,87 @@
 .news-filters__sort--light .news-filters__sort-button--active {
   background: colors.$background;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+
+// components/lists.scss
+.news-list {
+  @include mixins.flex-column;
+  gap: colors.$spacing-md;
+  position: relative;
+
+  &__load-more {
+    text-align: center;
+    padding: colors.$spacing-lg;
+
+    &-button {
+      display: flex;
+      justify-content: center;
+      margin: colors.$spacing-lg 0;
+    }
+
+    &-sentinel {
+      height: 1px;
+      margin: colors.$spacing-md 0;
+    }
+  }
+}
+
+.scroll-to-top {
+  position: fixed;
+  bottom: colors.$spacing-lg;
+  right: colors.$spacing-lg;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: colors.$hh-red;
+  color: colors.$background;
+  border: none;
+  cursor: pointer;
+  box-shadow: colors.$shadow-lg;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  @include mixins.flex-center;
+
+  &:hover {
+    background: colors.$hh-red-dark;
+    transform: translateY(-2px);
+  }
+
+  @include mixins.mobile {
+    bottom: colors.$spacing-md;
+    right: colors.$spacing-md;
+    width: 44px;
+    height: 44px;
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  background: colors.$hh-red;
+  color: colors.$background;
+  border-radius: colors.$border-radius-sm;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: colors.$spacing-sm;
+
+  &--new {
+    background: #2e7d32;
+    animation: pulse 2s infinite;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }

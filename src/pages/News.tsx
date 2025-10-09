@@ -1,60 +1,83 @@
-// components/News.tsx
+// pages/News.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { NewsFilters } from '../components/news/NewsFilters';
 import { NewsList } from '../components/news/NewsList';
 import { useCachedNews } from '../hooks/useCachedNews';
+import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 import { useAppSettings } from '../hooks/useLocalStorage';
+import { useNewsList } from '../hooks/useNewsList';
 import { useNotification } from '../hooks/useNotification';
 import { useNotifications } from '../hooks/useNotifications';
+import { newsService } from '../services/newsService';
 import type { NewsFilters as NewsFiltersType, NewsItem } from '../types/news';
 
 export const News: React.FC = () => {
   const { settings, setSettings } = useAppSettings();
   const { showCardNotification: showNotification } = useNotification();
-  const { showNotification: showPushNotification, isSubscribed } = useNotifications();
-  const {
-    news,
-    loading,
-    lastUpdated,
-    hasNewNews,
-    loadNews,
-    refreshNews
-  } = useCachedNews();
+  // const { showNotification: showPushNotification, isSubscribed } = useNotifications();
 
   const [filters, setFilters] = useState<NewsFiltersType>(settings.filters);
   const [showNewNewsBadge, setShowNewNewsBadge] = useState(false);
 
-  // Загрузка новостей при изменении фильтров
+  // Функция для загрузки дополнительных новостей
+  const loadMoreNews = useCallback(async (page: number, currentFilters: NewsFiltersType) => {
+    return await newsService.getNews(settings.selectedSources, currentFilters, settings.sortBy, page);
+  }, [settings.selectedSources, settings.sortBy]);
+
+  // Загрузка первой страницы новостей
+  const { news: initialNews, loading: initialLoading } = useCachedNews();
+
+  // Управление списком новостей с пагинацией
+  const {
+    news,
+    loading,
+    hasMore,
+    loadMore,
+    refresh
+  } = useNewsList({
+    initialNews,
+    loadMoreNews,
+    filters
+  });
+
+  const handleLoadMores = useCallback(async () => {
+    await loadMore();
+  }, [loadMore]);
+
+  // Настройка бесконечного скролла
+  const {
+    isLoading: infiniteLoading,
+    loadMoreRef,
+    handleLoadMore
+  } = useInfiniteScroll({
+    hasMore,
+    loadMore: handleLoadMores
+  });
+
+  // Обновление новостей при изменении фильтров
   useEffect(() => {
-    loadNews(settings.selectedSources, filters, settings.sortBy);
-  }, [filters, settings.sortBy, settings.selectedSources, loadNews]);
+    refresh();
+  }, [filters, settings.sortBy, settings.selectedSources, refresh]);
 
   // Уведомление о новых новостях
-  useEffect(() => {
-    if (hasNewNews && isSubscribed) {
-      setShowNewNewsBadge(true);
-      showPushNotification('Доступны новые новости!', {
-        body: 'Нажмите для обновления',
-        tag: 'new-news-available'
-      });
-    }
-  }, [hasNewNews, isSubscribed, showPushNotification]);
+  // useEffect(() => {
+  //   if (hasNewNews && isSubscribed) {
+  //     setShowNewNewsBadge(true);
+  //     showPushNotification('Доступны новые новости!', {
+  //       body: 'Нажмите для обновления',
+  //       tag: 'new-news-available'
+  //     });
+  //   }
+  // }, [hasNewNews, isSubscribed, showPushNotification]);
 
   const handleRefresh = useCallback(() => {
-    refreshNews(settings.selectedSources, filters, settings.sortBy);
+    refresh();
     setShowNewNewsBadge(false);
-  }, [refreshNews, settings.selectedSources, filters, settings.sortBy]);
+  }, [refresh]);
 
   const handleRate = async (newsId: string, increment: number) => {
     try {
-      // Здесь ваш существующий код для обновления рейтинга
-      // Обновляем локальное состояние
-      // setNews(news.map(item =>
-      //   item.id === newsId
-      //     ? { ...item, rating: item.rating + increment }
-      //     : item
-      // ));
       console.log(newsId, increment);
     } catch (error) {
       console.error('Error updating rating:', error);
@@ -78,7 +101,6 @@ export const News: React.FC = () => {
   const handleSuggestEdit = async (newsItem: NewsItem, content: string) => {
     try {
       console.log(newsItem, content);
-      // Здесь ваш существующий код для предложения правок
       showNotification('Предложение отправлено на модерацию', 'success');
     } catch (error) {
       console.error('Error suggesting edit:', error);
@@ -88,6 +110,8 @@ export const News: React.FC = () => {
 
   const availableSources = Array.from(new Set(news.map(item => item.source_id)));
   const availableTags = Array.from(new Set(news.flatMap(item => item.tags)));
+
+  const isListLoading = loading || infiniteLoading;
 
   return (
     <div className='page'>
@@ -103,15 +127,10 @@ export const News: React.FC = () => {
             <button
               className='button button--secondary'
               onClick={handleRefresh}
-              disabled={loading}
+              disabled={isListLoading}
             >
-              {loading ? 'Обновление...' : 'Обновить'}
+              {isListLoading ? 'Обновление...' : 'Обновить'}
             </button>
-            {lastUpdated && (
-              <span className='page__last-updated'>
-                Обновлено: {lastUpdated.toLocaleTimeString()}
-              </span>
-            )}
           </div>
         </div>
         <p className='page__subtitle'>Свежие новости из ваших источников</p>
@@ -132,10 +151,13 @@ export const News: React.FC = () => {
         <div className='page__main'>
           <NewsList
             news={news}
-            loading={loading}
+            loading={isListLoading}
+            hasMore={hasMore}
+            onLoadMore={handleLoadMore}
             onRate={handleRate}
             onShare={handleShare}
             onSuggestEdit={handleSuggestEdit}
+            loadMoreRef={loadMoreRef}
           />
         </div>
       </div>

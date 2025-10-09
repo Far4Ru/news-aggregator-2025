@@ -1,10 +1,21 @@
+// services/newsService.ts
 import type { NewsFilters } from '../types/news';
 import { mockNews } from '../utils/mockData';
 
 import { supabase } from './supabase';
 
+const PAGE_SIZE = 10;
+
 export const newsService = {
-  async getNews(selected: string[], filters: NewsFilters, sortBy: 'date' | 'rating' = 'date') {
+  async getNews(
+    selected: string[],
+    filters: NewsFilters,
+    sortBy: 'date' | 'rating' = 'date',
+    page = 1
+  ) {
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
     const { data: news, error } = await supabase
       .from('news')
       .select(`
@@ -17,7 +28,8 @@ export const newsService = {
           type,
           status
         )
-      `);
+      `)
+      .range(from, to);
 
     console.log(error);
     let filteredNews = [...mockNews, ...news as any];
@@ -30,7 +42,7 @@ export const newsService = {
     if (filters.searchQuery) {
       filteredNews = filteredNews.filter(item =>
         item.title.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
-                item.content.toLowerCase().includes(filters.searchQuery.toLowerCase())
+        item.content.toLowerCase().includes(filters.searchQuery.toLowerCase())
       );
     }
 
