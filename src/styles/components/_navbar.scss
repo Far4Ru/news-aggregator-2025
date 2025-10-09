@@ -109,10 +109,10 @@
   &__icon--active {
     color: colors.$hh-red;
   }
-  
+
   &__burger {
     display: none;
-  
+
     @include mixins.mobile {
       display: block;
     }
@@ -130,7 +130,7 @@
       width: 100%;
       text-align: center;
       margin: 0;
-      padding: colors.$spacing-md 0;
+      padding: colors.$spacing-md 0 colors.$spacing-xxl 0;
     }
 
     &__nav {
