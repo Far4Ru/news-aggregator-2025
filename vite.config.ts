@@ -1,3 +1,4 @@
+// vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -9,13 +10,32 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        runtimeCaching: [
+          {
+            urlPattern: /\/api\/news.*/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'news-api-cache',
+              networkTimeoutSeconds: 3,
+              cacheableResponse: {
+                statuses: [0, 200]
+              },
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 24 * 60 * 60 // 24 часа
+              }
+            }
+          }
+        ]
       },
       manifest: {
         name: 'Агрегатор новостей',
         short_name: 'Новости',
         description: 'Все важные новости из проверенных источников в одном месте',
         theme_color: '#d7131c',
+        background_color: '#ffffff',
+        display: 'standalone',
         icons: [
           {
             src: 'icons/icon_192.png',

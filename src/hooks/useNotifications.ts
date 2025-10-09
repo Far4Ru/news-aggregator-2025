@@ -5,6 +5,7 @@ import { useNotification } from './useNotification';
 export const useNotifications = () => {
   const [isSupported, setIsSupported] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isPeriodicSyncSupported, setIsPeriodicSyncSupported] = useState(false);
   const { showCardNotification } = useNotification();
 
   const checkSubscription = useCallback(async () => {
@@ -14,6 +15,20 @@ export const useNotifications = () => {
       const registration = await navigator.serviceWorker.ready;
       const subscription = await registration.pushManager.getSubscription();
 
+      // Проверяем поддержку периодической синхронизации
+      if ('periodicSync' in registration) {
+        setIsPeriodicSyncSupported(true);
+
+        // Регистрируем периодическую синхронизацию
+        try {
+          await (registration as any).periodicSync.register('news-update', {
+            minInterval: 60000 // 1 минута
+          });
+        } catch (error) {
+          console.log('Periodic sync not supported:', error);
+        }
+      }
+
       setIsSubscribed(!!subscription);
     } catch (error) {
       console.error('Error checking subscription:', error);
@@ -21,14 +36,13 @@ export const useNotifications = () => {
   }, [isSupported]);
 
   useEffect(() => {
-    const supported = 
+    const supported =
       'Notification' in window &&
       'serviceWorker' in navigator &&
       'PushManager' in window &&
       typeof Notification !== 'undefined';
 
     setIsSupported(supported);
-    // setIsSupported('Notification' in window && 'serviceWorker' in navigator);
     checkSubscription();
   }, [checkSubscription]);
 
@@ -47,6 +61,14 @@ export const useNotifications = () => {
 
         return;
       }
+
+      // Регистрируем фоновую синхронизацию
+      const registration = await navigator.serviceWorker.ready;
+
+      if ('sync' in registration) {
+        await (registration as any).sync.register('news-sync');
+      }
+
       setIsSubscribed(true);
       showCardNotification('Уведомления включены', 'success');
     } catch (error) {
@@ -58,6 +80,13 @@ export const useNotifications = () => {
     if (!isSupported) return;
 
     try {
+      // Отменяем периодическую синхронизацию
+      if (isPeriodicSyncSupported) {
+        const registration = await navigator.serviceWorker.ready;
+
+        await (registration as any).periodicSync.unregister('news-update');
+      }
+
       showCardNotification('Уведомления выключены', 'success');
       setIsSubscribed(false);
     } catch (error) {
@@ -71,6 +100,7 @@ export const useNotifications = () => {
     if (Notification.permission === 'granted') {
       new Notification(title, {
         icon: '/icons/icon-192x192.png',
+        badge: '/icons/icon-192x192.png',
         ...options
       });
     }
@@ -79,6 +109,7 @@ export const useNotifications = () => {
   return {
     isSupported,
     isSubscribed,
+    isPeriodicSyncSupported,
     subscribe,
     unsubscribe,
     showNotification
