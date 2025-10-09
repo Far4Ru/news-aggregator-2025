@@ -1,5 +1,4 @@
-// components/news/DesktopNewsFilters.tsx
-import { X } from 'lucide-react';
+import { X, SortAsc, SortDesc } from 'lucide-react';
 import React from 'react';
 
 import type { NewsFilters } from '../../types/news';
@@ -17,6 +16,8 @@ interface DesktopNewsFiltersProps {
 export const DesktopNewsFilters: React.FC<DesktopNewsFiltersProps> = ({
   filters,
   onFiltersChange,
+  sortBy,
+  onSortChange,
   availableSources,
   availableTags
 }) => {
@@ -50,7 +51,28 @@ export const DesktopNewsFilters: React.FC<DesktopNewsFiltersProps> = ({
 
   return (
     <div className='desktop-filters'>
-      {/* Активные фильтры сверху */}
+      {/* Сортировка */}
+      <div className='desktop-filters__sort'>
+        <h3 className='desktop-filters__sort-title'>Сортировка</h3>
+        <div className='desktop-filters__sort-options'>
+          <button
+            className={`desktop-filters__sort-button ${sortBy === 'date' ? 'desktop-filters__sort-button--active' : ''}`}
+            onClick={() => onSortChange('date')}
+          >
+            <SortDesc size={16} />
+            По дате
+          </button>
+          <button
+            className={`desktop-filters__sort-button ${sortBy === 'rating' ? 'desktop-filters__sort-button--active' : ''}`}
+            onClick={() => onSortChange('rating')}
+          >
+            <SortAsc size={16} />
+            По рейтингу
+          </button>
+        </div>
+      </div>
+
+      {/* Активные фильтры */}
       {activeFilters.length > 0 && (
         <div className='desktop-filters__active'>
           <div className='desktop-filters__active-header'>

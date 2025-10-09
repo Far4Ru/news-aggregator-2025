@@ -3,6 +3,58 @@
 @use '../abstracts/mixins';
 
 .desktop-filters {
+  &__sort {
+    margin-bottom: colors.$spacing-lg;
+    padding: colors.$spacing-md;
+    background: colors.$background;
+    border: 1px solid colors.$hh-gray;
+    border-radius: colors.$border-radius-md;
+  }
+
+  &__sort-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: colors.$hh-text;
+    margin: 0 0 colors.$spacing-md 0;
+  }
+
+  &__sort-options {
+    display: flex;
+    flex-direction: column;
+    gap: colors.$spacing-xs;
+  }
+
+  &__sort-button {
+    @include mixins.button-reset;
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-sm;
+    padding: 8px 12px;
+    border: 1px solid colors.$hh-gray;
+    border-radius: colors.$border-radius-sm;
+    font-size: 14px;
+    background: colors.$background;
+    color: colors.$hh-text;
+    text-align: left;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: colors.$hh-red;
+      background: rgba(colors.$hh-red, 0.05);
+    }
+
+    &--active {
+      border-color: colors.$hh-red;
+      background: rgba(colors.$hh-red, 0.1);
+      color: colors.$hh-red;
+      font-weight: 500;
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+
   &__active {
     margin-bottom: colors.$spacing-lg;
     padding: colors.$spacing-md;
