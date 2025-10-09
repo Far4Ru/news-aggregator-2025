@@ -13,17 +13,17 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
         runtimeCaching: [
           {
-            urlPattern: /\/api\/news.*/,
+            urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/v1\/.*/,
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'news-api-cache',
+              cacheName: 'supabase-api-cache',
               networkTimeoutSeconds: 3,
               cacheableResponse: {
                 statuses: [0, 200]
               },
               expiration: {
                 maxEntries: 100,
-                maxAgeSeconds: 24 * 60 * 60 // 24 часа
+                maxAgeSeconds: 5 * 60 // 5 минут
               }
             }
           }

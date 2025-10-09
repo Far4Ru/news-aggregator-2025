@@ -1,52 +1,31 @@
+// hooks/useCachedNews.ts
 import { useState, useEffect, useCallback } from 'react';
 
-interface NewsItem {
-  id: string;
-  title: string;
-  description: string;
-  url: string;
-  source: string;
-  publishedAt: string;
-  category: string;
-}
+import { cachedNewsService } from '../services/cachedNewsService';
+import type { NewsItem, NewsFilters } from '../types/news';
 
 export const useCachedNews = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [hasNewNews, setHasNewNews] = useState(false);
 
-  // Загрузка данных из кэша
-  const loadCachedNews = useCallback(async () => {
+  const loadNews = useCallback(async (
+    selectedSources: string[] = [],
+    filters: NewsFilters,
+    sortBy: 'date' | 'rating' = 'date'
+  ) => {
+    setLoading(true);
     try {
-      setLoading(true);
+      const newsData = await cachedNewsService.getNews(selectedSources, filters, sortBy);
 
-      // Сначала пытаемся получить свежие данные
-      const response = await fetch('/api/news');
+      setNews(newsData);
+      setLastUpdated(new Date());
 
-      if (response.ok) {
-        const freshNews = await response.json();
+      // Проверяем наличие новых новостей
+      const newNewsCheck = await cachedNewsService.checkForNewNews();
 
-        setNews(freshNews);
-        setLastUpdated(new Date());
-
-        return;
-      }
-    } catch (error) {
-      console.log('Network unavailable, using cache');
-    }
-
-    // Если сеть недоступна, используем Service Worker
-    try {
-      const response = await fetch('/api/news');
-      const cachedNews = await response.json();
-
-      setNews(cachedNews);
-
-      const lastUpdate = localStorage.getItem('last-update');
-
-      if (lastUpdate) {
-        setLastUpdated(new Date(parseInt(lastUpdate)));
-      }
+      setHasNewNews(newNewsCheck.hasNew);
     } catch (error) {
       console.error('Error loading cached news:', error);
     } finally {
@@ -54,15 +33,18 @@ export const useCachedNews = () => {
     }
   }, []);
 
-  // Принудительное обновление
-  const refreshNews = useCallback(async () => {
+  const refreshNews = useCallback(async (
+    selectedSources: string[],
+    filters: NewsFilters,
+    sortBy: 'date' | 'rating'
+  ) => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await fetch('/api/news?forceRefresh=true');
-      const freshNews = await response.json();
+      const newsData = await cachedNewsService.refreshCache(selectedSources, filters, sortBy);
 
-      setNews(freshNews);
+      setNews(newsData);
       setLastUpdated(new Date());
+      setHasNewNews(false);
     } catch (error) {
       console.error('Error refreshing news:', error);
     } finally {
@@ -70,22 +52,23 @@ export const useCachedNews = () => {
     }
   }, []);
 
+  // Периодическая проверка новых новостей
   useEffect(() => {
-    loadCachedNews();
+    const interval = setInterval(async () => {
+      const newNewsCheck = await cachedNewsService.checkForNewNews();
 
-    // Периодическое обновление каждую минуту
-    const interval = setInterval(() => {
-      refreshNews();
-    }, 60000); // 60 секунд
+      setHasNewNews(newNewsCheck.hasNew);
+    }, 60000); // Каждую минуту
 
     return () => clearInterval(interval);
-  }, [loadCachedNews, refreshNews]);
+  }, []);
 
   return {
     news,
     loading,
     lastUpdated,
-    refreshNews,
-    loadCachedNews
+    hasNewNews,
+    loadNews,
+    refreshNews
   };
 };

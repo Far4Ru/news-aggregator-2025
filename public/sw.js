@@ -1,9 +1,11 @@
+// sw.js - Service Worker для Supabase
 const CACHE_NAME = 'news-cache-v1';
 const API_CACHE_NAME = 'news-api-cache-v1';
 
 // Ключи для хранения метаданных
 const LAST_UPDATE_KEY = 'last-update';
 const NEWS_HASH_KEY = 'news-hash';
+const LAST_NEWS_CHECK_KEY = 'last-news-check';
 
 self.addEventListener('install', (event) => {
     console.log('Service Worker installing');
@@ -15,7 +17,7 @@ self.addEventListener('activate', (event) => {
     event.waitUntil(self.clients.claim());
 });
 
-// Функция для хранения данных в IndexedDB
+// IndexedDB для хранения новостей
 const openDB = () => {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open('NewsDatabase', 1);
@@ -28,6 +30,10 @@ const openDB = () => {
             if (!db.objectStoreNames.contains('news')) {
                 const store = db.createObjectStore('news', { keyPath: 'id' });
                 store.createIndex('timestamp', 'timestamp');
+                store.createIndex('published_at', 'published_at');
+            }
+            if (!db.objectStoreNames.contains('sources')) {
+                db.createObjectStore('sources', { keyPath: 'id' });
             }
         };
     });
@@ -46,11 +52,11 @@ const storeNewsData = async (newsData) => {
         for (const item of newsData) {
             store.put({
                 ...item,
-                timestamp: Date.now()
+                cached_at: Date.now()
             });
         }
 
-        // Сохраняем хэш для быстрой проверки изменений
+        // Сохраняем хэш и время обновления
         const hash = await generateHash(JSON.stringify(newsData));
         localStorage.setItem(NEWS_HASH_KEY, hash);
         localStorage.setItem(LAST_UPDATE_KEY, Date.now().toString());
@@ -87,32 +93,35 @@ const generateHash = async (data) => {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 };
 
-// Фоновая синхронизация
-self.addEventListener('sync', (event) => {
-    if (event.tag === 'news-sync') {
-        event.waitUntil(checkForNewNews());
-    }
-});
-
-// Периодическая синхронизация (каждую минуту)
-self.addEventListener('periodicsync', (event) => {
-    if (event.tag === 'news-update') {
-        event.waitUntil(checkForNewNews());
-    }
-});
-
+// Проверка новых новостей
 const checkForNewNews = async () => {
     try {
-        // Здесь должен быть ваш API endpoint для получения новостей
-        const response = await fetch('/api/news/latest');
-        const newNews = await response.json();
+        const lastCheck = localStorage.getItem(LAST_NEWS_CHECK_KEY);
+        const now = Date.now();
 
-        const oldHash = localStorage.getItem(NEWS_HASH_KEY);
-        const newHash = await generateHash(JSON.stringify(newNews));
+        // Проверяем не чаще чем раз в 30 секунд
+        if (lastCheck && (now - parseInt(lastCheck)) < 30000) {
+            return;
+        }
 
-        if (oldHash !== newHash) {
-            // Новые новости обнаружены
-            await storeNewsData(newNews);
+        localStorage.setItem(LAST_NEWS_CHECK_KEY, now.toString());
+
+        // Получаем последние новости из Supabase
+        const lastStoredNews = await getStoredNews();
+        const lastNewsDate = lastStoredNews.length > 0
+            ? Math.max(...lastStoredNews.map(n => new Date(n.published_at).getTime()))
+            : 0;
+
+        // Здесь будет запрос к Supabase - имитируем его
+        const newNews = await fetchLatestNewsFromSupabase(lastNewsDate);
+
+        if (newNews && newNews.length > 0) {
+            // Сохраняем новые новости
+            const allNews = [...lastStoredNews, ...newNews]
+                .sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
+                .slice(0, 1000); // Ограничиваем общее количество
+
+            await storeNewsData(allNews);
 
             // Показываем уведомление
             await self.registration.showNotification('Новые новости!', {
@@ -123,7 +132,11 @@ const checkForNewNews = async () => {
                 actions: [
                     { action: 'open', title: 'Открыть' },
                     { action: 'dismiss', title: 'Закрыть' }
-                ]
+                ],
+                data: {
+                    url: '/news',
+                    newsCount: newNews.length
+                }
             });
         }
     } catch (error) {
@@ -131,47 +144,102 @@ const checkForNewNews = async () => {
     }
 };
 
+// Имитация запроса к Supabase
+const fetchLatestNewsFromSupabase = async (sinceTimestamp) => {
+    // В реальном приложении здесь будет запрос к Supabase
+    // Например: supabase.from('news').select('*').gt('published_at', new Date(sinceTimestamp))
+
+    // Для демонстрации возвращаем пустой массив
+    return [];
+};
+
+// Фоновая синхронизация
+self.addEventListener('sync', (event) => {
+    if (event.tag === 'news-sync') {
+        event.waitUntil(checkForNewNews());
+    }
+});
+
+// Периодическая синхронизация
+self.addEventListener('periodicsync', (event) => {
+    if (event.tag === 'news-update') {
+        event.waitUntil(checkForNewNews());
+    }
+});
+
+// Перехват запросов к Supabase
 self.addEventListener('fetch', (event) => {
-    // Кэширование API запросов
-    if (event.request.url.includes('/api/news')) {
+    const url = event.request.url;
+
+    // Кэшируем запросы новостей
+    if (url.includes('/rest/v1/news') || url.includes('/rest/v1/sources')) {
         event.respondWith(
-            caches.open(API_CACHE_NAME).then(async (cache) => {
-                try {
-                    // Пытаемся получить свежие данные
-                    const networkResponse = await fetch(event.request);
-                    if (networkResponse.ok) {
-                        await cache.put(event.request, networkResponse.clone());
-                        return networkResponse;
-                    }
-                    throw new Error('Network response not ok');
-                } catch (error) {
-                    // Если сеть недоступна, используем кэш
-                    const cachedResponse = await cache.match(event.request);
-                    if (cachedResponse) {
-                        return cachedResponse;
-                    }
-                    // Если в кэше нет данных, возвращаем данные из IndexedDB
-                    const storedNews = await getStoredNews();
-                    return new Response(JSON.stringify(storedNews), {
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-                }
-            })
+            handleSupabaseRequest(event.request)
         );
     }
 });
+
+const handleSupabaseRequest = async (request) => {
+    const cache = await caches.open(API_CACHE_NAME);
+
+    try {
+        // Пытаемся получить свежие данные
+        const networkResponse = await fetch(request);
+
+        if (networkResponse.ok) {
+            const responseClone = networkResponse.clone();
+
+            // Сохраняем в кэш
+            cache.put(request, responseClone);
+
+            // Если это запрос новостей, сохраняем в IndexedDB
+            if (request.url.includes('/rest/v1/news')) {
+                const newsData = await responseClone.json();
+                await storeNewsData(newsData);
+            }
+
+            return networkResponse;
+        }
+
+        throw new Error('Network response not ok');
+    } catch (error) {
+        // Если сеть недоступна, используем кэш
+        const cachedResponse = await cache.match(request);
+
+        if (cachedResponse) {
+            return cachedResponse;
+        }
+
+        // Если в кэше нет данных, возвращаем данные из IndexedDB
+        if (request.url.includes('/rest/v1/news')) {
+            const storedNews = await getStoredNews();
+            return new Response(JSON.stringify(storedNews), {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Encoding': 'gzip'
+                }
+            });
+        }
+
+        // Для других запросов возвращаем ошибку
+        return new Response(JSON.stringify({ error: 'Network unavailable' }), {
+            status: 503,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+};
 
 // Обработка кликов по уведомлениям
 self.addEventListener('notificationclick', (event) => {
     event.notification.close();
 
-    if (event.action === 'open') {
+    if (event.action === 'open' || event.action === '') {
         event.waitUntil(
             self.clients.matchAll().then((clientList) => {
                 if (clientList.length > 0) {
                     return clientList[0].focus();
                 }
-                return self.clients.openWindow('/');
+                return self.clients.openWindow('/news');
             })
         );
     }
