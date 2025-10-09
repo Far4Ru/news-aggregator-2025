@@ -1,4 +1,3 @@
-// vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -48,6 +47,12 @@ export default defineConfig({
             type: 'image/png'
           }
         ]
+      },
+      srcDir: 'src/sw',
+      filename: 'sw.js',
+      strategies: 'injectManifest',
+      injectManifest: {
+        injectionPoint: undefined
       }
     })
   ],
