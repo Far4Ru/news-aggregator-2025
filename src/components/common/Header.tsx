@@ -1,5 +1,5 @@
 import { Bell, Settings, Download, Upload, LogOut, BellOff, Menu, X } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../hooks/useAuth';
@@ -10,9 +10,10 @@ export const Header: React.FC = () => {
   const location = useLocation();
   const authContext = useAuth();
   const navigate = useNavigate();
+  const settingsInputRef = useRef<HTMLInputElement>(null);
   const { importSettings, exportSettings } = useAppSettings();
   const { isSupported, isSubscribed, subscribe, unsubscribe } = useNotifications();
-  
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -39,7 +40,11 @@ export const Header: React.FC = () => {
     return () => document.removeEventListener('keydown', handleEscape);
   }, []);
 
-  const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImport = () => {
+    settingsInputRef.current?.click();
+  };
+
+  const handleImportChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
     if (file) {
@@ -75,9 +80,9 @@ export const Header: React.FC = () => {
     <header className='navbar'>
       <div className='navbar__container'>
         <Link to='/' className='navbar__logo' onClick={closeMenu}>
-          <img 
-            src='./logo.png' 
-            alt='Агрегатор новостей' 
+          <img
+            src='./logo.png'
+            alt='Агрегатор новостей'
             className='navbar__logo-image'
           />
         </Link>
@@ -143,13 +148,14 @@ export const Header: React.FC = () => {
                 <Download size={16} />
                 Экспорт настроек
               </button>
-              <button className='navbar__dropdown-item'>
+              <button className='navbar__dropdown-item' onClick={handleImport}>
                 <Upload size={16} />
                 Импорт настроек
                 <input
+                  ref={settingsInputRef}
                   type='file'
                   accept='.json'
-                  onChange={handleImport}
+                  onChange={handleImportChange}
                   style={{ display: 'none' }}
                 />
               </button>
@@ -166,7 +172,7 @@ export const Header: React.FC = () => {
             </button>
           )}
 
-          <button 
+          <button
             className='navbar__button navbar__burger'
             onClick={toggleMenu}
             aria-label={isMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
