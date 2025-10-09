@@ -119,7 +119,7 @@ export class CachedNewsService {
   // Проверка новых новостей
   async checkForNewNews(): Promise<{ hasNew: boolean; count?: number }> {
     try {
-      const latestNews = await supabase
+      const latestNews: any = await supabase
         .from('news')
         .select('id, published_at')
         .eq('status', 'approved')

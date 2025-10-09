@@ -50,11 +50,12 @@ export const News: React.FC = () => {
     try {
       // Здесь ваш существующий код для обновления рейтинга
       // Обновляем локальное состояние
-      setNews(news.map(item =>
-        item.id === newsId
-          ? { ...item, rating: item.rating + increment }
-          : item
-      ));
+      // setNews(news.map(item =>
+      //   item.id === newsId
+      //     ? { ...item, rating: item.rating + increment }
+      //     : item
+      // ));
+      console.log(newsId, increment);
     } catch (error) {
       console.error('Error updating rating:', error);
       showNotification('Ошибка при оценке новости', 'error');
@@ -76,6 +77,7 @@ export const News: React.FC = () => {
 
   const handleSuggestEdit = async (newsItem: NewsItem, content: string) => {
     try {
+      console.log(newsItem, content);
       // Здесь ваш существующий код для предложения правок
       showNotification('Предложение отправлено на модерацию', 'success');
     } catch (error) {
