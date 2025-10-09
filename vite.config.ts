@@ -48,7 +48,6 @@ export default defineConfig({
           }
         ]
       },
-      srcDir: 'src/sw',
       filename: 'sw.js',
       strategies: 'injectManifest',
       injectManifest: {
