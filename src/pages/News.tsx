@@ -8,7 +8,6 @@ import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 import { useAppSettings } from '../hooks/useLocalStorage';
 import { useNewsList } from '../hooks/useNewsList';
 import { useNotification } from '../hooks/useNotification';
-import { useNotifications } from '../hooks/useNotifications';
 import { newsService } from '../services/newsService';
 import type { NewsFilters as NewsFiltersType, NewsItem } from '../types/news';
 
@@ -26,7 +25,7 @@ export const News: React.FC = () => {
   }, [settings.selectedSources, settings.sortBy]);
 
   // Загрузка первой страницы новостей
-  const { news: initialNews, loading: initialLoading } = useCachedNews();
+  const { news: initialNews, loading: _initialLoading } = useCachedNews();
 
   // Управление списком новостей с пагинацией
   const {

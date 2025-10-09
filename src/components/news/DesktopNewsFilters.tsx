@@ -1,5 +1,5 @@
 // components/news/DesktopNewsFilters.tsx
-import { Filter, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import React from 'react';
 
 import type { NewsFilters } from '../../types/news';
@@ -17,8 +17,6 @@ interface DesktopNewsFiltersProps {
 export const DesktopNewsFilters: React.FC<DesktopNewsFiltersProps> = ({
   filters,
   onFiltersChange,
-  sortBy,
-  onSortChange,
   availableSources,
   availableTags
 }) => {

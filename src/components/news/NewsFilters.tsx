@@ -17,8 +17,6 @@ export const NewsFilters: React.FC<NewsFiltersProps> = (props) => {
   const {
     filters,
     onFiltersChange,
-    availableSources,
-    availableTags
   } = props;
 
   return (

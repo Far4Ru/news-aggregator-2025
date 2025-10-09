@@ -10,7 +10,6 @@ interface UseInfiniteScrollProps {
 export const useInfiniteScroll = ({
   hasMore,
   loadMore,
-  threshold = 100
 }: UseInfiniteScrollProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const observerRef = useRef<IntersectionObserver>();
