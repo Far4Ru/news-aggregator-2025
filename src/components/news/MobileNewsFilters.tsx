@@ -23,7 +23,6 @@ export const MobileNewsFilters: React.FC<MobileNewsFiltersProps> = ({
 }) => {
   const [showSortModal, setShowSortModal] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [activeFilterGroup, setActiveFilterGroup] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const sourceTypes = [
@@ -118,8 +117,8 @@ export const MobileNewsFilters: React.FC<MobileNewsFiltersProps> = ({
     });
   };
 
-  const getFilterGroup = (groupId: string) => {
-    return filterGroups.find(group => group.id === groupId);
+  const isFilterSelected = (groupId: string, value: string) => {
+    return (filters[groupId as keyof NewsFilters] ?? []).includes(value);
   };
 
   return (
@@ -172,26 +171,6 @@ export const MobileNewsFilters: React.FC<MobileNewsFiltersProps> = ({
             </button>
           </div>
         )}
-
-        {/* Горизонтальный список групп фильтров */}
-        <div className='mobile-filters__groups'>
-          {filterGroups.map(group => (
-            <button
-              key={group.id}
-              className={`mobile-filters__group-button ${activeFilterGroup === group.id ? 'mobile-filters__group-button--active' : ''}`}
-              onClick={() => setActiveFilterGroup(
-                activeFilterGroup === group.id ? null : group.id
-              )}
-            >
-              {group.label}
-              {(filters[group.id as keyof NewsFilters]?.length ?? 0) > 0 && (
-                <span className='mobile-filters__group-count'>
-                  {(filters[group.id as keyof NewsFilters] as string[]).length}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Всплывающее меню сортировки */}
@@ -233,7 +212,7 @@ export const MobileNewsFilters: React.FC<MobileNewsFiltersProps> = ({
         </div>
       )}
 
-      {/* Всплывающее меню фильтров */}
+      {/* Всплывающее меню фильтров в виде chips */}
       {showFilterModal && (
         <div className='mobile-modal'>
           <div className='mobile-modal__content'>
@@ -244,7 +223,7 @@ export const MobileNewsFilters: React.FC<MobileNewsFiltersProps> = ({
                   className='mobile-modal__clear'
                   onClick={clearAllFilters}
                 >
-                  Очистить
+                  Очистить все
                 </button>
                 <button
                   className='mobile-modal__close'
@@ -255,28 +234,25 @@ export const MobileNewsFilters: React.FC<MobileNewsFiltersProps> = ({
               </div>
             </div>
 
-            <div className='mobile-modal__filter-groups'>
+            <div className='mobile-modal__chips-content'>
               {filterGroups.map(group => (
-                <div key={group.id} className='mobile-modal__filter-group'>
-                  <h4 className='mobile-modal__filter-group-title'>{group.label}</h4>
-                  <div className='mobile-modal__filter-options'>
+                <div key={group.id} className='mobile-modal__chips-group'>
+                  <h4 className='mobile-modal__chips-group-title'>{group.label}</h4>
+                  <div className='mobile-modal__chips-list'>
                     {group.options.map(option => {
-                      const isChecked = (filters[group.id as keyof NewsFilters] ?? []).includes(option.value);
+                      const isSelected = isFilterSelected(group.id, option.value);
 
                       return (
-                        <label key={option.id} className='mobile-modal__filter-option'>
-                          <input
-                            type='checkbox'
-                            checked={isChecked}
-                            onChange={(e) => updateFilter(group.id, option.value, e.target.checked)}
-                            className='mobile-modal__checkbox'
-                          />
-                          <span className='mobile-modal__checkmark' />
-                          <span className='mobile-modal__option-label'>{option.label}</span>
+                        <button
+                          key={option.id}
+                          className={`mobile-modal__chip ${isSelected ? 'mobile-modal__chip--active' : ''}`}
+                          onClick={() => updateFilter(group.id, option.value, !isSelected)}
+                        >
+                          {option.label}
                           {option.count && (
-                            <span className='mobile-modal__option-count'>{option.count}</span>
+                            <span className='mobile-modal__chip-count'>{option.count}</span>
                           )}
-                        </label>
+                        </button>
                       );
                     })}
                   </div>
@@ -290,44 +266,10 @@ export const MobileNewsFilters: React.FC<MobileNewsFiltersProps> = ({
                 onClick={() => setShowFilterModal(false)}
               >
                 Показать результаты
+                {activeFilters.length > 0 && (
+                  <span className='mobile-modal__apply-count'>({activeFilters.length})</span>
+                )}
               </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Всплывающий список опций для активной группы */}
-      {activeFilterGroup && (
-        <div className='mobile-filter-popover'>
-          <div className='mobile-filter-popover__content'>
-            <div className='mobile-filter-popover__header'>
-              <h4 className='mobile-filter-popover__title'>
-                {getFilterGroup(activeFilterGroup)?.label}
-              </h4>
-              <button
-                className='mobile-filter-popover__close'
-                onClick={() => setActiveFilterGroup(null)}
-              >
-                <X size={16} />
-              </button>
-            </div>
-            <div className='mobile-filter-popover__options'>
-              {getFilterGroup(activeFilterGroup)?.options.map(option => {
-                const isChecked = (filters[activeFilterGroup as keyof NewsFilters] ?? []).includes(option.value);
-
-                return (
-                  <label key={option.id} className='mobile-filter-popover__option'>
-                    <input
-                      type='checkbox'
-                      checked={isChecked}
-                      onChange={(e) => updateFilter(activeFilterGroup, option.value, e.target.checked)}
-                      className='mobile-filter-popover__checkbox'
-                    />
-                    <span className='mobile-filter-popover__checkmark' />
-                    <span className='mobile-filter-popover__option-label'>{option.label}</span>
-                  </label>
-                );
-              })}
             </div>
           </div>
         </div>
