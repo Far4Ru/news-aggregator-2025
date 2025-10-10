@@ -47,11 +47,14 @@ export const NewsCard: React.FC<NewsCardProps> = ({
             <span className='news-card__source'>{news.source_type}</span>
           </div>
 
-          <button
+          <a
+            href={news.sources.url}
+            target='_blank'
+            rel='noopener noreferrer'
             className='news-card__button news-card__button--up-right'
           >
             <ArrowUpRight size={24} />
-          </button>
+          </a>
         </div>
         <div className='news-card__meta'>
           <button
