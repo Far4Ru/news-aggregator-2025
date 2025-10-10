@@ -29,7 +29,6 @@
     font-size: 14px;
     background: colors.$background;
     color: colors.$hh-text;
-    flex: 1;
     justify-content: center;
 
     &:hover {
@@ -52,7 +51,7 @@
   &__active {
     display: flex;
     align-items: center;
-    padding: colors.$spacing-sm colors.$spacing-md;
+    padding: colors.$spacing-sm 0;
     gap: colors.$spacing-sm;
     border-bottom: 1px solid colors.$hh-gray-light;
   }
@@ -262,10 +261,13 @@
     display: flex;
     align-items: center;
     gap: colors.$spacing-xs;
+    border-radius: colors.$spacing-md;
+    font-size: large;
+    padding: colors.$spacing-md;
   }
 
   &__apply-count {
-    font-size: 14px;
+    font-size: large;
     opacity: 0.9;
   }
 }

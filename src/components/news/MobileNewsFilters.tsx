@@ -1,5 +1,5 @@
 // components/news/MobileNewsFilters.tsx
-import { Filter, X, ChevronDown, SortAsc, SortDesc } from 'lucide-react';
+import { X, SortAsc, SortDesc, ArrowUpDown, Settings2 } from 'lucide-react';
 import React, { useState, useRef } from 'react';
 
 import type { NewsFilters, FilterGroup, ActiveFilter } from '../../types/news';
@@ -125,155 +125,156 @@ export const MobileNewsFilters: React.FC<MobileNewsFiltersProps> = ({
     <div className='mobile-filters'>
       {/* Верхняя панель фильтров */}
       <div className='mobile-filters__top'>
-        <div className='mobile-filters__actions'>
+        <div className='mobile-filters__active'>
           <button
             className='mobile-filters__button'
             onClick={() => setShowSortModal(true)}
           >
-            <SortAsc size={16} />
-            {sortBy === 'date' ? 'По дате' : 'По рейтингу'}
-            <ChevronDown size={14} />
+            <ArrowUpDown size={16} />
           </button>
 
           <button
             className='mobile-filters__button'
             onClick={() => setShowFilterModal(true)}
           >
-            <Filter size={16} />
-            Фильтры
+            <Settings2 size={16} />
             {activeFilters.length > 0 && (
               <span className='mobile-filters__count'>{activeFilters.length}</span>
             )}
           </button>
-        </div>
 
-        {/* Активные фильтры */}
-        {activeFilters.length > 0 && (
-          <div className='mobile-filters__active'>
-            <div className='mobile-filters__active-list' ref={scrollContainerRef}>
-              {activeFilters.map(filter => (
-                <div key={`${filter.groupId}-${filter.value}`} className='mobile-filters__active-item'>
-                  <span className='mobile-filters__active-label'>{filter.label}</span>
-                  <button
-                    className='mobile-filters__active-remove'
-                    onClick={() => removeFilter(filter)}
-                  >
-                    <X size={14} />
-                  </button>
-                </div>
-              ))}
-            </div>
-            <button
-              className='mobile-filters__clear-all'
-              onClick={clearAllFilters}
-            >
-              Очистить
-            </button>
-          </div>
-        )}
+          {/* Активные фильтры */}
+          {activeFilters.length > 0 && (
+            <>
+              <div className='mobile-filters__active-list' ref={scrollContainerRef}>
+                {activeFilters.map(filter => (
+                  <div key={`${filter.groupId}-${filter.value}`} className='mobile-filters__active-item'>
+                    <span className='mobile-filters__active-label'>{filter.label}</span>
+                    <button
+                      className='mobile-filters__active-remove'
+                      onClick={() => removeFilter(filter)}
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              {/* <button
+                className='mobile-filters__clear-all'
+                onClick={clearAllFilters}
+              >
+                Очистить
+              </button> */}
+            </>
+          )}
+        </div>
       </div>
 
       {/* Всплывающее меню сортировки */}
-      {showSortModal && (
-        <div className='mobile-modal'>
-          <div className='mobile-modal__content'>
-            <div className='mobile-modal__header'>
-              <h3 className='mobile-modal__title'>Сортировка</h3>
-              <button
-                className='mobile-modal__close'
-                onClick={() => setShowSortModal(false)}
-              >
-                <X size={20} />
-              </button>
-            </div>
-            <div className='mobile-modal__options'>
-              <button
-                className={`mobile-modal__option ${sortBy === 'date' ? 'mobile-modal__option--active' : ''}`}
-                onClick={() => {
-                  onSortChange('date');
-                  setShowSortModal(false);
-                }}
-              >
-                <SortDesc size={16} />
-                По дате
-              </button>
-              <button
-                className={`mobile-modal__option ${sortBy === 'rating' ? 'mobile-modal__option--active' : ''}`}
-                onClick={() => {
-                  onSortChange('rating');
-                  setShowSortModal(false);
-                }}
-              >
-                <SortAsc size={16} />
-                По рейтингу
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Всплывающее меню фильтров в виде chips */}
-      {showFilterModal && (
-        <div className='mobile-modal'>
-          <div className='mobile-modal__content'>
-            <div className='mobile-modal__header'>
-              <h3 className='mobile-modal__title'>Фильтры</h3>
-              <div className='mobile-modal__header-actions'>
-                <button
-                  className='mobile-modal__clear'
-                  onClick={clearAllFilters}
-                >
-                  Очистить все
-                </button>
+      {
+        showSortModal && (
+          <div className='mobile-modal'>
+            <div className='mobile-modal__content'>
+              <div className='mobile-modal__header'>
+                <h3 className='mobile-modal__title'>Сортировка</h3>
                 <button
                   className='mobile-modal__close'
-                  onClick={() => setShowFilterModal(false)}
+                  onClick={() => setShowSortModal(false)}
                 >
                   <X size={20} />
                 </button>
               </div>
-            </div>
-
-            <div className='mobile-modal__chips-content'>
-              {filterGroups.map(group => (
-                <div key={group.id} className='mobile-modal__chips-group'>
-                  <h4 className='mobile-modal__chips-group-title'>{group.label}</h4>
-                  <div className='mobile-modal__chips-list'>
-                    {group.options.map(option => {
-                      const isSelected = isFilterSelected(group.id, option.value);
-
-                      return (
-                        <button
-                          key={option.id}
-                          className={`mobile-modal__chip ${isSelected ? 'mobile-modal__chip--active' : ''}`}
-                          onClick={() => updateFilter(group.id, option.value, !isSelected)}
-                        >
-                          {option.label}
-                          {option.count && (
-                            <span className='mobile-modal__chip-count'>{option.count}</span>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className='mobile-modal__footer'>
-              <button
-                className='button button--primary mobile-modal__apply'
-                onClick={() => setShowFilterModal(false)}
-              >
-                Показать результаты
-                {activeFilters.length > 0 && (
-                  <span className='mobile-modal__apply-count'>({activeFilters.length})</span>
-                )}
-              </button>
+              <div className='mobile-modal__options'>
+                <button
+                  className={`mobile-modal__option ${sortBy === 'date' ? 'mobile-modal__option--active' : ''}`}
+                  onClick={() => {
+                    onSortChange('date');
+                    setShowSortModal(false);
+                  }}
+                >
+                  <SortDesc size={16} />
+                  По дате
+                </button>
+                <button
+                  className={`mobile-modal__option ${sortBy === 'rating' ? 'mobile-modal__option--active' : ''}`}
+                  onClick={() => {
+                    onSortChange('rating');
+                    setShowSortModal(false);
+                  }}
+                >
+                  <SortAsc size={16} />
+                  По рейтингу
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+
+      {/* Всплывающее меню фильтров в виде chips */}
+      {
+        showFilterModal && (
+          <div className='mobile-modal'>
+            <div className='mobile-modal__content'>
+              <div className='mobile-modal__header'>
+                <h3 className='mobile-modal__title'>Фильтры</h3>
+                <div className='mobile-modal__header-actions'>
+                  <button
+                    className='mobile-modal__clear'
+                    onClick={clearAllFilters}
+                  >
+                    Очистить все
+                  </button>
+                  <button
+                    className='mobile-modal__close'
+                    onClick={() => setShowFilterModal(false)}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+
+              <div className='mobile-modal__chips-content'>
+                {filterGroups.map(group => (
+                  <div key={group.id} className='mobile-modal__chips-group'>
+                    <h4 className='mobile-modal__chips-group-title'>{group.label}</h4>
+                    <div className='mobile-modal__chips-list'>
+                      {group.options.map(option => {
+                        const isSelected = isFilterSelected(group.id, option.value);
+
+                        return (
+                          <button
+                            key={option.id}
+                            className={`mobile-modal__chip ${isSelected ? 'mobile-modal__chip--active' : ''}`}
+                            onClick={() => updateFilter(group.id, option.value, !isSelected)}
+                          >
+                            {option.label}
+                            {option.count && (
+                              <span className='mobile-modal__chip-count'>{option.count}</span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className='mobile-modal__footer'>
+                <button
+                  className='button button--primary mobile-modal__apply'
+                  onClick={() => setShowFilterModal(false)}
+                >
+                  Показать результаты
+                  {activeFilters.length > 0 && (
+                    <span className='mobile-modal__apply-count'>({activeFilters.length})</span>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+      }
+    </div >
   );
 };
