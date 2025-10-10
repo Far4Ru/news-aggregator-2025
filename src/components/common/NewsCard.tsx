@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 
 import type { NewsItem } from '../../types/news';
 
+const ICONS_PATH: any = {
+  'telegram': 'icons/telegram.png',
+};
+
 interface NewsCardProps {
   news: NewsItem
   onRate: (newsId: string, increment: number) => void
@@ -40,11 +44,11 @@ export const NewsCard: React.FC<NewsCardProps> = ({
       <div className='news-card__header'>
         <div className='news-card__header-block'>
           <div className='news-card__title-image-block'>
-            <img className='news-card__title-image' alt={news.source_type} src='logo.png' />
+            <img className='news-card__title-image' alt={news.sources.type} src={ICONS_PATH[news.sources.type] ?? 'logo.png'} />
           </div>
           <div className='news-card__title-block'>
             <h3 className='news-card__title'>{news.sources.name}</h3>
-            <span className='news-card__source'>{news.source_type}</span>
+            <span className='news-card__source'>{news.sources.type}</span>
           </div>
 
           <a

@@ -110,7 +110,7 @@ export const News: React.FC = () => {
   };
 
   const availableSources = Array.from(new Set(news.map(item => item.source_id)));
-  const availableTags = Array.from(new Set(news.flatMap(item => item.tags)));
+  const availableTags: string[] = Array.from(new Set(news.flatMap(item => item.tags ?? [])));
 
   const isListLoading = loading || infiniteLoading;
 
