@@ -33,7 +33,7 @@ export default defineConfig({
         short_name: 'Новости',
         description: 'Все важные новости из проверенных источников в одном месте',
         theme_color: '#d7131c',
-        background_color: '#ffffff',
+        background_color: '#d40c14',
         display: 'standalone',
         icons: [
           {
