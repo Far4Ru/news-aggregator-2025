@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import { NewsFilters } from '../components/news/NewsFilters';
 import { NewsList } from '../components/news/NewsList';
+import { useAuth } from '../hooks/useAuth';
 import { useCachedNews } from '../hooks/useCachedNews';
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 import { useAppSettings } from '../hooks/useLocalStorage';
@@ -19,6 +20,7 @@ export const News: React.FC = () => {
 
   const [filters, setFilters] = useState<NewsFiltersType>(settings.filters);
   const [showNewNewsBadge, setShowNewNewsBadge] = useState(false);
+  const { user } = useAuth();
 
   // Функция для загрузки дополнительных новостей
   const loadMoreNews = useCallback(async (page: number, currentFilters: NewsFiltersType) => {
@@ -79,7 +81,14 @@ export const News: React.FC = () => {
 
   const handleRate = async (newsId: string, increment: number) => {
     try {
-      console.log(newsId, increment);
+      await newsService.updateRating(newsId, user?.id ?? '', increment);
+      refresh();
+      news.forEach(item => {
+        if (item.id === newsId) {
+          item.rating = item.rating + increment;
+        }
+      }
+      );
     } catch (error) {
       console.error('Error updating rating:', error);
       showNotification('Ошибка при оценке новости', 'error');
@@ -109,7 +118,7 @@ export const News: React.FC = () => {
     }
   };
 
-  const availableSources = Array.from(new Set(news.map(item => item.source_id)));
+  const availableSources = Array.from(new Set(news.map(item => item.sources.name)));
   const availableTags: string[] = Array.from(new Set(news.flatMap(item => item.tags ?? [])));
 
   const isListLoading = loading || infiniteLoading;

@@ -38,13 +38,11 @@ export const newsService = {
 
     const newsIds = (news as any).map((item: any) => item.id);
 
-    // 2. Параллельно получаем теги и рейтинги
     const [tagsByNewsId, ratingsByNewsId] = await Promise.all([
       this.getTagsForMultipleNews(newsIds),
       this.getRatingsForMultipleNews(newsIds)
     ]);
 
-    // 3. Объединяем данные
     const newsWithDetails = (news as any).map((item: any) => ({
       ...item,
       tags: tagsByNewsId[item.id] || [],
@@ -68,7 +66,7 @@ export const newsService = {
 
     if (filters.sources.length > 0) {
       filteredNews = filteredNews.filter(item =>
-        filters.sources.includes(item.source_id)
+        filters.sources.includes(item.sources.name)
       );
     }
 
@@ -140,13 +138,41 @@ export const newsService = {
     return ratingsByNewsId;
   },
 
-  async updateRating(_newsId: string, increment: number) {
-    // Заглушка
-    await new Promise(resolve => setTimeout(resolve, 200));
+  async updateRating(newsId: string, userId: string, increment: number) {
+    try {
+      const { data: newRating } = await supabase
+        .from('news_ratings')
+        .insert([
+          {
+            news_id: newsId,
+            user_id: userId,
+            rating: increment, // +1 или -1
+            created_at: new Date().toISOString()
+          } as never
+        ])
+        .select()
+        .single();
 
-    return { rating: increment };
+      return newRating;
+    } catch (error) {
+      return undefined;
+    }
   },
 
+  async checkUserRating(newsId: string, userId: string) {
+    try {
+      const { data: existingRating } = await supabase
+        .from('news_ratings')
+        .select('id')
+        .eq('news_id', newsId)
+        .eq('user_id', userId)
+        .single();
+
+      return existingRating;
+    } catch (error) {
+      return undefined;
+    }
+  },
   async suggestEdit(_newsId: string, _suggestedContent: string, _ip: string) {
     // Заглушка
     await new Promise(resolve => setTimeout(resolve, 200));
