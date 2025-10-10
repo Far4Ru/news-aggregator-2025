@@ -238,6 +238,14 @@
     min-height: 200px;
     color: inherit;
     transition: all 0.2s ease;
+    text-align: center;
+    padding: colors.$spacing-xl colors.$spacing-lg;
+
+    &--icon {
+      margin: 0 auto colors.$spacing-md;
+      color: colors.$hh-red;
+    }
+
 
     &:hover {
       border-color: colors.$hh-red;

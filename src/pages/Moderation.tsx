@@ -1,3 +1,4 @@
+import { FileEdit, Globe, Newspaper } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -15,6 +16,7 @@ export const Moderation: React.FC = () => (
             to='/suggestions'
             className='moderation-dashboard__card'
           >
+            <FileEdit size={64} className='moderation-dashboard__card--icon' />
             <h3>Предложения правок</h3>
             <p>Модерация предложенных изменений новостей</p>
           </Link>
@@ -23,6 +25,7 @@ export const Moderation: React.FC = () => (
             to='/new-news'
             className='moderation-dashboard__card'
           >
+            <Newspaper size={64} className='moderation-dashboard__card--icon' />
             <h3>Новые новости</h3>
             <p>Проверка новых добавленных новостей</p>
           </Link>
@@ -31,6 +34,7 @@ export const Moderation: React.FC = () => (
             to='/sources'
             className='moderation-dashboard__card'
           >
+            <Globe size={64} className='moderation-dashboard__card--icon' />
             <h3>Источники</h3>
             <p>Управление источниками новостей</p>
           </Link>

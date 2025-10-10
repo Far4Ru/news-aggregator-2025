@@ -97,6 +97,7 @@
     gap: colors.$spacing-sm;
 
     &--title {
+      color: colors.$hh-gray-dark;
       font-weight: 400;
       font-size: smaller;
       text-align: center;
@@ -118,6 +119,10 @@
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
+
+    &--edit {
+      color: colors.$hh-gray-dark;
+    }
 
     &:hover {
       background: colors.$hh-gray-light;
