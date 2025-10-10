@@ -1,5 +1,12 @@
-// components/common/Notification.tsx
+import { AlertTriangle, Check, Info, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+
+const iconMap = {
+  success: Check,
+  error: X,
+  info: Info,
+  warning: AlertTriangle,
+};
 
 export interface NotificationProps {
   id: string
@@ -33,23 +40,12 @@ export const NotificationCard: React.FC<NotificationProps> = ({
     }, 300);
   };
 
-  const getIcon = () => {
-    switch (type) {
-    case 'success':
-      return '✅';
-    case 'error':
-      return '❌';
-    case 'info':
-      return 'ℹ️';
-    default:
-      return 'ℹ️';
-    }
-  };
+  const IconComponent = iconMap[type];
 
   return (
     <div className={`notification notification--${type} ${isClosing ? 'notification--closing' : ''}`}>
       <div className='notification__content'>
-        <span className='notification__icon'>{getIcon()}</span>
+        <IconComponent size={20} />
         <span className='notification__message'>{message}</span>
       </div>
     </div>
