@@ -12,13 +12,16 @@
   }
 
   &__sort-title {
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-sm;
+    font-size: 16px;
     font-weight: 600;
-    color: colors.$hh-text;
-    margin: 0 0 colors.$spacing-md 0;
+    margin: 0;
   }
 
   &__sort-options {
+    margin: 20px 0px 4px 0px;
     display: flex;
     flex-direction: column;
     gap: colors.$spacing-xs;

@@ -1,13 +1,13 @@
-import { ThumbsUp, ThumbsDown, Share2, AlertTriangle, ArrowUpRight } from 'lucide-react';
+import { Share2, AlertTriangle, ArrowUpRight, ArrowUp, ArrowDown } from 'lucide-react';
 import React, { useState } from 'react';
 
 import type { NewsItem } from '../../types/news';
 
 interface NewsCardProps {
-    news: NewsItem
-    onRate: (newsId: string, increment: number) => void
-    onShare: (news: NewsItem) => void
-    onSuggestEdit: (news: NewsItem, content: string) => void
+  news: NewsItem
+  onRate: (newsId: string, increment: number) => void
+  onShare: (news: NewsItem) => void
+  onSuggestEdit: (news: NewsItem, content: string) => void
 }
 
 export const NewsCard: React.FC<NewsCardProps> = ({
@@ -34,7 +34,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
       setSuggestedContent('');
     }
   };
-  
+
   return (
     <div className='news-card'>
       <div className='news-card__header'>
@@ -79,18 +79,19 @@ export const NewsCard: React.FC<NewsCardProps> = ({
 
         <div className='news-card__actions'>
           <div className='news-card__rating'>
-            <button
-              className='news-card__button news-card__button--up'
-              onClick={() => handleRate(1)}
-            >
-              <ThumbsUp size={16} />
-            </button>
-            <span className='news-card__rating-value'>{news.rating}</span>
+            <span className='news-card__rating--title'>Полезность:</span>
             <button
               className='news-card__button news-card__button--down'
               onClick={() => handleRate(-1)}
             >
-              <ThumbsDown size={16} />
+              <ArrowDown size={16} />
+            </button>
+            <span className='news-card__rating--value'>{news.rating}</span>
+            <button
+              className='news-card__button news-card__button--up'
+              onClick={() => handleRate(1)}
+            >
+              <ArrowUp size={16} />
             </button>
           </div>
 

@@ -4,10 +4,10 @@ import React from 'react';
 import { type NewsFilters } from '../../types/news';
 
 interface FilterPanelProps {
-    filters: NewsFilters
-    onFiltersChange: (filters: NewsFilters) => void
-    availableSources: string[]
-    availableTags: string[]
+  filters: NewsFilters
+  onFiltersChange: (filters: NewsFilters) => void
+  availableSources: string[]
+  availableTags: string[]
 }
 
 export const FilterPanel: React.FC<FilterPanelProps> = ({
@@ -38,12 +38,12 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   };
 
   const hasActiveFilters =
-        filters.sources.length > 0 ||
-        filters.sourceTypes.length > 0 ||
-        filters.tags.length > 0 ||
-        filters.searchQuery ||
-        filters.dateFrom ||
-        filters.dateTo;
+    filters.sources.length > 0 ||
+    filters.sourceTypes.length > 0 ||
+    filters.tags.length > 0 ||
+    filters.searchQuery ||
+    filters.dateFrom ||
+    filters.dateTo;
 
   return (
     <div className='filter-panel'>

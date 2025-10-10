@@ -1,4 +1,4 @@
-import { X, SortAsc, SortDesc } from 'lucide-react';
+import { X, SortAsc, SortDesc, ArrowDownUp } from 'lucide-react';
 import React from 'react';
 
 import type { NewsFilters } from '../../types/news';
@@ -53,7 +53,8 @@ export const DesktopNewsFilters: React.FC<DesktopNewsFiltersProps> = ({
     <div className='desktop-filters'>
       {/* Сортировка */}
       <div className='desktop-filters__sort'>
-        <h3 className='desktop-filters__sort-title'>Сортировка</h3>
+        <h3 className='desktop-filters__sort-title'>
+          <ArrowDownUp size={20} />Сортировка</h3>
         <div className='desktop-filters__sort-options'>
           <button
             className={`desktop-filters__sort-button ${sortBy === 'date' ? 'desktop-filters__sort-button--active' : ''}`}
