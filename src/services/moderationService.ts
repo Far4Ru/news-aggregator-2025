@@ -27,6 +27,18 @@ export const moderationService = {
     return null;
   },
 
+  async moderateSources(sourceId: string, status: 'approved' | 'rejected') {
+    const { data, error } = await supabase
+      .from('sources')
+      .update({ status } as never)
+      .eq('id', sourceId)
+      .select();
+
+    console.log(data, error);
+
+    return null;
+  },
+
   async blockIp(_ip: string) {
     // Заглушка
     await new Promise(resolve => setTimeout(resolve, 200));

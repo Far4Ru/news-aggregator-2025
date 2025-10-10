@@ -31,7 +31,7 @@ export const Moderation: React.FC = () => (
           </Link>
 
           <Link
-            to='/sources'
+            to='/new-sources'
             className='moderation-dashboard__card'
           >
             <Globe size={64} className='moderation-dashboard__card--icon' />

@@ -8,6 +8,7 @@ import { Home } from './pages/Home';
 import { Moderation } from './pages/Moderation';
 import { NewNews } from './pages/NewNews';
 import { News } from './pages/News';
+import { NewSources } from './pages/NewSources';
 import { Sources } from './pages/Sources';
 import { Suggestions } from './pages/Suggestions';
 import './styles/main.scss';
@@ -27,6 +28,7 @@ function App() {
                 <Route path='/moderation' element={<Moderation />} />
                 <Route path='/suggestions' element={<Suggestions />} />
                 <Route path='/new-news' element={<NewNews />} />
+                <Route path='/new-sources' element={<NewSources />} />
               </Routes>
             </main>
             <Footer />

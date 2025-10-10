@@ -4,10 +4,10 @@ import React from 'react';
 import { type NewsSource } from '../../types/sources';
 
 interface SourceCardProps {
-    source: NewsSource
-    isAdded: boolean
-    onAdd: (sourceId: string) => void
-    onRemove: (sourceId: string) => void
+  source: NewsSource
+  isAdded: boolean
+  onAdd: (sourceId: string) => void
+  onRemove: (sourceId: string) => void
 }
 
 export const SourceCard: React.FC<SourceCardProps> = ({
@@ -17,7 +17,7 @@ export const SourceCard: React.FC<SourceCardProps> = ({
   onRemove
 }) => {
   // const totalActivity = source.activity_data.reduce((sum, count) => sum + count, 0)
-  const maxActivity = Math.max(...source.activity_data);
+  const maxActivity = Math.max(...(source.activity_data ?? []));
 
   return (
     <div className='source-card'>
@@ -36,7 +36,7 @@ export const SourceCard: React.FC<SourceCardProps> = ({
           <span>Активность (последние 7 дней)</span>
         </div>
         <div className='source-card__chart'>
-          {source.activity_data.map((count, index) => (
+          {(source.activity_data ?? []).map((count, index) => (
             <div
               key={index}
               className='source-card__bar'
