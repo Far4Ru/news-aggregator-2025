@@ -1,4 +1,5 @@
 // pages/News.tsx
+import { RefreshCcw } from 'lucide-react';
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { NewsFilters } from '../components/news/NewsFilters';
@@ -25,7 +26,8 @@ export const News: React.FC = () => {
   }, [settings.selectedSources, settings.sortBy]);
 
   // Загрузка первой страницы новостей
-  const { news: initialNews, loading: _initialLoading } = useCachedNews();
+  const { news: initialNews,
+    lastUpdated, loading: _initialLoading } = useCachedNews();
 
   // Управление списком новостей с пагинацией
   const {
@@ -122,15 +124,18 @@ export const News: React.FC = () => {
               <span className='badge badge--new'>Новые!</span>
             )}
           </h1>
-          <div className='page__header-actions'>
-            <button
-              className='button button--secondary'
-              onClick={handleRefresh}
-              disabled={isListLoading}
-            >
-              {isListLoading ? 'Обновление...' : 'Обновить'}
-            </button>
-          </div>
+          <button
+            className='page__header-top--button'
+            onClick={handleRefresh}
+            disabled={isListLoading}
+          >
+            {isListLoading ? 'Обновление...' : (<RefreshCcw size={24} />)}
+          </button>
+          {lastUpdated && (
+            <span className='page__header-top--time'>
+              {lastUpdated.toLocaleTimeString()}
+            </span>
+          )}
         </div>
         <p className='page__subtitle'>Свежие новости из ваших источников</p>
       </div>

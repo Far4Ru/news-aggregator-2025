@@ -10,12 +10,29 @@
     margin-bottom: colors.$spacing-xl;
   }
 
+  &__header-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    &--button {
+      color: colors.$hh-gray;
+      background: none;
+      border: none;
+    }
+
+    &--time {
+      color: colors.$hh-gray;
+    }
+  }
+
   &__title {
     font-size: 32px;
     font-weight: 600;
     color: colors.$hh-text;
     margin-bottom: colors.$spacing-sm;
   }
+
 
   &__subtitle {
     font-size: 16px;
