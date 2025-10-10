@@ -86,6 +86,7 @@
   }
 
   &__actions {
+    width: none;
     display: flex;
     align-items: center;
     gap: colors.$spacing-md;
@@ -178,7 +179,7 @@
   @include mixins.mobile-small {
     &__footer {
       flex-direction: column;
-      gap: colors.$spacing-xs;
+      gap: colors.$spacing-sm;
     }
 
     &__tags {
@@ -189,6 +190,12 @@
       &--title {
         display: none;
       }
+    }
+
+    &__actions {
+      width: 100%;
+      justify-content: space-between;
+      flex-direction: row-reverse;
     }
   }
 }
