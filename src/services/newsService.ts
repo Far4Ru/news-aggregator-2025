@@ -59,8 +59,8 @@ export const newsService = {
     // Применение фильтров
     if (filters.searchQuery) {
       filteredNews = filteredNews.filter(item =>
-        item.title.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
-        item.content.toLowerCase().includes(filters.searchQuery.toLowerCase())
+        // item.title.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
+        item.short_contents.content_text.toLowerCase().includes(filters.searchQuery.toLowerCase())
       );
     }
 
@@ -95,7 +95,7 @@ export const newsService = {
         status,
         tags (
           id,
-          name
+          tag_name
         )
       `)
         .in('news_id', newsIds as any)
@@ -108,7 +108,7 @@ export const newsService = {
         if (!tagsByNewsId[item.news_id]) {
           tagsByNewsId[item.news_id] = [];
         }
-        tagsByNewsId[item.news_id].push(item.tags);
+        tagsByNewsId[item.news_id].push(item.tags.tag_name);
       });
 
       return tagsByNewsId;
