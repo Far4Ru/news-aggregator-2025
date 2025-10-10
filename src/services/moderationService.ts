@@ -1,5 +1,3 @@
-import { mockNews } from '../utils/mockData';
-
 import { supabase } from './supabase';
 
 export const moderationService = {
@@ -24,7 +22,7 @@ export const moderationService = {
 
     console.log(error);
 
-    let filteredNews = [...mockNews, ...news as any];
+    let filteredNews = [...news as any];
 
     return filteredNews;
   },

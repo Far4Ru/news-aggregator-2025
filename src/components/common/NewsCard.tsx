@@ -67,7 +67,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
       </div>
 
       <div className='news-card__content'>
-        <p className='news-card__text'>{news.short_content}</p>
+        <p className='news-card__text'>{news.short_contents.content_text}</p>
       </div>
 
       <div className='news-card__tags'>

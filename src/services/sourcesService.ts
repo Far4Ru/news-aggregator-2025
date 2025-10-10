@@ -1,5 +1,4 @@
 import type { NewsSource } from '../types/sources';
-import { mockSources } from '../utils/mockData';
 
 import { supabase } from './supabase';
 
@@ -10,12 +9,12 @@ export const sourcesService = {
       .select('*');
 
     console.log(sources, error);
-    let filteredSources = [...mockSources, ...sources as NewsSource[]];
+    let filteredSources = [...sources as NewsSource[]];
 
     if (searchQuery) {
       filteredSources = filteredSources.filter(source =>
         source.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                source.description?.toLowerCase().includes(searchQuery.toLowerCase())
+        source.description?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -23,11 +22,11 @@ export const sourcesService = {
   },
 
   async addSource(sourceData: {
-        name: string
-        description: string
-        url: string
-        type: string
-    }) {
+    name: string
+    description: string
+    url: string
+    type: string
+  }) {
     const { data, error } = await supabase
       .from('sources')
       .insert([
@@ -47,7 +46,7 @@ export const sourcesService = {
     // Заглушка
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    return mockSources;
+    return null;
   },
 
   async moderateSource(_sourceId: string, _action: 'approve' | 'reject') {

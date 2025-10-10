@@ -1,6 +1,5 @@
 // services/newsService.ts
 import type { NewsFilters } from '../types/news';
-import { mockNews } from '../utils/mockData';
 
 import { supabase } from './supabase';
 
@@ -33,10 +32,27 @@ export const newsService = {
           content_text
         )
       `)
+      .eq('status', 'approved') // только approved новости
+      .eq('sources.status', 'approved') // только активные источники
       .range(from, to);
 
-    console.log(error);
-    let filteredNews = [...mockNews, ...news as any];
+    const newsIds = (news as any).map((item: any) => item.id);
+
+    // 2. Параллельно получаем теги и рейтинги
+    const [tagsByNewsId, ratingsByNewsId] = await Promise.all([
+      this.getTagsForMultipleNews(newsIds),
+      this.getRatingsForMultipleNews(newsIds)
+    ]);
+
+    // 3. Объединяем данные
+    const newsWithDetails = (news as any).map((item: any) => ({
+      ...item,
+      tags: tagsByNewsId[item.id] || [],
+      rating: ratingsByNewsId[item.id] || 0
+    }));
+
+    console.log(newsWithDetails, error);
+    let filteredNews = [...newsWithDetails as any];
 
     filteredNews = filteredNews.filter(item =>
       selected.includes(item.source_id)
@@ -70,6 +86,58 @@ export const newsService = {
     }
 
     return filteredNews;
+  },
+
+  async getTagsForMultipleNews(newsIds: string) {
+    try {
+      const { data: newsTags } = await supabase
+        .from('news_tags')
+        .select(`
+        news_id,
+        status,
+        tags (
+          id,
+          name
+        )
+      `)
+        .in('news_id', newsIds as any)
+        .eq('status', 'approved');
+
+      // Группируем теги по ID новости
+      const tagsByNewsId: any = {};
+
+      newsTags?.forEach((item: any) => {
+        if (!tagsByNewsId[item.news_id]) {
+          tagsByNewsId[item.news_id] = [];
+        }
+        tagsByNewsId[item.news_id].push(item.tags);
+      });
+
+      return tagsByNewsId;
+    } catch (error) {
+      return {};
+    }
+  },
+
+  async getRatingsForMultipleNews(newsIds: string) {
+    const { data: ratings, error } = await supabase
+      .from('news_ratings')
+      .select('news_id, rating')
+      .in('news_id', newsIds as any);
+
+    if (error) throw error;
+
+    // Группируем рейтинги по ID новости
+    const ratingsByNewsId: any = {};
+
+    ratings?.forEach((item: any) => {
+      if (!ratingsByNewsId[item.news_id]) {
+        ratingsByNewsId[item.news_id] = 0;
+      }
+      ratingsByNewsId[item.news_id] += item.rating;
+    });
+
+    return ratingsByNewsId;
   },
 
   async updateRating(_newsId: string, increment: number) {
