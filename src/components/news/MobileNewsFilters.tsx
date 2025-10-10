@@ -126,27 +126,27 @@ export const MobileNewsFilters: React.FC<MobileNewsFiltersProps> = ({
       {/* Верхняя панель фильтров */}
       <div className='mobile-filters__top'>
         <div className='mobile-filters__active'>
-          <button
-            className='mobile-filters__button'
-            onClick={() => setShowSortModal(true)}
-          >
-            <ArrowUpDown size={16} />
-          </button>
+          <div className='mobile-filters__active-list' ref={scrollContainerRef}>
+            <button
+              className='mobile-filters__button'
+              onClick={() => setShowSortModal(true)}
+            >
+              <ArrowUpDown size={16} />
+            </button>
 
-          <button
-            className='mobile-filters__button'
-            onClick={() => setShowFilterModal(true)}
-          >
-            <Settings2 size={16} />
+            <button
+              className='mobile-filters__button'
+              onClick={() => setShowFilterModal(true)}
+            >
+              <Settings2 size={16} />
+              {activeFilters.length > 0 && (
+                <span className='mobile-filters__count'>{activeFilters.length}</span>
+              )}
+            </button>
+
+            {/* Активные фильтры */}
             {activeFilters.length > 0 && (
-              <span className='mobile-filters__count'>{activeFilters.length}</span>
-            )}
-          </button>
-
-          {/* Активные фильтры */}
-          {activeFilters.length > 0 && (
-            <>
-              <div className='mobile-filters__active-list' ref={scrollContainerRef}>
+              <>
                 {activeFilters.map(filter => (
                   <div key={`${filter.groupId}-${filter.value}`} className='mobile-filters__active-item'>
                     <span className='mobile-filters__active-label'>{filter.label}</span>
@@ -158,15 +158,15 @@ export const MobileNewsFilters: React.FC<MobileNewsFiltersProps> = ({
                     </button>
                   </div>
                 ))}
-              </div>
-              {/* <button
+                {/* <button
                 className='mobile-filters__clear-all'
                 onClick={clearAllFilters}
               >
                 Очистить
               </button> */}
-            </>
-          )}
+              </>
+            )}
+          </div>
         </div>
       </div>
 

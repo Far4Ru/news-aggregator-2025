@@ -54,19 +54,14 @@
     padding: colors.$spacing-sm 0;
     gap: colors.$spacing-sm;
     border-bottom: 1px solid colors.$hh-gray-light;
+    overflow-x: auto;
   }
 
   &__active-list {
     display: flex;
     gap: colors.$spacing-xs;
-    overflow-x: auto;
     flex: 1;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
 
-    &::-webkit-scrollbar {
-      display: none;
-    }
   }
 
   &__active-item {
