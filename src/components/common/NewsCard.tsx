@@ -67,15 +67,16 @@ export const NewsCard: React.FC<NewsCardProps> = ({
         <p className='news-card__text'>{news.short_content}</p>
       </div>
 
+      <div className='news-card__tags'>
+        {news.tags.map(tag => (
+          <span key={tag} className='news-card__tag'>{tag}</span>
+        ))}
+      </div>
+
       <div className='news-card__footer'>
-        <div className='news-card__tags'>
-          <span className='news-card__date'>
-            {new Date(news.published_at).toLocaleDateString()}
-          </span>
-          {news.tags.map(tag => (
-            <span key={tag} className='news-card__tag'>{tag}</span>
-          ))}
-        </div>
+        <span className='news-card__date'>
+          {new Date(news.published_at).toLocaleDateString()}
+        </span>
 
         <div className='news-card__actions'>
           <div className='news-card__rating'>

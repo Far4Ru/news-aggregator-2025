@@ -1,6 +1,12 @@
 @use 'variables' as colors;
 
 // Media queries
+@mixin mobile-small {
+  @media (max-width: #{colors.$breakpoint-mobile-small}) {
+    @content;
+  }
+}
+
 @mixin mobile {
   @media (max-width: #{colors.$breakpoint-mobile}) {
     @content;
@@ -43,7 +49,7 @@
   border: none;
   cursor: pointer;
   font-family: inherit;
-  
+
   &:focus {
     outline: none;
   }

@@ -78,7 +78,7 @@
 
   &__tag {
     background: colors.$hh-gray-light;
-    padding: colors.$spacing-sm colors.$spacing-sm;
+    padding: colors.$spacing-xs colors.$spacing-sm;
     border-radius: colors.$border-radius-sm;
     font-size: 12px;
     color: colors.$hh-gray-dark;
@@ -108,6 +108,15 @@
       min-width: 20px;
       text-align: center;
     }
+  }
+
+  &__tags {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-x: auto;
+    margin-bottom: colors.$spacing-sm;
   }
 
   &__button {
@@ -154,21 +163,32 @@
 
   @include mixins.mobile {
     &__footer {
-      align-items: flex-end;
-      flex-direction: column;
       gap: colors.$spacing-md;
     }
 
-    &__tags {
-      display: flex;
-      flex-wrap: wrap;
-      flex-direction: row;
-      align-items: center;
-      justify-content: flex-start;
+    &__tag {
+      padding: 4px 8px;
     }
 
     &__meta {
       align-items: flex-start;
+    }
+  }
+
+  @include mixins.mobile-small {
+    &__footer {
+      flex-direction: column;
+      gap: colors.$spacing-xs;
+    }
+
+    &__tags {
+      margin-bottom: 4px;
+    }
+
+    &__rating {
+      &--title {
+        display: none;
+      }
     }
   }
 }
