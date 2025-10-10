@@ -70,10 +70,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: colors.$spacing-sm;
+    margin-bottom: colors.$spacing-md;
   }
 
   &__active-title {
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-sm;
     font-size: 14px;
     font-weight: 600;
     color: colors.$hh-text;
@@ -81,13 +84,17 @@
   }
 
   &__clear-all {
-    @include mixins.button-reset;
-    color: colors.$hh-red;
+    display: flex;
+    align-items: center;
+    gap: colors.$spacing-xs;
+    background: none;
+    border: none;
+    color: colors.$hh-gray-dark;
+    cursor: pointer;
     font-size: 12px;
-    text-decoration: underline;
 
     &:hover {
-      color: colors.$hh-red-dark;
+      color: colors.$hh-red;
     }
   }
 

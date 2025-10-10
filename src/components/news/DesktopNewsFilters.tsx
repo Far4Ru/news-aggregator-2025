@@ -1,4 +1,4 @@
-import { X, SortAsc, SortDesc, ArrowDownUp } from 'lucide-react';
+import { X, SortAsc, SortDesc, ArrowDownUp, FilterX } from 'lucide-react';
 import React from 'react';
 
 import type { NewsFilters } from '../../types/news';
@@ -77,12 +77,15 @@ export const DesktopNewsFilters: React.FC<DesktopNewsFiltersProps> = ({
       {activeFilters.length > 0 && (
         <div className='desktop-filters__active'>
           <div className='desktop-filters__active-header'>
-            <h4 className='desktop-filters__active-title'>Активные фильтры</h4>
+            <h4 className='desktop-filters__active-title'>
+              <FilterX size={16} />
+              Активные фильтры</h4>
             <button
               className='desktop-filters__clear-all'
               onClick={clearAllFilters}
             >
-              Очистить все
+              <X size={14} />
+              Очистить
             </button>
           </div>
           <div className='desktop-filters__active-list'>
