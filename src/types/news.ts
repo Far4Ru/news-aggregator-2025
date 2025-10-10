@@ -1,18 +1,34 @@
 export interface NewsItem {
     id: string;
     title: string;
-    content: string;
+    content?: string; // remove
+    original_content: string;
     short_content: string;
     source_id: string;
     source_type: 'telegram' | 'rss' | 'website' | 'other';
     status: string;
     published_at: string;
     rating: number;
-    tags: string[];
+    tags?: string[];
     url: string;
-    sources: any;
+    sources: Sources;
+    short_contents: ShortContents;
     created_at: string;
     updated_at: string;
+}
+
+export interface Sources {
+    description: string;
+    id: string;
+    name: string;
+    status: string;
+    type: string;
+    url: string;
+}
+
+export interface ShortContents {
+    id: string;
+    content_text: string;
 }
 
 export interface NewsSuggestion {

@@ -6,7 +6,21 @@ export const moderationService = {
   async getNewNews() {
     const { data: news, error } = await supabase
       .from('news')
-      .select('*');
+      .select(`
+        *,
+        sources (
+          id,
+          name,
+          description,
+          url,
+          type,
+          status
+        ),
+        short_contents (
+          id,
+          content_text
+        )
+      `);
 
     console.log(error);
 

@@ -71,7 +71,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
       </div>
 
       <div className='news-card__tags'>
-        {news.tags.map(tag => (
+        {(news.tags ?? []).map(tag => (
           <span key={tag} className='news-card__tag'>{tag}</span>
         ))}
       </div>

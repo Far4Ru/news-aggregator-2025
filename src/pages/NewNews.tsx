@@ -74,9 +74,9 @@ export const NewNews: React.FC = () => {
               <div key={item.id} className='moderation-news-item'>
                 <div className='moderation-news-item__content'>
                   <h3>{item.title}</h3>
-                  <p>{item.short_content}</p>
+                  <p>{item.short_contents.content_text}</p>
                   <div className='moderation-news-item__meta'>
-                    <span>Источник: {item.source_id}</span>
+                    <span>Источник: {item.sources.name}</span>
                     <span>Дата: {new Date(item.published_at).toLocaleDateString()}</span>
                   </div>
                 </div>

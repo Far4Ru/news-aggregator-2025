@@ -2,6 +2,10 @@ import { createClient } from '@supabase/supabase-js';
 import { config } from '../utils/config';
 import { NewsItem, Source } from '../types';
 
+interface Result {
+  success: any,
+  error: any
+}
 export class DatabaseService {
   private supabase;
 
@@ -22,6 +26,30 @@ export class DatabaseService {
     return data || [];
   }
 
+  async createShortContent(item: NewsItem): Promise<Result> {
+    const result: Result = {
+      success: null,
+      error: null,
+    }
+    try {
+      const shortContentItem = {
+        content_text: item.short_content,
+        created_at: item.created_at,
+      }
+      const { data, error } = await this.supabase
+        .from('short_contents')
+        .insert([shortContentItem]);
+      console.log(data, error)
+      if (Array.isArray(data)) {
+        result.success = data[0]
+      }
+      result.error = error
+    } catch (error) {
+      result.error = error
+    }
+    return result;
+  }
+
   async createNews(newsItems: NewsItem[]): Promise<{ success: number; errors: string[] }> {
     const errors: string[] = [];
     let successCount = 0;
@@ -29,14 +57,30 @@ export class DatabaseService {
     // Проверяем на дубликаты перед вставкой
     for (const item of newsItems) {
       try {
-        const { error } = await this.supabase
-          .from('news')
-          .insert([item]);
+        const shortContentResult = await this.createShortContent(item);
+        if (shortContentResult.success) {
+          const newsItem = {
+            source_id: item.source_id,
+            published_at: item.published_at,
+            url: item.url,
+            status: item.status,
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+            original_content: item.content,
+            short_content_id: shortContentResult.success.id
+          }
+          const { error } = await this.supabase
+            .from('news')
+            .insert([newsItem]);
 
-        if (error) {
-          errors.push(`Failed to insert "${item.title}": ${error.message}`);
+          console.log(error)
+          if (error) {
+            errors.push(`Failed to insert "${item.title}": ${error.message}`);
+          } else {
+            successCount++;
+          }
         } else {
-          successCount++;
+          errors.push(shortContentResult.error)
         }
       } catch (error) {
         errors.push(`Error inserting "${item.title}": ${error}`);

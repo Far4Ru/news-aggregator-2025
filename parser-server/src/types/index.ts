@@ -10,7 +10,7 @@ export interface NewsItem {
   tags: string[];
   url?: string;
   status: 'pending' | 'approved' | 'rejected';
-  language?: string; // Добавляем поле языка
+  language?: string;
   created_at?: Date;
   updated_at?: Date;
 }

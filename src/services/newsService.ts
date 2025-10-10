@@ -27,6 +27,10 @@ export const newsService = {
           url,
           type,
           status
+        ),
+        short_contents (
+          id,
+          content_text
         )
       `)
       .range(from, to);
