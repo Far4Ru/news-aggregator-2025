@@ -1,4 +1,3 @@
-// pages/News.tsx
 import { RefreshCcw } from 'lucide-react';
 import React, { useState, useEffect, useCallback } from 'react';
 
@@ -11,16 +10,18 @@ import { useAppSettings } from '../hooks/useLocalStorage';
 import { useNewsList } from '../hooks/useNewsList';
 import { useNotification } from '../hooks/useNotification';
 import { newsService } from '../services/newsService';
+import { sourcesService } from '../services/sourcesService';
 import type { NewsFilters as NewsFiltersType, NewsItem } from '../types/news';
 
 export const News: React.FC = () => {
   const { settings, setSettings } = useAppSettings();
   const { showCardNotification: showNotification } = useNotification();
-  // const { showNotification: showPushNotification, isSubscribed } = useNotifications();
 
   const [filters, setFilters] = useState<NewsFiltersType>(settings.filters);
   const [showNewNewsBadge, setShowNewNewsBadge] = useState(false);
   const { user } = useAuth();
+
+  const [allNews, setAllNews] = useState<any>([]);
 
   // Функция для загрузки дополнительных новостей
   const loadMoreNews = useCallback(async (page: number, currentFilters: NewsFiltersType) => {
@@ -41,8 +42,33 @@ export const News: React.FC = () => {
   } = useNewsList({
     initialNews,
     loadMoreNews,
-    filters
+    filters,
+    settings
   });
+
+  useEffect(() => {
+    const loadSources = async () => {
+      if (filters.sources.length === 0) {
+        const sources = await sourcesService.getSources();
+
+        if (sources) {
+          const newSelectedSources = sources.map(source => source.id);
+
+          setSettings({
+            ...settings,
+            selectedSources: newSelectedSources as any
+          });
+        }
+
+      }
+    };
+    const loadAllNews = async () => {
+      setAllNews(await newsService.getAllNews(settings.selectedSources));
+    };
+
+    loadSources();
+    loadAllNews();
+  }, [filters]);
 
   const handleLoadMores = useCallback(async () => {
     await loadMore();
@@ -61,7 +87,7 @@ export const News: React.FC = () => {
   // Обновление новостей при изменении фильтров
   useEffect(() => {
     refresh();
-  }, [filters, settings.sortBy, settings.selectedSources, refresh]);
+  }, [filters, settings.sortBy, settings.selectedSources]);
 
   // Уведомление о новых новостях
   // useEffect(() => {
@@ -81,14 +107,20 @@ export const News: React.FC = () => {
 
   const handleRate = async (newsId: string, increment: number) => {
     try {
-      await newsService.updateRating(newsId, user?.id ?? '', increment);
-      refresh();
-      news.forEach(item => {
-        if (item.id === newsId) {
-          item.rating = item.rating + increment;
+      const result = await newsService.updateRating(newsId, user?.id ?? '', increment);
+
+      if (result) {
+        refresh();
+        news.forEach(item => {
+          if (item.id === newsId) {
+            item.rating = item.rating + increment;
+          }
         }
+        );
+        showNotification('Новость успешно оценена', 'success');
+      } else {
+        showNotification('Новость уже была оценена', 'error');
       }
-      );
     } catch (error) {
       console.error('Error updating rating:', error);
       showNotification('Ошибка при оценке новости', 'error');
@@ -118,8 +150,8 @@ export const News: React.FC = () => {
     }
   };
 
-  const availableSources = Array.from(new Set(news.map(item => item.sources.name)));
-  const availableTags: string[] = Array.from(new Set(news.flatMap(item => item.tags ?? [])));
+  const availableSources = Array.from(new Set(allNews.map((item: any) => item.sources.name)));
+  const availableTags: string[] = Array.from(new Set(allNews.flatMap((item: any) => item.tags ?? [])));
 
   const isListLoading = loading || infiniteLoading;
 
@@ -156,7 +188,7 @@ export const News: React.FC = () => {
             onFiltersChange={setFilters}
             sortBy={settings.sortBy}
             onSortChange={(sortBy) => setSettings({ ...settings, sortBy })}
-            availableSources={availableSources}
+            availableSources={availableSources as any}
             availableTags={availableTags}
           />
         </div>

@@ -49,6 +49,7 @@ export interface NewsFilters {
     sourceTypes: string[];
     tags: string[];
     searchQuery: string;
+    timeTag: string;
 }
 
 export interface FilterOption {

@@ -1,4 +1,3 @@
-// components/news/MobileNewsFilters.tsx
 import { X, SortAsc, SortDesc, ArrowUpDown, Settings2 } from 'lucide-react';
 import React, { useState, useRef } from 'react';
 

@@ -9,16 +9,20 @@ interface UserData {
 }
 
 export const userService = {
-  async checkIp(ipAddress: string): Promise<IpData | undefined> {
+  async checkIp(ipAddress: string): Promise<IpData | null | undefined> {
     try {
       const { data: existingIP } = await supabase
         .from('ip_addresses')
         .select('id, user_id')
-        .eq('ip', ipAddress)
-        .single();
+        .eq('ip', ipAddress);
 
-      return existingIP as any;
+      if (Array.isArray(existingIP)) {
+        return existingIP[0] as any;
+      }
+
+      return null;
     } catch (error) {
+
       return undefined;
     }
   },
@@ -35,8 +39,7 @@ export const userService = {
       return undefined;
     }
   },
-  async checkUserByIp(ipAddress: string): Promise<string | undefined> {
-    const existingIP = await this.checkIp(ipAddress);
+  async checkUserByIp(existingIP: any): Promise<string | undefined> {
 
     if (existingIP && existingIP.user_id) {
       const userId = existingIP.user_id;

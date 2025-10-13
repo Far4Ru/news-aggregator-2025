@@ -33,7 +33,8 @@ export const useAppSettings = () => {
       sources: [],
       sourceTypes: [],
       tags: [],
-      searchQuery: ''
+      searchQuery: '',
+      timeTag: '',
     },
     notificationsEnabled: true,
     userRole: 'user' as 'user' | 'moderator'

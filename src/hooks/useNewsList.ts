@@ -1,4 +1,3 @@
-// hooks/useNewsList.ts
 import { useState, useCallback } from 'react';
 
 import type { NewsItem, NewsFilters } from '../types/news';
@@ -8,12 +7,14 @@ interface UseNewsListProps {
   loadMoreNews: (page: number, filters: NewsFilters) => Promise<NewsItem[]>;
   filters: NewsFilters;
   pageSize?: number;
+  settings: any;
 }
 
 export const useNewsList = ({
   initialNews,
   loadMoreNews,
   filters,
+  settings,
   pageSize = 10
 }: UseNewsListProps) => {
   const [news, setNews] = useState<NewsItem[]>(initialNews);
@@ -40,7 +41,7 @@ export const useNewsList = ({
     } finally {
       setLoading(false);
     }
-  }, [page, filters, loadMoreNews, loading, pageSize]);
+  }, [filters, settings.sortBy]);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -55,7 +56,7 @@ export const useNewsList = ({
     } finally {
       setLoading(false);
     }
-  }, [filters, loadMoreNews, pageSize]);
+  }, [filters, settings.sortBy]);
 
   return {
     news,

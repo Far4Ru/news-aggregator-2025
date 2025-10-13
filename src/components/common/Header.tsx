@@ -91,8 +91,8 @@ export const Header: React.FC = () => {
           <ul className='navbar__menu'>
             <li className='navbar__item'>
               <Link
-                to='/news'
-                className={`navbar__link ${location.pathname === '/news' ? 'navbar__link--active' : ''}`}
+                to='/'
+                className={`navbar__link ${location.pathname === '/' ? 'navbar__link--active' : ''}`}
                 onClick={closeMenu}
               >
                 Новости

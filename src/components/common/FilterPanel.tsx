@@ -17,7 +17,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   availableTags
 }) => {
   const sourceTypes = ['telegram', 'rss', 'website', 'other'];
-  const periodTags = ['за последний час', 'за 3 часа', 'за 6 часов', 'сегодня', 'за неделю', 'за месяц'];
+  const periodTags = ['сегодня', 'за неделю', 'за месяц'];
 
   const updateFilter = (key: keyof NewsFilters, value: any) => {
     onFiltersChange({
@@ -33,7 +33,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       tags: [],
       searchQuery: '',
       dateFrom: '',
-      dateTo: ''
+      dateTo: '',
+      timeTag: '',
     });
   };
 
@@ -43,6 +44,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     filters.tags.length > 0 ||
     filters.searchQuery ||
     filters.dateFrom ||
+    filters.timeTag ||
     filters.dateTo;
 
   return (
@@ -86,14 +88,10 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           {periodTags.map(periodTag => (
             <button
               key={periodTag}
-              className={`filter-panel__chip ${filters.sources.includes(periodTag) ? 'filter-panel__chip--active' : ''}`}
+              className={`filter-panel__chip ${filters.timeTag === periodTag ? 'filter-panel__chip--active' : ''}`}
               onClick={() => {
-                // TODO: - change
-                // const newSources = filters.sources.includes(periodTag)
-                //   ? filters.sources.filter(s => s !== periodTag)
-                //   : [...filters.sources, periodTag];
-
-                // updateFilter('sources', newSources);
+                periodTag = periodTag === filters.timeTag ? '' : periodTag;
+                updateFilter('timeTag', periodTag);
               }}
             >
               {periodTag}

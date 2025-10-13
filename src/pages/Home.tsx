@@ -11,7 +11,7 @@ export const Home: React.FC = () => (
           Все важные новости из проверенных источников в одном месте
         </p>
         <div className='home__actions'>
-          <Link to='/news' className='button button--primary home__button'>
+          <Link to='/' className='button button--primary home__button'>
             Читать новости
           </Link>
           <Link to='/sources' className='button button--secondary home__button'>

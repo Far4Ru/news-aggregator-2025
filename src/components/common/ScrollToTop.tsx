@@ -1,4 +1,3 @@
-// components/common/ScrollToTop.tsx
 import { ChevronUp } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 

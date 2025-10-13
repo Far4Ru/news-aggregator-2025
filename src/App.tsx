@@ -22,8 +22,8 @@ function App() {
             <Header />
             <main className='main'>
               <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='/news' element={<News />} />
+                <Route path='/' element={<News />} />
+                <Route path='/about' element={<Home />} />
                 <Route path='/sources' element={<Sources />} />
                 <Route path='/moderation' element={<Moderation />} />
                 <Route path='/suggestions' element={<Suggestions />} />

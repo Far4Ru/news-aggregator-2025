@@ -8,9 +8,9 @@ export const Footer: React.FC = () => (
           © 2025 Новостной агрегатор. Все права защищены.
         </p>
         <div className='footer__links'>
-          <a href='/' className='footer__link'>О проекте</a>
-          <a href='/' className='footer__link'>Помощь</a>
-          <a href='/' className='footer__link'>Контакты</a>
+          <a href='/about' className='footer__link'>О проекте</a>
+          <a href='/about#help' className='footer__link'>Помощь</a>
+          <a href='/about#contacts' className='footer__link'>Контакты</a>
         </div>
       </div>
     </div>

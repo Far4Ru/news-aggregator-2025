@@ -24,7 +24,8 @@ export const DesktopNewsFilters: React.FC<DesktopNewsFiltersProps> = ({
   const activeFilters = [
     ...filters.sources.map(source => ({ groupId: 'sources', label: source, value: source })),
     ...filters.sourceTypes.map(type => ({ groupId: 'sourceTypes', label: type, value: type })),
-    ...filters.tags.map(tag => ({ groupId: 'tags', label: tag, value: tag }))
+    ...filters.tags.map(tag => ({ groupId: 'tags', label: tag, value: tag })),
+    ...(filters.timeTag ? [{ groupId: 'timeTag', label: filters.timeTag, value: filters.timeTag }] : []),
   ];
 
   const removeFilter = (filter: { groupId: string; value: string }) => {
@@ -37,6 +38,11 @@ export const DesktopNewsFilters: React.FC<DesktopNewsFiltersProps> = ({
         ...filters,
         [filterKey]: newValues
       });
+    } else {
+      onFiltersChange({
+        ...filters,
+        [filterKey]: ''
+      });
     }
   };
 
@@ -45,7 +51,8 @@ export const DesktopNewsFilters: React.FC<DesktopNewsFiltersProps> = ({
       ...filters,
       sources: [],
       sourceTypes: [],
-      tags: []
+      tags: [],
+      timeTag: '',
     });
   };
 

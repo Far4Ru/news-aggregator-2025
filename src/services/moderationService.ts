@@ -2,7 +2,7 @@ import { supabase } from './supabase';
 
 export const moderationService = {
   async getNewNews() {
-    const { data: news, error } = await supabase
+    const { data: news } = await supabase
       .from('news')
       .select(`
         *,
@@ -19,8 +19,6 @@ export const moderationService = {
           content_text
         )
       `);
-
-    console.log(error);
 
     let filteredNews = [...news as any];
 

@@ -36,14 +36,6 @@ async function getPublicIP() {
 
 ;
 
-/**
- * Авторизация модератора:
- * /?token=<MD5-hash>
- * - сохранение auth_token в local
- * - сохранение ip в state
- * Авторизация пользователя:
- * - сохранение ip в state
- */
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = (props) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,14 +44,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = (props) => 
 
   const handleTokenAuth = async (token: string) => {
     if (isValidMd5Token(token) && checkAuthToken(token)) {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data } = await supabase.auth.signInWithPassword({
         email: import.meta.env.VITE_SUPABASE_MODERATOR_EMAIL,
         password: import.meta.env.VITE_SUPABASE_MODERATOR_PASSWORD
       });
       const ip = await getPublicIP();
       const id = await getUserIdByIp(ip) ?? '';
 
-      console.log(data, error, ip);
       if (data) {
         setUser({
           id,
@@ -80,13 +71,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = (props) => 
   const getUserIdByIp = async (ip: string) => {
     const ipData = await checkIp(ip);
 
-    if (ipData?.user_id) {
+    if (ipData && ipData.user_id) {
       return ipData.user_id;
     } else {
       const userData = await createNewUser();
 
-      if (userData?.id) {
-        const userId = await checkUserByIp(ip);
+      if (userData && userData.id) {
+
+        const existingIP = await checkIp(ip);
+        const userId = await checkUserByIp(existingIP);
 
         if (userId) {
           return userId;

@@ -1,4 +1,3 @@
-// hooks/useCachedNews.ts
 import { useState, useEffect, useCallback } from 'react';
 
 import { cachedNewsService } from '../services/cachedNewsService';

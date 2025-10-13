@@ -13,7 +13,6 @@ export const NewNews: React.FC = () => {
     try {
       const data = await moderationService.getNewNews();
 
-      console.log(data);
       setNews(data);
     } catch (error) {
       console.error('Error loading new news:', error);

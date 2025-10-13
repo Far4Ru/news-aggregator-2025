@@ -15,7 +15,7 @@ export const newsService = {
     const from = (page - 1) * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
 
-    const { data: news, error } = await supabase
+    const { data: news } = await supabase
       .from('news')
       .select(`
         *,
@@ -33,8 +33,7 @@ export const newsService = {
         )
       `)
       .eq('status', 'approved') // только approved новости
-      .eq('sources.status', 'approved') // только активные источники
-      .range(from, to);
+      .eq('sources.status', 'approved'); // только активные источники
 
     const newsIds = (news as any).map((item: any) => item.id);
 
@@ -49,7 +48,6 @@ export const newsService = {
       rating: ratingsByNewsId[item.id] || 0
     }));
 
-    console.log(newsWithDetails, error);
     let filteredNews = [...newsWithDetails as any];
 
     filteredNews = filteredNews.filter(item =>
@@ -59,11 +57,9 @@ export const newsService = {
     // Применение фильтров
     if (filters.searchQuery) {
       filteredNews = filteredNews.filter(item =>
-        // item.title.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
         item.short_contents.content_text.toLowerCase().includes(filters.searchQuery.toLowerCase())
       );
     }
-
     if (filters.sources.length > 0) {
       filteredNews = filteredNews.filter(item =>
         filters.sources.includes(item.sources.name)
@@ -76,12 +72,93 @@ export const newsService = {
       );
     }
 
+    if (filters.timeTag !== '') {
+      const now = new Date();
+
+      if (filters.timeTag === 'сегодня') {
+        const todayStart = new Date(now);
+
+        todayStart.setHours(0, 0, 0, 0);
+
+        filteredNews = filteredNews.filter(item => {
+          const itemDate = new Date(item.published_at);
+
+          return itemDate >= todayStart && itemDate <= now;
+        });
+      } else if (filters.timeTag === 'за неделю') {
+        const weekAgo = new Date(now);
+
+        weekAgo.setDate(now.getDate() - 7);
+
+        filteredNews = filteredNews.filter(item => {
+          const itemDate = new Date(item.published_at);
+
+          return itemDate >= weekAgo && itemDate <= now;
+        });
+      } else if (filters.timeTag === 'за месяц') {
+        const monthAgo = new Date(now);
+
+        monthAgo.setMonth(now.getMonth() - 1);
+
+        filteredNews = filteredNews.filter(item => {
+          const itemDate = new Date(item.published_at);
+
+          return itemDate >= monthAgo && itemDate <= now;
+        });
+      }
+    }
+
     // Сортировка
     if (sortBy === 'date') {
       filteredNews.sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime());
     } else {
       filteredNews.sort((a, b) => b.rating - a.rating);
     }
+
+    return filteredNews.slice(from, to + 1);
+  },
+  async getAllNews(
+    selected: string[],
+  ) {
+
+    const { data: news } = await supabase
+      .from('news')
+      .select(`
+        *,
+        sources (
+          id,
+          name,
+          description,
+          url,
+          type,
+          status
+        ),
+        short_contents (
+          id,
+          content_text
+        )
+      `)
+      .eq('status', 'approved') // только approved новости
+      .eq('sources.status', 'approved'); // только активные источники
+
+    const newsIds = (news as any).map((item: any) => item.id);
+
+    const [tagsByNewsId, ratingsByNewsId] = await Promise.all([
+      this.getTagsForMultipleNews(newsIds),
+      this.getRatingsForMultipleNews(newsIds)
+    ]);
+
+    const newsWithDetails = (news as any).map((item: any) => ({
+      ...item,
+      tags: tagsByNewsId[item.id] || [],
+      rating: ratingsByNewsId[item.id] || 0
+    }));
+
+    let filteredNews = [...newsWithDetails as any];
+
+    filteredNews = filteredNews.filter(item =>
+      selected.includes(item.source_id)
+    );
 
     return filteredNews;
   },

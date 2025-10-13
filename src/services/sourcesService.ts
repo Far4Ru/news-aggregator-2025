@@ -4,11 +4,10 @@ import { supabase } from './supabase';
 
 export const sourcesService = {
   async getSources(searchQuery = '') {
-    const { data: sources, error } = await supabase
+    const { data: sources } = await supabase
       .from('sources')
       .select('*');
 
-    console.log(sources, error);
     let filteredSources = [...sources as NewsSource[]];
 
     if (searchQuery) {
