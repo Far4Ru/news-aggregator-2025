@@ -65,6 +65,11 @@ export const newsService = {
         filters.sources.includes(item.sources.name)
       );
     }
+    if (filters.sourceTypes.length > 0) {
+      filteredNews = filteredNews.filter(item =>
+        filters.sourceTypes.includes(item.sources.type)
+      );
+    }
 
     if (filters.tags.length > 0) {
       filteredNews = filteredNews.filter(item =>
@@ -114,6 +119,8 @@ export const newsService = {
     } else {
       filteredNews.sort((a, b) => b.rating - a.rating);
     }
+
+    console.log(from, to, filteredNews, filteredNews.slice(from, to + 1));
 
     return filteredNews.slice(from, to + 1);
   },

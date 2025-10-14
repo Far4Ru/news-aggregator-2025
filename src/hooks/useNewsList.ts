@@ -18,7 +18,7 @@ export const useNewsList = ({
   pageSize = 10
 }: UseNewsListProps) => {
   const [news, setNews] = useState<NewsItem[]>(initialNews);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState(initialNews.length >= pageSize);
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +27,7 @@ export const useNewsList = ({
 
     setLoading(true);
     try {
-      const newNews = await loadMoreNews(page + 1, filters);
+      const newNews = await loadMoreNews(page, filters);
 
       if (newNews.length > 0) {
         setNews(prev => [...prev, ...newNews]);
@@ -41,7 +41,7 @@ export const useNewsList = ({
     } finally {
       setLoading(false);
     }
-  }, [filters, settings.sortBy]);
+  }, [filters, settings.sortBy, page]);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -56,7 +56,7 @@ export const useNewsList = ({
     } finally {
       setLoading(false);
     }
-  }, [filters, settings.sortBy]);
+  }, [filters, settings.sortBy, page, news]);
 
   return {
     news,

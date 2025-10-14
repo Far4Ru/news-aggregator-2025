@@ -43,7 +43,7 @@ export const News: React.FC = () => {
     initialNews,
     loadMoreNews,
     filters,
-    settings
+    settings,
   });
 
   useEffect(() => {

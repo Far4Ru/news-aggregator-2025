@@ -5,6 +5,11 @@ import type { NewsItem } from '../../types/news';
 
 const ICONS_PATH: any = {
   'telegram': 'icons/telegram.png',
+  'dtf': 'icons/dtf.png',
+  'habr': 'icons/habr.jpg',
+  'podcast': 'icons/podcast.png',
+  'rss': 'icons/rss.png',
+  'website': 'icons/website.png'
 };
 
 interface NewsCardProps {

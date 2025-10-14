@@ -16,7 +16,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   availableSources,
   availableTags
 }) => {
-  const sourceTypes = ['telegram', 'rss', 'website', 'other'];
+  const sourceTypes = ['telegram', 'rss', 'website', 'dtf', 'podcast', 'habr'];
   const periodTags = ['сегодня', 'за неделю', 'за месяц'];
 
   const updateFilter = (key: keyof NewsFilters, value: any) => {

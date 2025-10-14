@@ -1,5 +1,5 @@
 import { Plus, Minus, BarChart3, ExternalLink } from 'lucide-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { type NewsSource } from '../../types/sources';
 
@@ -16,8 +16,13 @@ export const SourceCard: React.FC<SourceCardProps> = ({
   onAdd,
   onRemove
 }) => {
+  const [sourceActivity, setSourceActivity] = useState<number[]>([]);
+
+  useEffect(() => {
+    setSourceActivity(source.activity_data = [...Array(7)].map(() => Math.floor(Math.random() * 10)));
+  }, []);
   // const totalActivity = source.activity_data.reduce((sum, count) => sum + count, 0)
-  const maxActivity = Math.max(...(source.activity_data ?? []));
+  const maxActivity = Math.max(...sourceActivity);
 
   return (
     <div className='source-card'>
@@ -36,7 +41,7 @@ export const SourceCard: React.FC<SourceCardProps> = ({
           <span>Активность (последние 7 дней)</span>
         </div>
         <div className='source-card__chart'>
-          {(source.activity_data ?? []).map((count, index) => (
+          {sourceActivity.map((count, index) => (
             <div
               key={index}
               className='source-card__bar'
