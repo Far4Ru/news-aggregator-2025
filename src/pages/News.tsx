@@ -132,10 +132,10 @@ export const News: React.FC = () => {
       navigator.share({
         title: newsItem.title,
         text: newsItem.short_content,
-        url: newsItem.url || window.location.href
+        url: newsItem.sources.url || window.location.href
       });
     } else {
-      navigator.clipboard.writeText(newsItem.url || window.location.href);
+      navigator.clipboard.writeText(newsItem.sources.url || window.location.href);
       showNotification('Ссылка скопирована в буфер обмена', 'success');
     }
   };
