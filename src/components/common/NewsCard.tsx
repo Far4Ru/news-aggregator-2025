@@ -1,15 +1,21 @@
 import { Share2, AlertTriangle, ArrowUpRight, ArrowUp, ArrowDown } from 'lucide-react';
 import React, { useState } from 'react';
 
+import dtf from '../../assets/dtf.png';
+import habr from '../../assets/habr.jpg';
+import podcast from '../../assets/podcast.png';
+import rss from '../../assets/rss.png';
+import telegram from '../../assets/telegram.png';
+import website from '../../assets/website.png';
 import type { NewsItem } from '../../types/news';
 
 const ICONS_PATH: any = {
-  'telegram': 'icons/telegram.png',
-  'dtf': 'icons/dtf.png',
-  'habr': 'icons/habr.jpg',
-  'podcast': 'icons/podcast.png',
-  'rss': 'icons/rss.png',
-  'website': 'icons/website.png'
+  'telegram': telegram,
+  'dtf': dtf,
+  'habr': habr,
+  'podcast': podcast,
+  'rss': rss,
+  'website': website
 };
 
 interface NewsCardProps {
